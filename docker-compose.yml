@@ -1,11 +1,29 @@
 version: "3.9"
 services:
-  node:
-    build: ./build/node
-    environment:
-      - NODE_ENV=development
+#  node:
+#    build: ./build/node
+#    environment:
+#      - NODE_ENV=development
 
-  red_tetris_boilerplate:
-    image: node
+  boilerplate-serveur:
+    build: ./build/boilerplate/serveur
     volumes:
-      - ./build/red_tetris_boilerplate:/app
+      - ./build/boilerplate:/app
+    working_dir: /app
+    networks:
+      - tetris
+    ports:
+      - "3004:3004"
+
+  boilerplate-client:
+    build: ./build/boilerplate/client
+    volumes:
+      - ./build/boilerplate:/app
+    working_dir: /app
+    networks:
+      - tetris
+    ports:
+      - "8080:8080"
+
+networks:
+  tetris:
