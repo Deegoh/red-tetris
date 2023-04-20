@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  node:
+    build: ./build/node
+    environment:
+      - NODE_ENV=development
+
+  red_tetris_boilerplate:
+    image: node
+    volumes:
+      - ./build/red_tetris_boilerplate:/app
