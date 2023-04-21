@@ -10,11 +10,9 @@ ${NAME}:
 logs:
 	${DOCKER} logs -f
 
-runbsrv:
-	${DOCKER} exec boilerplate-serveur bash
+runnode:
+	${DOCKER} exec node bash
 
-runbscli:
-	${DOCKER} exec boilerplate-client bash
 
 clean:
 	${DOCKER} down
@@ -23,4 +21,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re logs runbsrv runbscli
+.PHONY: all clean fclean re logs runnode
