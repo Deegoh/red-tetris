@@ -10,8 +10,8 @@ ${NAME}:
 logs:
 	${DOCKER} logs -f
 
-runnode:
-	${DOCKER} exec node bash
+runserver:
+	${DOCKER} exec server bash
 
 
 clean:
@@ -21,4 +21,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re logs runnode
+.PHONY: all clean fclean re logs runserver
