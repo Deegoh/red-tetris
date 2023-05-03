@@ -7,11 +7,21 @@ all: ${NAME}
 ${NAME}:
 	${DOCKER} up -d --build
 
+
+build:
+	${DOCKER} build --no-cache
+
+ps:
+	${DOCKER} ps -a
+
 logs:
 	${DOCKER} logs -f
 
-runnode:
-	${DOCKER} exec node bash
+runserver:
+	${DOCKER} exec server bash
+
+runclient:
+	${DOCKER} exec client bash
 
 
 clean:
@@ -21,4 +31,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re logs runnode
+.PHONY: all build clean fclean re ps logs runserver runclient
