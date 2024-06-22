@@ -1,16 +1,16 @@
-version: "3.9"
 services:
   server:
     build: ./build/server
     environment:
+      # - NODE_ENV=production
       - NODE_ENV=development
-    working_dir: /app
     volumes:
-      - ./data/server:/app
+      - ./data/server:/server
     networks:
       - tetris
     ports:
       - "8081:8081"
+      - "3000:3000"
 
 networks:
   tetris:

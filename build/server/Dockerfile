@@ -1,24 +1,19 @@
-FROM node:current-alpine
+FROM node:lts-alpine3.20
+# WORKDIR /server
 
-WORKDIR /app
+COPY endpoint.sh /
+COPY vite.config.js /
 
 RUN apk update
 RUN apk upgrade
 RUN apk add bash vim nano
-
 RUN npm install -g pnpm
-RUN pnpm create vite red-tetris --template react
-RUN cd red-tetris
-#RUN pnpm add -D vitest
-#RUN pnpm add socket.io
 
-#  pnpm install
-#  pnpm run dev
+EXPOSE 8081
+EXPOSE 3000
 
-RUN pnpm install
-#CMD ["yarn", "start"]
-
-CMD ["sleep", "infinity"]
+# CMD ["sleep", "infinity"]
+CMD ["sh", "/endpoint.sh"]
 
 #https://pnpm.io/fr/installation
 #https://vitejs.dev/guide/
