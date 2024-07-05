@@ -13,9 +13,7 @@ services:
     networks:
       - tetris
     ports:
-      - "8081:8081"
-      - "3031:3000"
-
+      - ${PORT}:5173
 
   backend:
     build: ./build/backend
