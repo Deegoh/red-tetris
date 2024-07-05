@@ -1,7 +1,7 @@
 
-# pnpm create vite server --template react
+# pnpm create vite frontend --template react
 
-# cd server
+# cd frontend
 
 # pnpm add -D vitest
 # pnpm add socket.io

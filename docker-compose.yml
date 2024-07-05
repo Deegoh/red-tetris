@@ -1,11 +1,11 @@
 services:
-  server:
-    build: ./build/server
+  frontend:
+    build: ./build/frontend
     environment:
       # - NODE_ENV=production
       - NODE_ENV=development
     volumes:
-      - ./data/server:/server
+      - ./data/frontend:/frontend
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
@@ -14,7 +14,7 @@ services:
       - tetris
     ports:
       - "8081:8081"
-      - "3000:3000"
+      - "3031:3000"
 
 
   backend:

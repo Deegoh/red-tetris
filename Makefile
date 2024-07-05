@@ -18,8 +18,10 @@ logsfront:
 logsback:
 	${DOCKER} logs backend -f
 
-runserver:
-	${DOCKER} exec server bash
+runfront:
+	${DOCKER} exec frontend bash
+runback:
+	${DOCKER} exec backend bash
 
 
 clean:
@@ -30,4 +32,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re logs runserver
+.PHONY: all clean fclean re logs logsfront logsback runfront runback
