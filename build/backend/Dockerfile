@@ -1,16 +1,15 @@
 FROM node:lts-alpine3.20
-WORKDIR /server
+# FROM oven/bun:alpine
+WORKDIR /backend
 
-COPY endpoint.sh /
-# COPY vite.config.js /
 
 RUN apk update
 RUN apk upgrade
 RUN apk add bash vim nano
+# RUN apk add node
 RUN npm install -g pnpm
 
-EXPOSE 8081
-EXPOSE 3000
+COPY endpoint.sh /
 
 # CMD ["sleep", "infinity"]
 CMD ["sh", "/endpoint.sh"]

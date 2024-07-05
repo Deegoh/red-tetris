@@ -6,11 +6,32 @@ services:
       - NODE_ENV=development
     volumes:
       - ./data/server:/server
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
+
     networks:
       - tetris
     ports:
       - "8081:8081"
       - "3000:3000"
+
+
+  backend:
+    build: ./build/backend
+    environment:
+      # - NODE_ENV=production
+      - NODE_ENV=development
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
+
+    volumes:
+      - ./data/backend:/backend
+    networks:
+      - tetris
+    ports:
+      - "8082:8080"
 
 networks:
   tetris:

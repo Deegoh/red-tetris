@@ -7,8 +7,16 @@ all: ${NAME}
 ${NAME}:
 	${DOCKER} up -d --build
 
+ps:
+	${DOCKER} ps -a
+
 logs:
 	${DOCKER} logs -f
+
+logsfront:
+	${DOCKER} logs frontend -f
+logsback:
+	${DOCKER} logs backend -f
 
 runserver:
 	${DOCKER} exec server bash
@@ -17,6 +25,7 @@ runserver:
 clean:
 	${DOCKER} down
 
+down: clean
 fclean: clean
 
 re: fclean all
