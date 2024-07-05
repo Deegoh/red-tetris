@@ -1,0 +1,13 @@
+
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: ./build/prod/Dockerfile
+    restart: "always"
+
+    environment:
+      - NODE_ENV=production
+

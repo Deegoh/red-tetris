@@ -13,8 +13,3 @@ if [ "$NODE_ENV" = "development" ];
 then
     pnpm run dev
 fi
-
-if [ "$NODE_ENV" = "production" ];
-then
-    pnpm run preview
-fi

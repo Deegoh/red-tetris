@@ -1,6 +1,10 @@
 NAME = red-tetris
 
-DOCKER = docker compose -p ${NAME}
+COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
+COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
+
+DOCKER = docker compose ${COMPOSE_DEV} -p ${NAME}
+# DOCKER = docker compose ${COMPOSE_PROD} -p ${NAME}
 
 all: ${NAME}
 

@@ -1,12 +1,12 @@
 FROM node:lts-alpine3.20
 WORKDIR /frontend
 
-COPY endpoint.sh /
-
 RUN apk update
 RUN apk upgrade
 RUN apk add bash vim nano
 RUN npm install -g pnpm
+
+COPY endpoint.sh /
 
 CMD ["sh", "/endpoint.sh"]
 

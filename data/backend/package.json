@@ -3,11 +3,7 @@
     "version": "0.0.1",
     "description": "my first socket.io app",
     "scripts": {
-        "dev": "node --watch src/main.js",
-        "build": "vite build",
-        "preview": "vite preview",
-        "srv-dist": "DEBUG=tetris:* babel src --out-dir dist",
-        "go": "node ./dist/main.js"
+        "dev": "node --watch src/main.js"
     },
     "dependencies": {
         "express": "4",

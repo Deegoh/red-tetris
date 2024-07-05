@@ -1,0 +1,33 @@
+services:
+  frontend:
+    build: ./build/frontend
+    restart: "no"
+
+    environment:
+      - NODE_ENV=development
+
+    volumes:
+      - ./data/frontend:/frontend
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
+
+    networks:
+      - tetris
+
+    ports:
+      - "${PORT_FRONT}:5173"
+
+
+  backend:
+    build: ./build/backend
+    restart: "no"
+
+    environment:
+      - NODE_ENV=development
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
+
+    volumes:
+      - ./data/backend:/backend
