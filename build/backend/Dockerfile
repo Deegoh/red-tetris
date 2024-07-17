@@ -8,5 +8,6 @@ RUN apk add bash vim nano
 RUN npm install -g pnpm
 
 COPY endpoint.sh /
+RUN dos2unix /endpoint.sh
 
 CMD ["sh", "/endpoint.sh"]
