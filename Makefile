@@ -27,6 +27,11 @@ runfront:
 runback:
 	${DOCKER} exec backend bash
 
+test:
+	${DOCKER} exec frontend pnpm run test
+cover:
+	${DOCKER} exec frontend pnpm run coverage
+
 
 clean:
 	${DOCKER} down

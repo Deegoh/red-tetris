@@ -54,15 +54,15 @@ export function EntryModal() {
 
         Username 
         <br/>
-        <input defaultValue={username} onChange={(e) => {setUsername(e.target.value)}} />
+        <input data-testid="username" defaultValue={username} onChange={(e) => {setUsername(e.target.value)}} />
         <br/>
         <br/>
         <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', minHeight: '300px'}}>
           <div style={{backgroundColor: 'blue', display: 'flex', flexDirection: 'column', gap: '4px'}}>
             Create room
-            <input defaultValue={roomname} onChange={(e) => {setRoomname(e.target.value.trim())}} />
+            <input data-testid="roomname" defaultValue={roomname} onChange={(e) => {setRoomname(e.target.value.trim())}} />
 
-           <button style={{}} onClick={createRoom}>Create</button>
+            <button data-testid="createroom" style={{}} onClick={createRoom}>Create</button>
 
           </div>
           
