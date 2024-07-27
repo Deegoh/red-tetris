@@ -2,6 +2,7 @@ import {useState} from "react";
 import {
   Dialog,
 } from "@material-tailwind/react";
+import {Btn} from "./btn.jsx";
 
 export function DialogPlay({btnText, children}) {
   const [open, setOpen] = useState(false);
@@ -10,13 +11,9 @@ export function DialogPlay({btnText, children}) {
 
   return (
     <>
-      <button
-        className="rounded shadow-lg shadow-purple-500/40 bg-purple-500 hover:bg-purple-700 hover:shadow-purple-700/40 text-white px-4 py-2"
-        onClick={handleOpen}>
-        {btnText}
-      </button>
+      <Btn onClick={handleOpen}>{btnText}</Btn>
       <Dialog
-        size=""
+        size="xs"
         open={open}
         handler={handleOpen}
         animate={{
