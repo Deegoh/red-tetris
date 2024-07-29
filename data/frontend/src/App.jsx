@@ -11,19 +11,17 @@ import {NotificationsContainer} from './components/NotificationsContainer'
 function App() {
   return (
     <>
-      <div className="container mx-auto flex flex-col items-center">
-        <EntryModal/>
-        <Routes>
-          <Route path="/" element={
-            <>
-              <Home/>
-              <Footer/>
-            </>
-          }/>
-          <Route path="/create" element={<Game/>}/>
-          <Route path="/join" element={<Home/>}/>
-        </Routes>
-      </div>
+      <EntryModal/>
+      <Routes>
+        <Route path="/" element={
+          <div className="container mx-auto flex flex-col items-center">
+            <Home/>
+            <Footer/>
+          </div>
+        }/>
+        <Route path="/create" element={<Game/>}/>
+        <Route path="/join" element={<Home/>}/>
+      </Routes>
       <NotificationsContainer/>
     </>
   )

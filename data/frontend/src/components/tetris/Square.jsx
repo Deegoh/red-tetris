@@ -1,10 +1,9 @@
 import React from 'react';
 
 
-export const Square = ({color}) => {
-  const classes = `size-tile ${color}`;
-
+export const Square = ({color, position}) => {
+  const classes = `border size-tile ${color}`;
   return (
-    <div className={classes}></div>
+    <div data-position={position} className={classes}></div>
   );
 };
