@@ -2,7 +2,7 @@ import {useState} from "react";
 import {
   Dialog,
 } from "@material-tailwind/react";
-import {Btn} from "./btn.jsx";
+import {Btn} from "./Btn.jsx";
 
 export function DialogPlay({btnText, children}) {
   const [open, setOpen] = useState(false);

@@ -1,8 +1,8 @@
-import {DialogPlay} from "./dialog.jsx";
+import {DialogPlay} from "./DialogPlay.jsx";
 import {Typography} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import {Btn} from "./btn.jsx";
+import {Btn} from "./Btn.jsx";
 
 
 export const Home = () => {
@@ -14,7 +14,7 @@ export const Home = () => {
       <Typography variant="h1" className="py-4">Red Tetris</Typography>
       <Typography variant="h2" className="pb-12">New way to play Tetris</Typography>
       <DialogPlay btnText="Play">
-        <div className="mx-auto w-full flex flex-col p-12 text-center text-black bg-gray-300 gap-4">
+        <div className="mx-auto w-full flex flex-col p-12 text-center text-black bg-gray-300 gap-4 rounded">
           <label className="text-left" htmlFor="pseudo">Pseudo:</label>
           <input
             id="pseudo"

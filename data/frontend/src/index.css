@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-#root {
-  background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%);
+:root {
+  --cols: 10;
+  --rows: 20;
+  --tile-size: 20px;
 }
-
 
 div[role=alert] button {
   color: #666 !important;
 }
+
 div[role=alert] button:hover {
   border: 2px solid black;
 }
