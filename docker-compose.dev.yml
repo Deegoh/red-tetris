@@ -4,10 +4,22 @@ services:
     restart: "no"
 
     environment:
-      - NODE_ENV=development
-
+      - VITE_PORT_BACK=${PORT_BACK}
+      
     volumes:
-      - ./data/frontend:/frontend
+      # - ./data/frontend:/frontend
+
+      - ./data/frontend/public:/frontend/public
+      - ./data/frontend/src:/frontend/src
+      - ./data/frontend/.eslintrc.cjs:/frontend/.eslintrc.cjs
+      - ./data/frontend/index.html:/frontend/index.html
+      - ./data/frontend/package.json:/frontend/package.json
+      - ./data/frontend/pnpm-lock.yaml:/frontend/pnpm-lock.yaml
+      - ./data/frontend/postcss.config.js:/frontend/postcss.config.js
+      - ./data/frontend/vite.config.js:/frontend/vite.config.js
+      - ./data/frontend/tailwind.config.js:/frontend/tailwind.config.js
+      - node_front:/frontend/node_modules
+
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
@@ -25,9 +37,13 @@ services:
 
     environment:
       - NODE_ENV=development
+      - PORT_FRONT=${PORT_FRONT}
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
 
     volumes:
       - ./data/backend:/backend
+
+volumes:
+  node_front:

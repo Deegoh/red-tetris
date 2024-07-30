@@ -1,9 +1,13 @@
-import * as React from "react";
+
+import { EntryModal } from './components/EntryModal'
+import { NotificationsContainer } from './components/NotificationsContainer'
+
 
 function App() {
   return (
+    <>
     <div className="container mx-auto flex flex-col items-center">
-
+      <EntryModal/>
       <div className="p-8 shadow-xl bg-gray-300 rounded text-center">
         <h1 className="py-4">Red Tetris</h1>
         <h2 className="pb-12">New way to play Tetris</h2>
@@ -24,6 +28,8 @@ function App() {
       </footer>
 
     </div>
+      <NotificationsContainer/>
+    </>
   )
 }
 
