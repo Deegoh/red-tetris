@@ -6,6 +6,7 @@ import {
   PLAY_ACTION,
   RESTART_ACTION,
   ROTATE_ACTION,
+  SET_BOARD_ACTION,
   SET_PREVIEW_ACTION,
 } from "./gameReducers.js";
 import {tetrominoesBlocks} from "../../components/tetris/tetrominoes.js";
@@ -24,7 +25,7 @@ const getNextRotation = (game) => {
   if (nextRotation >= nbrRotation) {
     return 0;
   }
-  return parseInt(nextRotation);
+  return nextRotation;
 };
 
 export const rotateAction = (game) => {
@@ -61,5 +62,12 @@ export const setPreviewTerminoAction = (game, termino) => {
   return {
     type: SET_PREVIEW_ACTION,
     payload: {...game, previewTermino: termino, rotation: 0}
+  }
+}
+
+export const setBoardAction = (game, map) => {
+  return {
+    type: SET_BOARD_ACTION,
+    payload: {...game, board: map}
   }
 }

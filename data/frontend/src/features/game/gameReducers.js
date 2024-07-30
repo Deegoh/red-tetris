@@ -1,8 +1,11 @@
+import {generateDefaultMap} from "../../components/tetris/Board.jsx";
+
 const initialState = {
   roomId: 0,
   status: 'idle',
   previewTermino: 'default',
   rotation: 0,
+  board: generateDefaultMap(),
 };
 
 export const MOVE_RIGHT_ACTION = 'MOVE_RIGHT_ACTION';
@@ -13,6 +16,7 @@ export const PAUSE_ACTION = 'PAUSE_ACTION';
 export const PLAY_ACTION = 'PLAY_ACTION';
 export const RESTART_ACTION = 'RESTART_ACTION';
 export const SET_PREVIEW_ACTION = 'SET_PREVIEW_ACTION';
+export const SET_BOARD_ACTION = 'SET_BOARD_ACTION';
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -31,6 +35,8 @@ export const gameReducer = (state = initialState, action) => {
     case RESTART_ACTION:
       return action.payload;
     case SET_PREVIEW_ACTION:
+      return action.payload;
+    case SET_BOARD_ACTION:
       return action.payload;
     default:
       return state;

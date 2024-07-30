@@ -22,7 +22,7 @@ export const Game = () => {
             dispatch(restartAction(game));
           }}>Restart</Btn>
         </div>
-        <Board/>
+        <Board board={game.board}/>
         <PreviewTetrominoes rotation={game.rotation} shape={game.previewTermino}/>
         <ControlsStore/>
         {/* TODO: add message alert like countdown or whatever*/}

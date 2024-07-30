@@ -3,7 +3,8 @@ import {Btn} from "../Btn.jsx";
 import {tetrominoesBlocks} from "../tetris/tetrominoes.js";
 import {useDispatch, useSelector} from "react-redux";
 import {randomTetromino} from "../tetris/PreviewBlock.jsx";
-import {rotateAction, setPreviewTerminoAction} from "../../features/game/gameActions.js";
+import {rotateAction, setBoardAction, setPreviewTerminoAction} from "../../features/game/gameActions.js";
+import {generateDefaultMap} from "../tetris/Board.jsx";
 
 export const AdminTools = () => {
   const [debugMode, setDebugMode] = useState(false);
@@ -59,6 +60,7 @@ export const AdminTools = () => {
           <Btn onClick={setNewTerminoPreview}>Update preview</Btn>
         </div>
         <Btn onClick={() => {dispatch(rotateAction(game))}}>Rotation preview</Btn>
+        <Btn onClick={() => {dispatch(setBoardAction(game, generateDefaultMap()))}}>Reset board</Btn>
       </div>
     </div>
   );
