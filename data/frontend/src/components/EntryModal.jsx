@@ -1,49 +1,30 @@
-import { useState, useEffect, useRef } from 'react'
-import { io } from 'socket.io-client'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useNotification } from '../app/notifications';
+import { useSocket } from '../app/socket';
+import { useSelector } from 'react-redux';
 
 export function EntryModal() {
   const [username, setUsername] = useState('');
   const [roomname, setRoomname] = useState('');
-  const [rooms, setRooms] = useState([]);
+  const rooms = useSelector((state) => state.rooms.value)
 
-  const socketRef = useRef();
-
-
-
-  const deco = () => {
-    socketRef.current && socketRef.current.disconnect();
-    socketRef.current = undefined;
-  };
+  const { addNotif } = useNotification();
+  const { socketRef } = useSocket();
 
 
-  useEffect(() => {
-    if (socketRef.current === undefined) {
-      socketRef.current = io(import.meta.env.DEV === true ? `:${import.meta.env.VITE_PORT_BACK}` : '');
-
-      socketRef.current.on("connect", () => {
-
-        socketRef.current.on('room_list', function(lst) {
-          console.log('rooms', lst);
-          setRooms(lst);
-        });
-
-        socketRef.current.on('room_creation_res', function(msg) {
-          alert(msg);
-        });
-
-      });
-    }
-  }, []);
-
-
-  const createRoom = () => {
+  const createRoom = useCallback(() => {
     if (roomname.length > 3) {
-      socketRef.current.emit('createRoom', {roomname: roomname});
+      if (socketRef.current !== undefined) {
+        socketRef.current.emit('createRoom', {roomname: roomname});
+      }
+      else {
+        addNotif('Socket not loaded (yet?)', 'error');
+      }
     }
     else {
-      alert('Room name too short')
+      addNotif('Room name too short', 'warning');
     }
-  }
+  }, [roomname, socketRef.current]);
 
   return (
     <>

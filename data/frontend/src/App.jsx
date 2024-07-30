@@ -1,14 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
 import { EntryModal } from './components/EntryModal'
+import { NotificationsContainer } from './components/NotificationsContainer'
 
 
 function App() {
   return (
+    <>
     <div className="container mx-auto flex flex-col items-center">
-
+      <EntryModal/>
       <div className="p-8 shadow-xl bg-gray-300 rounded text-center">
         <h1 className="py-4">Red Tetris</h1>
         <h2 className="pb-12">New way to play Tetris</h2>
@@ -17,7 +16,7 @@ function App() {
           Play
         </button>
       </div>
-      <footer className="text-white absolute inset-x-0 bottom-8 flex flex-col items-center">
+      {/* <footer className="text-white absolute inset-x-0 bottom-8 flex flex-col items-center">
         <small>Made with ❤️ by <a
           className="text-blue-300 underline"
           href="https://profile.intra.42.fr/users/jjaqueme">jjaqueme</a> && <a
@@ -26,9 +25,11 @@ function App() {
         <small>
           <a className="text-blue-300 underline" href="https://github.com/Deegoh/red-tetris">Github Project</a>
         </small>
-      </footer>
+      </footer> */}
 
     </div>
+      <NotificationsContainer/>
+    </>
   )
 }
 

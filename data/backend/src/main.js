@@ -24,23 +24,28 @@ io.on('connection', (socket) => {
   console.log('a user connected');
 
 
-  socket.on('createRoom', (obj) => {
-    const name = obj.roomname;
+  socket.on('createRoom', (req) => {
+    const name = req.roomname.trim();
 
-    if (!Array.from(name).some(e => "0123456789".includes(e))) {
+    if (!rooms.includes(name)) {
       rooms.push(name);
 
-      socket.emit('room_creation_res', 'success')
+      socket.emit('notify', {
+        status: 'success', 
+        text: 'created'
+      })
       io.emit('room_list', rooms);
     }
     else {
-      socket.emit('room_creation_res', 'error')
+      socket.emit('notify', {
+        status: 'error', 
+        text: 'already exists'
+      })
 
     }
   });
 
-
-  socket.emit('room_list', rooms)
+  socket.emit('room_list', rooms);
 });
 
 
