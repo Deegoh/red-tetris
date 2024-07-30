@@ -8,14 +8,18 @@ services:
       
     volumes:
       # - ./data/frontend:/frontend
+
       - ./data/frontend/public:/frontend/public
       - ./data/frontend/src:/frontend/src
       - ./data/frontend/.eslintrc.cjs:/frontend/.eslintrc.cjs
       - ./data/frontend/index.html:/frontend/index.html
       - ./data/frontend/package.json:/frontend/package.json
+      - ./data/frontend/pnpm-lock.yaml:/frontend/pnpm-lock.yaml
+      - ./data/frontend/postcss.config.js:/frontend/postcss.config.js
       - ./data/frontend/vite.config.js:/frontend/vite.config.js
+      - ./data/frontend/tailwind.config.js:/frontend/tailwind.config.js
       - node_front:/frontend/node_modules
-      # - ./data/frontend/pnpm-lock.yaml:/frontend/pnpm-lock.yaml
+
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
