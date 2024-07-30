@@ -2,7 +2,6 @@ import {
   Alert,
 } from '@material-tailwind/react';
 import { useNotification } from '../app/notifications';
-// import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillQuestionCircle, AiFillWarning } from 'react-icons/ai';
 
 export function NotificationsContainer() {
   const { notifications, removeNotif } = useNotification();
