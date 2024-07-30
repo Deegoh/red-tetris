@@ -3,6 +3,7 @@ import {Footer} from "./components/Footer.jsx";
 import {Home} from "./components/Home.jsx";
 import {Route, Routes} from "react-router-dom";
 import {Game} from "./components/Game.jsx";
+import {AdminTools} from "./components/adminTools/AdminTools.jsx";
 
 import {EntryModal} from './components/EntryModal'
 import {NotificationsContainer} from './components/NotificationsContainer'
@@ -22,6 +23,7 @@ function App() {
         <Route path="/create" element={<Game/>}/>
         <Route path="/join" element={<Home/>}/>
       </Routes>
+      <AdminTools/>
       <NotificationsContainer/>
     </>
   )

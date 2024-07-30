@@ -5,30 +5,28 @@ import {ControlsStore} from "./tetris/ControlsStore.jsx";
 import {Btn} from "./Btn.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {playAction, restartAction} from "../features/game/gameActions.js";
-import {tetrominoesBlocks} from "./tetris/tetrominoes.js";
 
 export const Game = () => {
   const dispatch = useDispatch();
   const game = useSelector(state => state.game);
+
   return (
-    <div className="flex mx-auto gap-4">
-      <div className="flex flex-col gap-4">
-        <Score>Score:<br/>...</Score>
-        <Btn onClick={() => {
-          dispatch(playAction(game));
-        }}>Play</Btn>
-        <Btn onClick={() => {
-          dispatch(restartAction(game));
-        }}>Restart</Btn>
-        <Btn onClick={() => {
-          console.log(game);
-          console.log(tetrominoesBlocks);
-        }}>view selectorStore</Btn>
+    <>
+      <div className="flex mx-auto gap-4">
+        <div className="flex flex-col gap-4">
+          <Score>Score:<br/>...</Score>
+          <Btn onClick={() => {
+            dispatch(playAction(game));
+          }}>Play</Btn>
+          <Btn onClick={() => {
+            dispatch(restartAction(game));
+          }}>Restart</Btn>
+        </div>
+        <Board/>
+        <PreviewTetrominoes rotation={game.rotation} shape={game.previewTermino}/>
+        <ControlsStore/>
+        {/* TODO: add message alert like countdown or whatever*/}
       </div>
-      <Board/>
-      <PreviewTetrominoes/>
-      <ControlsStore/>
-      {/* TODO: add message alert like countdown or whatever*/}
-    </div>
+    </>
   );
 };

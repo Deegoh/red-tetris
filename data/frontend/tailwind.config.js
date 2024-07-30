@@ -5,6 +5,15 @@ module.exports = withMT({
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    'bg-tile-I',
+    'bg-tile-O',
+    'bg-tile-T',
+    'bg-tile-L',
+    'bg-tile-J',
+    'bg-tile-S',
+    'bg-tile-Z',
+  ],
   theme: {
     extend: {
       backgroundImage: {
