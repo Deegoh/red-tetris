@@ -8,6 +8,7 @@
 # pnpm add -D tailwindcss postcss autoprefixer
 # pnpm tailwindcss init -p
 # pnpm i @material-tailwind/react
+# pnpm add react-router-dom
 
 # cp /vite.config.js .
 
