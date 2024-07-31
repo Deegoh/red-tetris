@@ -1,25 +1,23 @@
 import {useEffect, useState} from 'react';
 import {Btn} from "../Btn.jsx";
-import {tetrominoesBlocks} from "../tetris/tetrominoes.js";
+import {tetrominoes, tetrominoesBlocks} from "../tetris/tetrominoes.js";
 import {useDispatch, useSelector} from "react-redux";
 import {randomTetromino} from "../tetris/PreviewBlock.jsx";
-import {rotateAction, setBoardAction, setPreviewTerminoAction} from "../../features/game/gameActions.js";
 import {generateDefaultMap} from "../tetris/Board.jsx";
-import store from "../../app/store.js";
+import {
+  boardUpdated,
+  tetrominoPreviewUpdated,
+  tetrominoRotated,
+} from "../../features/game/gameSlice.js";
 
 export const AdminTools = () => {
   const [debugMode, setDebugMode] = useState(false);
-  const [autoLog, setAutoLog] = useState(false);
-  const [previewTermino, setPreviewTermino] = useState('default');
+  const [previewTetromino, setpreviewTetromino] = useState('default');
+
   const game = useSelector(state => state.game);
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    if (autoLog) {
-      store.subscribe(() => {console.log(store.getState())})
-    }
-
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Escape") {
         const adminTools = document.getElementById("adminTools");
@@ -35,15 +33,17 @@ export const AdminTools = () => {
   });
 
   const updateInput = (event) => {
-    setPreviewTermino(event.target.value);
+    const newTetromino = event.target.value;
+    setpreviewTetromino(newTetromino);
+    if (!tetrominoes.includes(newTetromino)) {
+      return;
+    }
+    dispatch(tetrominoPreviewUpdated(newTetromino));
   }
   const setRandomTermino = () => {
     const termino = randomTetromino();
-    setPreviewTermino(termino);
-    dispatch(setPreviewTerminoAction(game, termino));
-  }
-  const setNewTerminoPreview = () => {
-    dispatch(setPreviewTerminoAction(game, previewTermino));
+    setpreviewTetromino(termino);
+    dispatch(tetrominoPreviewUpdated(termino));
   }
   const toggleAutoLog = () => {
     setAutoLog(!autoLog);
@@ -57,26 +57,23 @@ export const AdminTools = () => {
           console.log(tetrominoesBlocks);
         }}>log tetris block</Btn>
 
-        <div className="flex gap-4">
-          <Btn onClick={() => {
-            console.log(game);
-          }}>log gameStore</Btn>
-          <Btn onClick={toggleAutoLog}>auto log</Btn>
-        </div>
+        <Btn onClick={() => {
+          console.log(game);
+        }}>log gameStore</Btn>
 
         <label>
           <span>Termino Preview</span>
-          <input value={previewTermino} onChange={updateInput} type="text"/>
+          <input value={previewTetromino} onChange={updateInput} type="text"/>
         </label>
         <div className="flex gap-4">
           <Btn onClick={setRandomTermino}>Random preview</Btn>
-          <Btn onClick={setNewTerminoPreview}>Update preview</Btn>
+          <Btn onClick={() => {
+            dispatch(tetrominoRotated())
+          }}>Rotation preview</Btn>
         </div>
+
         <Btn onClick={() => {
-          dispatch(rotateAction(game))
-        }}>Rotation preview</Btn>
-        <Btn onClick={() => {
-          dispatch(setBoardAction(game, generateDefaultMap()))
+          dispatch(boardUpdated(generateDefaultMap()))
         }}>Reset board</Btn>
       </div>
     </div>

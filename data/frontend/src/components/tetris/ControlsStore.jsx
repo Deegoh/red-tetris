@@ -1,36 +1,50 @@
 import {useEffect} from 'react';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
-  moveDownAction,
-  moveLeftAction,
-  moveRightAction,
-  rotateAction
-} from "../../features/game/gameActions.js";
+  tetrominoHardDropped,
+  tetrominoLeftMoved,
+  tetrominoRightMoved,
+  tetrominoRotated,
+  tetrominoSoftDropped
+} from "../../features/game/gameSlice.js";
+
+// Left and right arrows: Horizontal move to the right or left
+// Top arrow: Rotation (only one direction is enough)
+// Down arrow: Fall towards the pile
+// Spacebar: Vertical move to position a piece in a hole in the pile
 
 export const ControlsStore = () => {
+  const game = useSelector(state => state.game);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      const key = event.key.toString().toLowerCase();
-      if (key === 'arrowup' || key === 'w') {
-        dispatch(rotateAction());
+      if (game.status !== "running") {
+        return;
       }
-      if (key === 'arrowleft' || key === 'a') {
-        dispatch(moveLeftAction())
+
+      const keyCode = event.code;
+      if (keyCode === 'ArrowUp' || keyCode === 'KeyW') {
+        dispatch(tetrominoRotated());
       }
-      if (key === 'arrowdown' || key === 's') {
-        dispatch(moveDownAction())
+      if (keyCode === 'ArrowLeft' || keyCode === 'KeyA') {
+        dispatch(tetrominoLeftMoved());
       }
-      if (key === 'arrowright' || key === 'd') {
-        dispatch(moveRightAction())
+      if (keyCode === 'ArrowDown' || keyCode === 'KeyS') {
+        dispatch(tetrominoSoftDropped());
       }
-    };
+      if (keyCode === 'ArrowRight' || keyCode === 'KeyD') {
+        dispatch(tetrominoRightMoved());
+      }
+      if (keyCode === 'Space') {
+        dispatch(tetrominoHardDropped());
+      }
+    }
 
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [game]);
 };

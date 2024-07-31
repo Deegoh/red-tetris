@@ -1,5 +1,6 @@
 import {Square} from "./Square.jsx";
 import {emptyColor, tetrominoes, tetrominoesBlocks} from "./tetrominoes.js";
+import {useSelector} from "react-redux";
 
 export const randomTetromino = () => {
   return tetrominoes.charAt(Math.floor(Math.random() * tetrominoes.length));
@@ -21,9 +22,9 @@ const parseAndFormatTetromino = (shape, rotation) => {
   return tetromino;
 }
 
-export const PreviewTetrominoes = ({shape, rotation = 0}) => {
-  const previewBlock = parseAndFormatTetromino(shape, rotation);
-
+export const PreviewTetrominoes = () => {
+  const {previewTermino, rotation} = useSelector(state => state.game);
+  const previewBlock = parseAndFormatTetromino(previewTermino, rotation);
   return (
     <div className="preview-block grid grid-cols-4 gap-0 content-start">
       {previewBlock}

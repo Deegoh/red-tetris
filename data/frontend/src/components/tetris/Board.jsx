@@ -1,5 +1,6 @@
 import {Square} from "./Square.jsx";
 import {emptyColor} from "./tetrominoes.js";
+import {useSelector} from "react-redux";
 
 export const rows = 20;
 export const cols = 10;
@@ -19,7 +20,7 @@ const renderBoard = (board) => {
       if (currentPosition === emptyColor) {
         color = "bg-tile";
       } else {
-        color = "bg-tile-"+currentPosition[row][col];
+        color = "bg-tile-" + currentPosition[row][col];
       }
       map.push(<Square position={index} key={index++} color={color}/>);
     }
@@ -27,7 +28,9 @@ const renderBoard = (board) => {
   return map;
 };
 
-export const Board = ({board}) => {
+export const Board = () => {
+  const board = useSelector(state => state.game.board);
+
   return (
     <div className="board grid grid-cols-10 gap-0">
       {renderBoard(board)}
