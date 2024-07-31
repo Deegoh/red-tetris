@@ -5,14 +5,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {randomTetromino} from "../tetris/PreviewBlock.jsx";
 import {rotateAction, setBoardAction, setPreviewTerminoAction} from "../../features/game/gameActions.js";
 import {generateDefaultMap} from "../tetris/Board.jsx";
+import store from "../../app/store.js";
 
 export const AdminTools = () => {
   const [debugMode, setDebugMode] = useState(false);
+  const [autoLog, setAutoLog] = useState(false);
   const [previewTermino, setPreviewTermino] = useState('default');
   const game = useSelector(state => state.game);
   const dispatch = useDispatch();
 
   useEffect(() => {
+
+    if (autoLog) {
+      store.subscribe(() => {console.log(store.getState())})
+    }
+
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Escape") {
         const adminTools = document.getElementById("adminTools");
@@ -38,6 +45,9 @@ export const AdminTools = () => {
   const setNewTerminoPreview = () => {
     dispatch(setPreviewTerminoAction(game, previewTermino));
   }
+  const toggleAutoLog = () => {
+    setAutoLog(!autoLog);
+  }
 
   return (
     <div id="adminTools"
@@ -47,9 +57,12 @@ export const AdminTools = () => {
           console.log(tetrominoesBlocks);
         }}>log tetris block</Btn>
 
-        <Btn onClick={() => {
-          console.log(game);
-        }}>log gameStore</Btn>
+        <div className="flex gap-4">
+          <Btn onClick={() => {
+            console.log(game);
+          }}>log gameStore</Btn>
+          <Btn onClick={toggleAutoLog}>auto log</Btn>
+        </div>
 
         <label>
           <span>Termino Preview</span>
@@ -59,8 +72,12 @@ export const AdminTools = () => {
           <Btn onClick={setRandomTermino}>Random preview</Btn>
           <Btn onClick={setNewTerminoPreview}>Update preview</Btn>
         </div>
-        <Btn onClick={() => {dispatch(rotateAction(game))}}>Rotation preview</Btn>
-        <Btn onClick={() => {dispatch(setBoardAction(game, generateDefaultMap()))}}>Reset board</Btn>
+        <Btn onClick={() => {
+          dispatch(rotateAction(game))
+        }}>Rotation preview</Btn>
+        <Btn onClick={() => {
+          dispatch(setBoardAction(game, generateDefaultMap()))
+        }}>Reset board</Btn>
       </div>
     </div>
   );

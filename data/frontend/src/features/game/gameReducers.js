@@ -5,6 +5,7 @@ const initialState = {
   status: 'idle',
   previewTermino: 'default',
   rotation: 0,
+  score: 0,
   board: generateDefaultMap(),
 };
 

@@ -6,6 +6,7 @@ import {gameReducer} from "../features/game/gameReducers.js";
 //Tuto here https://react-redux.js.org/tutorials/quick-start
 
 export default configureStore({
+  // TODO: maybe we can split some logic to multiple reducer
   reducer: {
     counter: counterReducer,
     game: gameReducer,

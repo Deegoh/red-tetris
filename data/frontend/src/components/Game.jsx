@@ -14,7 +14,7 @@ export const Game = () => {
     <>
       <div className="flex mx-auto gap-4">
         <div className="flex flex-col gap-4">
-          <Score>Score:<br/>...</Score>
+          <Score>{game.score}</Score>
           <Btn onClick={() => {
             dispatch(playAction(game));
           }}>Play</Btn>
