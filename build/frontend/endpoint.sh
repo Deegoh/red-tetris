@@ -9,6 +9,7 @@
 # pnpm tailwindcss init -p
 # pnpm i @material-tailwind/react
 # pnpm i --save-dev jsdom eslint vitest @vitest/coverage-v8 @vitest/plugin-react
+# pnpm add react-router-dom
 
 # cp /vite.config.js .
 

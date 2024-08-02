@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useNotification } from 'src/app/notifications';
 import { useSocket } from 'src/app/socket';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ export function EntryModal() {
     else {
       addNotif('Room name too short', 'warning');
     }
-  }, [roomname, socketRef.current, addNotif]);
+  }, [roomname, socketRef, addNotif]);
 
   return (
     <>
