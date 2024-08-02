@@ -1,41 +1,40 @@
-
-import { describe, expect, test, beforeEach, afterEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import configureStore from 'redux-mock-store';
-import { Provider } from "react-redux";
+import { Provider } from 'react-redux';
 
-import { useNotification } from "src/app/notifications";
-import { useSocket } from "src/app/socket";
-import { RoomList } from "./RoomList";
+import { useNotification } from 'src/app/notifications';
+import { useSocket } from 'src/app/socket';
+import { RoomList } from './RoomList';
 vi.mock('src/app/notifications');
 vi.mock('src/app/socket');
 vi.mock('react-router-dom', () => ({
   useNavigate: () => {
-    vi.fn()
-  }
+    vi.fn();
+  },
 }));
 
 const mockStore = configureStore([]);
 const store = mockStore({
   rooms: {
     value: ['test1', 'test2'],
-  }
+  },
 });
 
-describe("EntryModal", () => {
-  let addNotifMock;   
+describe('EntryModal', () => {
+  let addNotifMock;
   let socketEmitMock;
 
   beforeEach(() => {
     addNotifMock = vi.fn();
     useNotification.mockReturnValue({
-      addNotif: addNotifMock
+      addNotif: addNotifMock,
     });
 
     socketEmitMock = vi.fn();
     useSocket.mockReturnValue({
-      socketRef: { current: { emit: socketEmitMock } }
+      socketRef: { current: { emit: socketEmitMock } },
     });
   });
 
@@ -43,13 +42,15 @@ describe("EntryModal", () => {
     vi.clearAllMocks();
   });
 
+  test('renders from store', () => {
+    render(
+      <Provider store={store}>
+        <RoomList />
+      </Provider>
+    );
 
-  test("renders from store", () => {
-    render(<Provider store={store}><RoomList /></Provider>);
-
-    expect(screen.getByTestId("rooms").getElementsByTagName('div').length).toBe(2);
+    expect(screen.getByTestId('rooms').getElementsByTagName('div').length).toBe(
+      2
+    );
   });
 });
-
-
-

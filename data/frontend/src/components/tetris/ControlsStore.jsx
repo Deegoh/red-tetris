@@ -1,12 +1,12 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   tetrominoHardDropped,
   tetrominoLeftMoved,
   tetrominoRightMoved,
   tetrominoRotated,
-  tetrominoSoftDropped
-} from "../../features/game/gameSlice.js";
+  tetrominoSoftDropped,
+} from '../../features/game/gameSlice.js';
 
 // Left and right arrows: Horizontal move to the right or left
 // Top arrow: Rotation (only one direction is enough)
@@ -14,12 +14,12 @@ import {
 // Spacebar: Vertical move to position a piece in a hole in the pile
 
 export const ControlsStore = () => {
-  const game = useSelector(state => state.game);
+  const game = useSelector((state) => state.game);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (game.status !== "running") {
+      if (game.status !== 'running') {
         return;
       }
 
@@ -39,7 +39,7 @@ export const ControlsStore = () => {
       if (keyCode === 'Space') {
         dispatch(tetrominoHardDropped());
       }
-    }
+    };
 
     window.addEventListener('keydown', handleKeyDown);
 

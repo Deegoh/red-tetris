@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "testlive": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "prettier": "prettier --ignore-unknown --write src"
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.9",

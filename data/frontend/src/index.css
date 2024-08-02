@@ -8,10 +8,10 @@
   --tile-size: 20px;
 }
 
-div[role=alert] button {
+div[role='alert'] button {
   color: #666 !important;
 }
 
-div[role=alert] button:hover {
+div[role='alert'] button:hover {
   border: 2px solid black;
 }

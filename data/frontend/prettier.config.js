@@ -9,7 +9,6 @@ const config = {
   semi: true,
   singleQuote: true,
   bracketSameLine: true,
-  arrowParens: 'avoid',
   bracketSpacing: true,
   htmlWhitespaceSensitivity: 'css',
   insertPragma: false,

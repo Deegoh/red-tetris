@@ -1,42 +1,40 @@
-
-import { describe, expect, test, afterEach, cleanup } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { useState } from "react";
-import { EntryModal } from "./EntryModal";
+import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { EntryModal } from './EntryModal';
 
 import configureStore from 'redux-mock-store';
-import { Provider } from "react-redux";
+import { Provider } from 'react-redux';
 
-import { useNotification } from "src/app/notifications";
-import { useSocket } from "src/app/socket";
+import { useNotification } from 'src/app/notifications';
+import { useSocket } from 'src/app/socket';
 vi.mock('src/app/notifications');
 vi.mock('src/app/socket');
 vi.mock('react-router-dom', () => ({
   useNavigate: () => {
-    vi.fn()
-  }
+    vi.fn();
+  },
 }));
 
 const mockStore = configureStore([]);
 const store = mockStore({
   rooms: {
     value: ['test1', 'test2'],
-  }
+  },
 });
 
-describe("EntryModal", () => {
+describe('EntryModal', () => {
   let addNotifMock;
   let socketEmitMock;
 
   beforeEach(() => {
     addNotifMock = vi.fn();
     useNotification.mockReturnValue({
-      addNotif: addNotifMock
+      addNotif: addNotifMock,
     });
 
     socketEmitMock = vi.fn();
     useSocket.mockReturnValue({
-      socketRef: { current: { emit: socketEmitMock } }
+      socketRef: { current: { emit: socketEmitMock } },
     });
   });
 
@@ -44,46 +42,54 @@ describe("EntryModal", () => {
     vi.clearAllMocks();
   });
 
+  test('renders', () => {
+    render(
+      <Provider store={store}>
+        <EntryModal />
+      </Provider>
+    );
 
-
-  test("renders", () => {
-    render(<Provider store={store}><EntryModal /></Provider>);
-
-    expect(screen.getByTestId("username")).toBeDefined();
-    expect(screen.getByTestId("roomname")).toBeDefined();
-    expect(screen.getByTestId("rooms").getElementsByTagName('div').length).toBe(2);
+    expect(screen.getByTestId('username')).toBeDefined();
+    expect(screen.getByTestId('roomname')).toBeDefined();
+    expect(screen.getByTestId('rooms').getElementsByTagName('div').length).toBe(
+      2
+    );
   });
 
+  test('room name too short', () => {
+    render(
+      <Provider store={store}>
+        <EntryModal />
+      </Provider>
+    );
 
-  test("room name too short", () => {
-    render(<Provider store={store}><EntryModal /></Provider>);
+    const roomNameInput = screen.getByTestId('roomname');
+    const createRoomButton = screen.getByTestId('createroom');
 
-    const roomNameInput = screen.getByTestId("roomname");
-    const createRoomButton = screen.getByTestId("createroom");
-
-    fireEvent.change(roomNameInput, { target: { value: "sh" } });
+    fireEvent.change(roomNameInput, { target: { value: 'sh' } });
     fireEvent.click(createRoomButton);
 
-
     expect(addNotifMock).toHaveBeenCalled();
-    expect(addNotifMock).toHaveBeenCalledWith("Room name too short", "warning");
+    expect(addNotifMock).toHaveBeenCalledWith('Room name too short', 'warning');
   });
 
+  test('room name good length', () => {
+    render(
+      <Provider store={store}>
+        <EntryModal />
+      </Provider>
+    );
 
-  test("room name good length", () => {
-    render(<Provider store={store}><EntryModal /></Provider>);
+    const roomNameInput = screen.getByTestId('roomname');
+    const createRoomButton = screen.getByTestId('createroom');
 
-    const roomNameInput = screen.getByTestId("roomname");
-    const createRoomButton = screen.getByTestId("createroom");
-
-    fireEvent.change(roomNameInput, { target: { value: "shsh" } });
+    fireEvent.change(roomNameInput, { target: { value: 'shsh' } });
     fireEvent.click(createRoomButton);
 
     expect(addNotifMock).not.toHaveBeenCalled();
     expect(socketEmitMock).toHaveBeenCalled();
-    expect(socketEmitMock).toHaveBeenCalledWith("createRoom", { roomname: "shsh" });
+    expect(socketEmitMock).toHaveBeenCalledWith('createRoom', {
+      roomname: 'shsh',
+    });
   });
 });
-
-
-

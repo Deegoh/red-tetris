@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   Dialog,
   DialogHeader,
   DialogBody,
   DialogFooter,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 
 export function DialogDefault() {
   const [open, setOpen] = React.useState(false);
@@ -14,7 +14,7 @@ export function DialogDefault() {
 
   return (
     <>
-      <Button onClick={handleOpen} variant="gradient">
+      <Button onClick={handleOpen} variant='gradient'>
         Open Dialog
       </Button>
       <Dialog open={open} handler={handleOpen}>
@@ -27,14 +27,13 @@ export function DialogDefault() {
         </DialogBody>
         <DialogFooter>
           <Button
-            variant="text"
-            color="red"
+            variant='text'
+            color='red'
             onClick={handleOpen}
-            className="mr-1"
-          >
+            className='mr-1'>
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button variant='gradient' color='green' onClick={handleOpen}>
             <span>Confirm</span>
           </Button>
         </DialogFooter>

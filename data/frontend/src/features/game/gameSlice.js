@@ -1,6 +1,6 @@
-import {generateDefaultMap} from "../../components/tetris/Board.jsx";
-import {createSlice} from "@reduxjs/toolkit";
-import {tetrominoesBlocks} from "../../components/tetris/tetrominoes.js";
+import { generateDefaultMap } from '../../components/tetris/Board.jsx';
+import { createSlice } from '@reduxjs/toolkit';
+import { tetrominoesBlocks } from '../../components/tetris/tetrominoes.js';
 
 const initialState = {
   roomId: 0,
@@ -30,14 +30,10 @@ export const gameSlice = createSlice({
     gameRestarted: (state) => {
       state.status = 'idle';
     },
-    tetrominoRightMoved: (state) => {
-    },
-    tetrominoLeftMoved: (state) => {
-    },
-    tetrominoSoftDropped: (state) => {
-    },
-    tetrominoHardDropped: (state) => {
-    },
+    tetrominoRightMoved: (state) => {},
+    tetrominoLeftMoved: (state) => {},
+    tetrominoSoftDropped: (state) => {},
+    tetrominoHardDropped: (state) => {},
     tetrominoPreviewUpdated: (state, action) => {
       state.rotation = 0;
       state.previewTermino = action.payload;
@@ -47,8 +43,8 @@ export const gameSlice = createSlice({
     },
     boardUpdated: (state, action) => {
       state.board = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -61,7 +57,6 @@ export const {
   tetrominoPreviewUpdated,
   tetrominoRotated,
   boardUpdated,
-} = gameSlice.actions
-
+} = gameSlice.actions;
 
 export default gameSlice.reducer;

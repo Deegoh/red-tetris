@@ -1,10 +1,8 @@
-import {useState} from "react";
-import {
-  Dialog,
-} from "@material-tailwind/react";
-import {Btn} from "./Btn.jsx";
+import { useState } from 'react';
+import { Dialog } from '@material-tailwind/react';
+import { Btn } from './Btn.jsx';
 
-export function DialogPlay({btnText, children}) {
+export function DialogPlay({ btnText, children }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -13,12 +11,12 @@ export function DialogPlay({btnText, children}) {
     <>
       <Btn onClick={handleOpen}>{btnText}</Btn>
       <Dialog
-        size="xs"
+        size='xs'
         open={open}
         handler={handleOpen}
         animate={{
-          mount: {scale: 1, y: 0},
-          unmount: {scale: 0.9, y: -100},
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
         }}>
         {children}
       </Dialog>

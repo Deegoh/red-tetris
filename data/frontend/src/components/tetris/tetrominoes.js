@@ -1,18 +1,20 @@
 // https://en.wikipedia.org/wiki/Tetromino
 // https://tetris.wiki/Tetromino
 
-export const tetrominoes = "IOTJLSZ";
+export const tetrominoes = 'IOTJLSZ';
 
 export const emptyColor = '.';
 
 export const tetrominoesBlocks = {
-  'default': [[
-    ['.', '.', '.', '.'],
-    ['.', '.', '.', '.'],
-    ['.', '.', '.', '.'],
-    ['.', '.', '.', '.'],
-  ]],
-  'I': [
+  default: [
+    [
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+    ],
+  ],
+  I: [
     [
       ['.', 'I', '.', '.'],
       ['.', 'I', '.', '.'],
@@ -24,9 +26,9 @@ export const tetrominoesBlocks = {
       ['I', 'I', 'I', 'I'],
       ['.', '.', '.', '.'],
       ['.', '.', '.', '.'],
-    ]
+    ],
   ],
-  'O': [
+  O: [
     [
       ['.', 'O', 'O', '.'],
       ['.', 'O', 'O', '.'],
@@ -34,7 +36,7 @@ export const tetrominoesBlocks = {
       ['.', '.', '.', '.'],
     ],
   ],
-  'T': [
+  T: [
     [
       ['.', '.', '.', '.'],
       ['T', 'T', 'T', '.'],
@@ -60,7 +62,7 @@ export const tetrominoesBlocks = {
       ['.', '.', '.', '.'],
     ],
   ],
-  'J': [
+  J: [
     [
       ['J', '.', '.', '.'],
       ['J', 'J', 'J', '.'],
@@ -86,7 +88,7 @@ export const tetrominoesBlocks = {
       ['.', '.', '.', '.'],
     ],
   ],
-  'L': [
+  L: [
     [
       ['.', '.', '.', '.'],
       ['L', 'L', 'L', '.'],
@@ -112,7 +114,7 @@ export const tetrominoesBlocks = {
       ['.', '.', '.', '.'],
     ],
   ],
-  'S': [
+  S: [
     [
       ['.', '.', '.', '.'],
       ['.', 'S', 'S', '.'],
@@ -126,7 +128,7 @@ export const tetrominoesBlocks = {
       ['.', '.', '.', '.'],
     ],
   ],
-  'Z': [
+  Z: [
     [
       ['.', '.', '.', '.'],
       ['Z', 'Z', '.', '.'],
