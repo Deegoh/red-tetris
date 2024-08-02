@@ -7,8 +7,6 @@ import store from './app/store'
 import {Provider} from 'react-redux'
 import {ThemeProvider} from "@material-tailwind/react";
 import {BrowserRouter} from "react-router-dom";
-import {Provider} from 'react-redux'
-import {ThemeProvider} from "@material-tailwind/react";
 import {NotificationProvider} from './app/notifications.jsx'
 import {SocketProvider} from './app/socket.jsx'
 
