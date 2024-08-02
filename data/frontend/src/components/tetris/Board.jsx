@@ -1,6 +1,6 @@
-import {Square} from "./Square.jsx";
-import {emptyColor} from "./tetrominoes.js";
-import {useSelector} from "react-redux";
+import { Square } from "./Square.jsx";
+import { emptyColor } from "./tetrominoes.js";
+import { useSelector } from "react-redux";
 
 export const rows = 20;
 export const cols = 10;
@@ -20,9 +20,9 @@ const renderBoard = (board) => {
       if (currentPosition === emptyColor) {
         color = "bg-tile";
       } else {
-        color = "bg-tile-" + currentPosition[row][col];
+        color = "bg-tile-" + currentPosition;
       }
-      map.push(<Square position={index} key={index++} color={color}/>);
+      map.push(<Square position={index} key={index++} color={color} />);
     }
   }
   return map;

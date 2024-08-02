@@ -3,6 +3,7 @@ import { useNotification } from './notifications';
 import { io } from 'socket.io-client'
 import { setRooms } from '../features/rooms/roomSlice';
 import { useDispatch } from 'react-redux';
+import { boardUpdated } from 'src/features/game/gameSlice';
 
 
 const SocketContext = createContext(undefined);
@@ -15,7 +16,7 @@ export function useSocket() {
   return context;
 }
 
-export function SocketProvider({children}) {
+export function SocketProvider({ children }) {
   const socketRef = useRef();
 
   const dispatch = useDispatch()
@@ -28,17 +29,23 @@ export function SocketProvider({children}) {
 
       socketRef.current.on("connect", () => {
 
-        socketRef.current.on('room_list', function(rooms) {
+        socketRef.current.on('room_list', function (rooms) {
           dispatch(setRooms(rooms))
         });
 
-        socketRef.current.on('notify', function(res) {
+        socketRef.current.on('notify', function (res) {
           addNotif(res?.text, res?.status);
+        });
+
+        socketRef.current.on('updateBoard', (res) => {
+          if (res?.board !== undefined) {
+            dispatch(boardUpdated(res.board))
+          }
         });
 
       });
     }
-  }, []);
+  }, [addNotif, dispatch]);
 
 
   return (

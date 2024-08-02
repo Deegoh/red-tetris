@@ -28,16 +28,18 @@ runback:
 	${DOCKER} exec backend bash
 
 testfront:
-	${DOCKER} exec frontend pnpm run test
+	${DOCKER} exec frontend pnpm run testlive
 coverfront:
 	${DOCKER} exec frontend pnpm run coverage
 testback:
-	${DOCKER} exec backend pnpm run test
-		${DOCKER} exec frontend pnpm run test
+	${DOCKER} exec backend pnpm run testlive
 coverback:
 	${DOCKER} exec frontend pnpm run coverage
 
-test: testfront testback
+test:
+	${DOCKER} exec frontend pnpm run test
+	${DOCKER} exec backend pnpm run test
+
 cover: coverfront coverback
 
 clean:

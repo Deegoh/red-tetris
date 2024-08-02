@@ -7,18 +7,18 @@ services:
       - VITE_PORT_BACK=${PORT_BACK}
       
     volumes:
-      # - ./data/frontend:/frontend
+      - ./data/frontend:/frontend
 
-      - ./data/frontend/public:/frontend/public
-      - ./data/frontend/src:/frontend/src
-      - ./data/frontend/.eslintrc.cjs:/frontend/.eslintrc.cjs
-      - ./data/frontend/index.html:/frontend/index.html
-      - ./data/frontend/package.json:/frontend/package.json
-      - ./data/frontend/pnpm-lock.yaml:/frontend/pnpm-lock.yaml
-      - ./data/frontend/postcss.config.js:/frontend/postcss.config.js
-      - ./data/frontend/vite.config.js:/frontend/vite.config.js
-      - ./data/frontend/tailwind.config.js:/frontend/tailwind.config.js
-      - node_front:/frontend/node_modules
+      # - ./data/frontend/public:/frontend/public
+      # - ./data/frontend/src:/frontend/src
+      # - ./data/frontend/.eslintrc.cjs:/frontend/.eslintrc.cjs
+      # - ./data/frontend/index.html:/frontend/index.html
+      # - ./data/frontend/package.json:/frontend/package.json
+      # - ./data/frontend/pnpm-lock.yaml:/frontend/pnpm-lock.yaml
+      # - ./data/frontend/postcss.config.js:/frontend/postcss.config.js
+      # - ./data/frontend/vite.config.js:/frontend/vite.config.js
+      # - ./data/frontend/tailwind.config.js:/frontend/tailwind.config.js
+      # - node_front:/frontend/node_modules
 
 
     stdin_open:  true # docker run -i
@@ -45,5 +45,12 @@ services:
     volumes:
       - ./data/backend:/backend
 
+      # - ./data/backend/src:/backend/src
+      # - ./data/backend/package.json:/backend/package.json
+      # - ./data/backend/pnpm-lock.yaml:/backend/pnpm-lock.yaml
+      # - node_back:/backend/node_modules
+
+
 volumes:
   node_front:
+  node_back:
