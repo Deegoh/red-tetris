@@ -49,7 +49,7 @@ export function NotificationsContainer() {
 
 
   return (
-    <div className='fixed bottom-0 right-0 mb-5 mr-5 z-20 space-y-2'>
+    <div className='fixed bottom-0 right-0 mb-5 mr-5 z-[99999] space-y-2'>
       { notifications.map((notif) =>
         <Alert
           key={notif.id}
