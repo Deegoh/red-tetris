@@ -1,28 +1,26 @@
-import {Typography} from "@material-tailwind/react";
-import {Link} from "react-router-dom";
-import {Btn} from "./Btn.jsx";
-import React, {useCallback, useState} from "react";
-import {useSocket} from "../app/socket.jsx";
-import {useNotification} from "../app/notifications.jsx";
+import { Typography } from "@material-tailwind/react";
+import { Btn } from "./Btn.jsx";
+import { useCallback, useState } from "react";
+import { useSocket } from "src/app/socket.jsx";
+import { useNotification } from "src/app/notifications.jsx";
 
 export const RoomCreation = () => {
   const [pseudo, setPseudo] = useState('');
-  const [roomname, setRoomname] = useState('');
 
-  const {socketRef} = useSocket();
-  const {addNotif} = useNotification();
+  const { socketRef } = useSocket();
+  const { addNotif } = useNotification();
 
   const createRoom = useCallback(() => {
-    if (roomname.length > 3) {
+    if (pseudo.length > 3) {
       if (socketRef.current !== undefined) {
-        socketRef.current.emit('createRoom', {roomname: roomname});
+        socketRef.current.emit('createRoom', { pseudo: pseudo });
       } else {
         addNotif('Socket not loaded (yet?)', 'error');
       }
     } else {
-      addNotif('Room name too short', 'warning');
+      addNotif('Pseudo too short', 'warning');
     }
-  }, [roomname, socketRef.current]);
+  }, [addNotif, pseudo, socketRef]);
 
   return (
     <>
@@ -31,13 +29,16 @@ export const RoomCreation = () => {
         <input
           className="ml-1"
           id="pseudo"
+          data-testid="pseudo"
           type="text"
           value={pseudo}
           onChange={(e) => setPseudo(e.target.value)}
         />
       </label>
 
-      <Btn className="mx-auto max-w-fit" onClick={createRoom}>Create</Btn>
+      <Btn className="mx-auto max-w-fit" onClick={createRoom} data-testid="createroom">
+        Create
+      </Btn>
     </>
   );
 };
