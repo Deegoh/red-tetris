@@ -19,7 +19,6 @@ export function EntryModal() {
 
 
   useEffect(() => {
-    console.log(window.location)
     const hash = window.location.hash;
     if (hash === '' || hash === undefined) {
       setMode('home')
@@ -47,8 +46,6 @@ export function EntryModal() {
     else {
       setMode('game')
     }
-
-    console.log(value, room, user, firstBracket, lastBracket);
 
   }, [addNotif, navigate])
 
