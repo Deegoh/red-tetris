@@ -1,7 +1,7 @@
-import {configureStore} from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from '../features/counter/counterSlice'
 import gameSlice from "../features/game/gameSlice.js";
-import {roomSlice} from '../features/rooms/roomSlice'
+import { roomSlice } from '../features/rooms/roomSlice'
 
 //Tuto here https://react-redux.js.org/tutorials/quick-start
 

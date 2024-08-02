@@ -1,10 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
 
+  resolve: {
+    alias: {
+      src: path.resolve('./src/'),
+    },
+  },
   server: {
     watch: {
       usePolling: true
@@ -24,8 +30,14 @@ export default defineConfig({
         },
         chunkFileNames: '[name]-[hash].js',
         entryFileNames: 'bundle.js',
+        manualChunks: () => "bundle.js"
       },
     },
     outDir: './dist',
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/test_setup.js',
   }
 })

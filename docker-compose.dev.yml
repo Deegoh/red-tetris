@@ -45,5 +45,12 @@ services:
     volumes:
       - ./data/backend:/backend
 
+      # - ./data/backend/src:/backend/src
+      # - ./data/backend/package.json:/backend/package.json
+      # - ./data/backend/pnpm-lock.yaml:/backend/pnpm-lock.yaml
+      # - node_back:/backend/node_modules
+
+
 volumes:
   node_front:
+  node_back:

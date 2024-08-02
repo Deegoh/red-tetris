@@ -1,8 +1,13 @@
-import {DialogDefault} from "./DialogDefault.jsx";
-import {Typography} from "@material-tailwind/react";
+import { DialogPlay } from "./DialogPlay.jsx";
+import { Typography } from "@material-tailwind/react";
+import { useState } from "react";
+import { DialogDefault } from "./DialogDefault.jsx";
+import { RoomList } from "./RoomList.jsx";
+import { RoomCreation } from "./RoomCreation.jsx";
+import { NotificationsContainer } from "./NotificationsContainer.jsx";
 import React from "react";
-import {RoomList} from "./RoomList.jsx";
-import {RoomCreation} from "./RoomCreation.jsx";
+
+
 
 export const Home = () => {
   return (
