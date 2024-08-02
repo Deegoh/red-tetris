@@ -11,6 +11,11 @@ import { useNotification } from "src/app/notifications";
 import { useSocket } from "src/app/socket";
 vi.mock('src/app/notifications');
 vi.mock('src/app/socket');
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => {
+    vi.fn()
+  }
+}));
 
 const mockStore = configureStore([]);
 const store = mockStore({
