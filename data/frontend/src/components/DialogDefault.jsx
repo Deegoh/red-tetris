@@ -4,7 +4,7 @@ import {
 } from "@material-tailwind/react";
 import {Btn} from "./Btn.jsx";
 
-export function DialogPlay({btnText, children}) {
+export function DialogDefault({btnText, children}) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
