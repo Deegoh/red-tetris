@@ -10,6 +10,7 @@
 # pnpm i @material-tailwind/react
 # pnpm i --save-dev jsdom eslint vitest @vitest/coverage-v8 @vitest/plugin-react
 # pnpm add react-router-dom
+# pnpm add --save-dev --save-exact prettier
 
 # cp /vite.config.js .
 
