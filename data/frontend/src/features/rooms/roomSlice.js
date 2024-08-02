@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 export const roomSlice = createSlice({
     name: 'rooms',
@@ -12,4 +12,4 @@ export const roomSlice = createSlice({
     },
 })
 
-export const {setRooms} = roomSlice.actions
+export const { setRooms } = roomSlice.actions

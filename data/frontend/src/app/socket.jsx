@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef } from 'react';
 import { useNotification } from './notifications';
 import { io } from 'socket.io-client'
 import { setRooms } from '../features/rooms/roomSlice';

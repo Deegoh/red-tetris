@@ -65,7 +65,8 @@ export function EntryModal() {
 
   return (
     <>
-      <div style={{ backgroundColor: "red", minWidth: "20rem" }} >
+      {/*login*/}
+      <div style={{ backgroundColor: "red", minWidth: "20rem" }}>
 
         <h2>Enter red-tetris</h2>
         <p>Choose an username, then join a room or create a new one</p>
