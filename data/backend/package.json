@@ -5,8 +5,8 @@
     "scripts": {
         "dev": "node --watch src/main.js",
         "test": "jest",
-        "coverage": "jest --coverage"
-
+        "coverage": "jest --coverage",
+        "prettier": "prettier --ignore-unknown --write src"
     },
     "dependencies": {
         "express": "4",
@@ -14,6 +14,7 @@
     },
     "devDependencies": {
         "jest": "^29.7.0",
-        "socket.io-client": "^4.7.5"
+        "socket.io-client": "^4.7.5",
+        "prettier": "3.3.3"
     }
 }
