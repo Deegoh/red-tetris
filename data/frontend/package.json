@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "red-tetris-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
