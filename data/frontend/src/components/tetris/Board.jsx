@@ -20,7 +20,7 @@ const renderBoard = (board) => {
       if (currentPosition === emptyColor) {
         color = "bg-tile";
       } else {
-        color = "bg-tile-" + currentPosition[row][col];
+        color = "bg-tile-" + currentPosition;
       }
       map.push(<Square position={index} key={index++} color={color}/>);
     }
