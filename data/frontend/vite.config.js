@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path';
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,8 +13,8 @@ export default defineConfig({
   },
   server: {
     watch: {
-      usePolling: true
-    }
+      usePolling: true,
+    },
   },
   build: {
     rollupOptions: {
@@ -22,15 +22,15 @@ export default defineConfig({
 
       output: {
         assetFileNames: (assetInfo) => {
-          let extType = assetInfo.name.split('.').at(1);
+          let extType = assetInfo.name.split('.').at(1)
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            extType = 'img';
+            extType = 'img'
           }
-          return `${extType}/[name]-[hash][extname]`;
+          return `${extType}/[name]-[hash][extname]`
         },
         chunkFileNames: '[name]-[hash].js',
         entryFileNames: 'bundle.js',
-        manualChunks: () => "bundle.js"
+        manualChunks: () => 'bundle.js',
       },
     },
     outDir: './dist',
@@ -38,6 +38,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    coverage: {
+      include: ['src/**'],
+    },
     setupFiles: './src/test_setup.js',
-  }
+  },
 })
