@@ -36,6 +36,11 @@ testback:
 coverback:
 	${DOCKER} exec frontend pnpm run coverage
 
+prettierfront:
+	${DOCKER} exec frontend pnpm run prettier
+prettierback:
+	${DOCKER} exec backend pnpm run prettier
+
 test:
 	${DOCKER} exec frontend pnpm run test
 	${DOCKER} exec backend pnpm run test
