@@ -1,12 +1,20 @@
-import { Typography } from '@material-tailwind/react';
-import { useSelector } from 'react-redux';
+import { Typography } from '@material-tailwind/react'
+import { useSelector } from 'react-redux'
 
-export const Score = () => {
-  const score = useSelector((state) => state.game.score);
+export const Score = ({ justify = 'left' }) => {
+  const score = useSelector((state) => state.game.score)
+  let classes = ' items-start'
+  if (justify === 'left') {
+    classes = ' items-start'
+  }
+  if (justify === 'right') {
+    classes = ' items-end'
+  }
+
   return (
-    <div className='flex flex-col items-end'>
-      <Typography variant='h4'>Score</Typography>
-      <Typography variant='h5'>{score}</Typography>
+    <div className={'bg-board rounded p-2 text-white flex flex-col' + classes}>
+      <Typography variant="h4">Score</Typography>
+      <Typography variant="h5">{score}</Typography>
     </div>
-  );
-};
+  )
+}
