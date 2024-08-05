@@ -12,13 +12,13 @@ import { SocketProvider } from './app/socket.jsx';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider>
     <Provider store={store}>
-      <NotificationProvider>
-        <SocketProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+        <NotificationProvider>
+          <SocketProvider>
             <App />
-          </BrowserRouter>
-        </SocketProvider>
-      </NotificationProvider>
+          </SocketProvider>
+        </NotificationProvider>
+      </BrowserRouter>
     </Provider>
   </ThemeProvider>
 );

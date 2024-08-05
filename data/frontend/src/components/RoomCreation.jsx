@@ -7,20 +7,18 @@ import { useNotification } from 'src/app/notifications.jsx';
 export const RoomCreation = () => {
   const [pseudo, setPseudo] = useState('');
 
-  const { socketRef } = useSocket();
+  const { socket } = useSocket();
+  // const {socketRef: { current: socket }} = useSocket();
+
   const { addNotif } = useNotification();
 
   const createRoom = useCallback(() => {
-    if (pseudo.length > 3) {
-      if (socketRef.current !== undefined) {
-        socketRef.current.emit('createRoom', { pseudo: pseudo });
-      } else {
-        addNotif('Socket not loaded (yet?)', 'error');
-      }
+    if (socket !== undefined) {
+      socket.emit('createRoom', { pseudo: pseudo });
     } else {
-      addNotif('Pseudo too short', 'warning');
+      addNotif('Socket not loaded (yet?)', 'error');
     }
-  }, [addNotif, pseudo, socketRef]);
+  }, [addNotif, pseudo, socket]);
 
   return (
     <>

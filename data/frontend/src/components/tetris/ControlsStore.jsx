@@ -7,6 +7,7 @@ import {
   tetrominoRotated,
   tetrominoSoftDropped,
 } from '../../features/game/gameSlice.js';
+import { useSocket } from 'src/app/socket.jsx';
 
 // Left and right arrows: Horizontal move to the right or left
 // Top arrow: Rotation (only one direction is enough)
@@ -16,28 +17,29 @@ import {
 export const ControlsStore = () => {
   const game = useSelector((state) => state.game);
   const dispatch = useDispatch();
+  const { socket } = useSocket();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (game.status !== 'running') {
-        return;
-      }
+      // if (game.status !== 'running') {
+      //   return;
+      // }
 
       const keyCode = event.code;
       if (keyCode === 'ArrowUp' || keyCode === 'KeyW') {
-        dispatch(tetrominoRotated());
+        socket.emit('gameAction', { action: 'up' });
       }
       if (keyCode === 'ArrowLeft' || keyCode === 'KeyA') {
-        dispatch(tetrominoLeftMoved());
+        socket.emit('gameAction', { action: 'left' });
       }
       if (keyCode === 'ArrowDown' || keyCode === 'KeyS') {
-        dispatch(tetrominoSoftDropped());
+        socket.emit('gameAction', { action: 'down' });
       }
       if (keyCode === 'ArrowRight' || keyCode === 'KeyD') {
-        dispatch(tetrominoRightMoved());
+        socket.emit('gameAction', { action: 'right' });
       }
       if (keyCode === 'Space') {
-        dispatch(tetrominoHardDropped());
+        socket.emit('gameAction', { action: 'space' });
       }
     };
 
@@ -46,5 +48,5 @@ export const ControlsStore = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [game]);
+  }, [dispatch, game, socket]);
 };
