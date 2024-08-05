@@ -13,6 +13,8 @@ module.exports = withMT({
     'bg-tile-J',
     'bg-tile-S',
     'bg-tile-Z',
+    'bg-tile-Z',
+    'opacity-25'
   ],
   theme: {
     extend: {

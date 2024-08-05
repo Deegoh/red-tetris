@@ -4,7 +4,7 @@ import { useNotification } from './notifications';
 import { io } from 'socket.io-client';
 import { setRooms } from '../features/rooms/roomSlice';
 import { useDispatch } from 'react-redux';
-import { boardUpdated } from 'src/features/game/gameSlice';
+import { boardUpdated, updateScore } from 'src/features/game/gameSlice';
 
 const SocketContext = createContext(undefined);
 
@@ -41,9 +41,13 @@ export function SocketProvider({ children }) {
           if (res?.board !== undefined) {
             dispatch(boardUpdated(res.board));
           }
+          if (res?.score !== undefined) {
+            dispatch(updateScore(`${res.score} L${res.lines}S ^${res.level}`));
+          }
         });
       });
-    } else {
+    } //
+    else {
       setSocket(
         io(
           import.meta.env.DEV === true

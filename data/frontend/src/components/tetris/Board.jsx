@@ -22,7 +22,10 @@ const renderBoard = (board) => {
       if (currentPosition === emptyColor) {
         color = 'bg-tile';
       } else {
-        color = 'bg-tile-' + currentPosition;
+        color = 'bg-tile-' + currentPosition.replace('#', '');
+      }
+      if (currentPosition.indexOf('#') !== -1) {
+        color += ' opacity-25';
       }
       map.push(<Square position={index} key={index++} color={color} />);
     }
@@ -34,6 +37,8 @@ export const Board = () => {
   const board = useSelector((state) => state.game.board);
 
   return (
-    <div className='board grid grid-cols-10 gap-0'>{renderBoard(board)}</div>
+    <div className='board grid grid-cols-10 gap-0 bg-tile'>
+      {renderBoard(board)}
+    </div>
   );
 };
