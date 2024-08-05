@@ -47,6 +47,8 @@ test:
 
 cover: coverfront coverback
 
+prettier: prettierfront prettierback
+
 clean:
 	${DOCKER} down
 

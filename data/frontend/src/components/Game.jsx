@@ -15,8 +15,6 @@ export const Game = () => {
   const { addNotif } = useNotification();
 
   useEffect(() => {
-    addNotif('in', 'info');
-
     const hash = window.location.hash;
     if (hash === '' || hash === undefined) {
       return;

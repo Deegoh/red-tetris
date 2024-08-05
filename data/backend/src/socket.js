@@ -1,9 +1,7 @@
 const { Game } = require("./Game");
-const { Player } = require("./Player");
 
-let games = new Map();
-
-let players = new Map();
+const games = new Map();
+const sdns = new Map();
 
 function findFirstUnusedId(rooms) {
   let i = 1;
@@ -23,12 +21,10 @@ const setSocketListeners = (socket, io) => {
     socket.emit("pong");
   });
 
-  socket.on("createRoom", (req) => {
-    const name = req?.pseudo?.toString().trim();
-
-    if (name.length >= 3 && name.length < 32) {
+  const checkPseudo = (pseudo, page, cb) => {
+    if (pseudo.length >= 3 && pseudo.length < 32) {
       if (
-        Array.from(name).every(
+        Array.from(pseudo).every(
           (c) =>
             (c >= "A" && c <= "Z") ||
             (c >= "a" && c <= "z") ||
@@ -36,22 +32,13 @@ const setSocketListeners = (socket, io) => {
             authChars.include(c),
         )
       ) {
-        const current = findFirstUnusedId(games);
-        games.set(current, new Game(current, name));
-
-        games.get(current).init(io);
-
-        socket.emit("notify", {
-          status: "success",
-          text: "created",
-          page: `/create#${current}[${name}]`,
-        });
-        io.emit("room_list", Array.from(games.keys()));
+        cb();
       } //
       else {
         socket.emit("notify", {
           status: "error",
           text: "no special characters except $-_.+!*'()",
+          page: page,
         });
       }
     } //
@@ -59,139 +46,91 @@ const setSocketListeners = (socket, io) => {
       socket.emit("notify", {
         status: "error",
         text: "name must be between 3 and 32 characters long",
+        page: page,
       });
     }
+  };
+
+  const checkRoom = (roomname, page, cb) => {
+    if (games.has(roomname)) {
+      cb(games.get(roomname));
+    } //
+    else {
+      socket.emit("notify", {
+        status: "error",
+        text: "room doesn't exists",
+        page: page,
+      });
+    }
+  };
+
+  socket.on("createRoom", (req) => {
+    const pseudo = req?.pseudo?.toString().trim();
+
+    checkPseudo(pseudo, undefined, () => {
+      const current = findFirstUnusedId(games);
+
+      games.set(current, new Game(current, pseudo));
+      games.get(current).init();
+
+      socket.emit("notify", {
+        status: "success",
+        text: "created",
+        page: `/create#${current}[${pseudo}]`,
+      });
+      io.emit("room_list", Array.from(games.keys()));
+    });
   });
 
-  // function   verifyUsername(cb, page = undefined) {
-
-  // }
-
   socket.on("joinRoom", (req) => {
-    const name = req?.toString().pseudo?.toString().trim();
-    const game = req?.toString().room?.toString().trim();
+    const pseudo = req?.pseudo?.toString().trim();
+    const roomname = req?.room?.toString().trim();
 
-    if (name.length >= 3 && name.length < 32) {
-      if (
-        Array.from(name).every(
-          (c) =>
-            (c >= "A" && c <= "Z") ||
-            (c >= "a" && c <= "z") ||
-            (c >= "0" && c <= "9") ||
-            authChars.include(c),
-        )
-      ) {
-        if (games.has(game)) {
-          if (!games.get(game)["players"].has(name)) {
-            socket.emit("notify", {
-              status: "success",
-              text: "connecting",
-              page: `/create#${game}[${name}]`,
-            });
-          } //
-          else {
-            // if (prod && host match    => connect)   -------------------
-
-            socket.emit("notify", {
-              status: "error",
-              text: "username already taken in the room",
-            });
-          }
-        } //
-        else {
-          socket.emit("notify", {
-            status: "error",
-            text: "room doesn't exists",
-          });
-        }
-      } //
-      else {
+    checkPseudo(pseudo, undefined, () => {
+      checkRoom(roomname, undefined, (room) => {
         socket.emit("notify", {
-          status: "error",
-          text: "no special characters except $-_.+!*'()",
+          status: "success",
+          text: "connecting",
+          page: `/create#${room.id}[${pseudo}]`,
         });
-      }
-    } //
-    else {
-      socket.emit("notify", {
-        status: "error",
-        text: "name must be between 3 and 32 characters long",
       });
-    }
+    });
   });
 
   socket.on("connectRoom", (req) => {
-    const name = req?.pseudo?.toString().trim();
-    const game = req?.room?.toString().trim();
+    const pseudo = req?.pseudo?.toString().trim();
+    const roomname = req?.room?.toString().trim();
 
-    if (name.length >= 3 && name.length < 32) {
-      if (
-        Array.from(name).every(
-          (c) =>
-            (c >= "A" && c <= "Z") ||
-            (c >= "a" && c <= "z") ||
-            (c >= "0" && c <= "9") ||
-            authChars.include(c),
-        )
-      ) {
-        if (games.has(game)) {
-          if (!games.get(game)["players"].has(name)) {
-            games
-              .get(game)
-              [
-                "players"
-              ].set(name, new Player(name, socket.id, socket.conn.remoteAddress));
-            socket.join(game);
-            players.set(socket.id, { name: name, game: game });
+    checkPseudo(pseudo, "/", () => {
+      checkRoom(roomname, "/", (room) => {
+        if (!room.players.has(pseudo)) {
+          room.initPlayer(pseudo, socket);
+          socket.join(room.id);
+          sdns.set(socket.id, { pseudo: pseudo, roomname: room.id });
 
-            // console.log('connect room successs', games);
-            console.log("connect room successs", players);
-            io.emit("room_list", Array.from(games.keys()));
-          } //
-          else {
-            // if (prod && host match    => connect)   -------------------
-
-            socket.emit("notify", {
-              status: "error",
-              text: "username already taken in the room",
-              page: "/",
-            });
-          }
+          io.emit("room_list", Array.from(games.keys()));
         } //
         else {
+          // if (prod && host match    => connect)   -------------------
+
           socket.emit("notify", {
             status: "error",
-            text: "room doesn't exists",
-            page: "/",
+            text: "username already taken in the room",
           });
         }
-      } //
-      else {
-        socket.emit("notify", {
-          status: "error",
-          text: "no special characters except $-_.+!*'()",
-          page: "/",
-        });
-      }
-    } //
-    else {
-      socket.emit("notify", {
-        status: "error",
-        text: "name must be between 3 and 32 characters long",
-        page: "/",
       });
-    }
+    });
   });
 
   socket.on("startGame", (req) => {
-    const name = players.get(socket.id)?.name;
-    const game = players.get(socket.id)?.game;
+    const pseudo = sdns.get(socket.id)?.pseudo;
+    const roomname = sdns.get(socket.id)?.roomname;
 
-    if (games.has(game)) {
-      if (games.get(game).owner === name) {
-        if (games.get(game).status === "waiting") {
-          games.get(game).status = "playing";
-          games.get(game).start(socket, io);
+    checkRoom(roomname, "/", (room) => {
+      if (room.owner === pseudo) {
+        if (room.status === "waiting") {
+          room.status = "playing";
+          room.start(io);
 
           socket.emit("notify", {
             status: "success",
@@ -200,40 +139,24 @@ const setSocketListeners = (socket, io) => {
         }
       } //
       else {
-        console.log(games.get(game).owner, name, game);
+        console.log(room.owner, pseudo, roomname);
         socket.emit("notify", {
           status: "error",
           text: "you are not the owner of the room",
         });
       }
-    } //
-    else {
-      socket.emit("notify", {
-        status: "error",
-        text: "room doesn't exists",
-        page: "/",
-      });
-    }
+    });
   });
 
   socket.on("gameAction", (req) => {
-    const name = players.get(socket.id)?.name;
-    const game = players.get(socket.id)?.game;
+    const pseudo = sdns.get(socket.id)?.pseudo;
+    const roomname = sdns.get(socket.id)?.roomname;
 
-    if (games.has(game)) {
-      // if (games.get(game).status === 'playing') {
-
-      games.get(game).players.get(name).action(req.action);
-
-      // }
-    } //
-    else {
-      socket.emit("notify", {
-        status: "error",
-        text: "room doesn't exists",
-        page: "/",
-      });
-    }
+    checkRoom(roomname, "/", (room) => {
+      if (room.status === "playing" || ["left", "right"].includes(req.action)) {
+        room.players.get(pseudo).action(req.action);
+      }
+    });
   });
 
   socket.emit("room_list", Array.from(games.keys()));
