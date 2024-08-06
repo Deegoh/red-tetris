@@ -27,6 +27,17 @@ io.on("connection", (socket) => {
   setSocketListeners(socket, io);
 });
 
+function getConnecteds() {
+  const connecteds = [];
+  io.sockets.sockets.forEach((v) => connecteds.push(v.id));
+  return connecteds;
+}
+
+// setInterval(() => {
+//   // console.log('statataata', io.sockets.sockets);
+//   console.log('statataata', getConnecteds());
+// }, 10000)
+
 server.listen(8080, () => {
   console.log("listening on *:8080");
 });

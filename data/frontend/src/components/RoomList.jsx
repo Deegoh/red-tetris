@@ -1,9 +1,32 @@
 import { useSelector } from 'react-redux';
 import { Typography } from '@material-tailwind/react';
 import { Btn } from './Btn.jsx';
+import { useCallback } from 'react';
+import { useSocket } from 'src/app/socket.jsx';
+import { useNotification } from 'src/app/notifications.jsx';
 
 export const RoomList = () => {
   const rooms = useSelector((state) => state.rooms.value);
+  const { socket } = useSocket();
+
+  const { addNotif } = useNotification();
+
+  const joinRoom = useCallback(
+    (room) => {
+      const pseudo = 'myoa';
+
+      if (pseudo.length > 3) {
+        if (socket !== undefined) {
+          socket.emit('joinRoom', { pseudo: pseudo, room: room });
+        } else {
+          addNotif('Socket not loaded (yet?)', 'error');
+        }
+      } else {
+        addNotif('Pseudo too short', 'warning');
+      }
+    },
+    [addNotif, socket]
+  );
 
   return (
     <div>
@@ -20,7 +43,7 @@ export const RoomList = () => {
               <span className='grow'>{element}</span>
               <Btn
                 onClick={() => {
-                  console.log(element);
+                  joinRoom(element);
                 }}>
                 Join
               </Btn>

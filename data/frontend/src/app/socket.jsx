@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useNotification } from './notifications';
 import { io } from 'socket.io-client';
 import { setRooms } from '../features/rooms/roomSlice';
@@ -16,39 +17,47 @@ export function useSocket() {
 }
 
 export function SocketProvider({ children }) {
-  const socketRef = useRef();
+  const [socket, setSocket] = useState(undefined);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { addNotif } = useNotification();
 
   useEffect(() => {
-    if (socketRef.current === undefined) {
-      socketRef.current = io(
-        import.meta.env.DEV === true ? `:${import.meta.env.VITE_PORT_BACK}` : ''
-      );
-
-      socketRef.current.on('connect', () => {
-        socketRef.current.on('room_list', function (rooms) {
+    if (socket !== undefined) {
+      socket.on('connect', () => {
+        socket.on('room_list', function (rooms) {
           dispatch(setRooms(rooms));
         });
 
-        socketRef.current.on('notify', function (res) {
+        socket.on('notify', function (res) {
           addNotif(res?.text, res?.status);
+          if (res?.page !== undefined) {
+            navigate(res.page);
+          }
         });
 
-        socketRef.current.on('updateBoard', (res) => {
+        socket.on('updateBoard', (res) => {
           if (res?.board !== undefined) {
             dispatch(boardUpdated(res.board));
           }
         });
       });
+    } else {
+      setSocket(
+        io(
+          import.meta.env.DEV === true
+            ? `:${import.meta.env.VITE_PORT_BACK}`
+            : ''
+        )
+      );
     }
-  }, [addNotif, dispatch]);
+  }, [addNotif, dispatch, navigate, socket]);
 
   return (
     <SocketContext.Provider
       value={{
-        socketRef: socketRef,
+        socket: socket,
       }}>
       {children}
     </SocketContext.Provider>
