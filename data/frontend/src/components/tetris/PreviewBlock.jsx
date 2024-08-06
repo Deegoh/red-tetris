@@ -17,8 +17,7 @@ const parseAndFormatTetromino = (shape, rotation) => {
   for (let index = 0; index < size; index++) {
     let colorId =
       tetrominoesBlocks[shape][rotation][Math.floor(index / 4)][index % 4];
-    let color = colorId !== emptyColor ? 'bg-tile-' + colorId : 'bg-tile';
-    tetromino.push(<Square position={index} key={index} color={color} />);
+    tetromino.push(<Square position={index} key={index} color={colorId} />);
   }
   return tetromino;
 };
@@ -27,7 +26,7 @@ export const PreviewTetrominoes = () => {
   const { previewTermino, rotation } = useSelector((state) => state.game);
   const previewBlock = parseAndFormatTetromino(previewTermino, rotation);
   return (
-    <div className='preview-block grid grid-cols-4 gap-0 content-start'>
+    <div className='bg-board p-1 rounded shrink-1 preview-block grid grid-cols-4 gap-[1px] content-start'>
       {previewBlock}
     </div>
   );

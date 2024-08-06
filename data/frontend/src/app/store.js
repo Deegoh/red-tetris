@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
 import gameSlice from '../features/game/gameSlice.js';
 import { roomSlice } from '../features/rooms/roomSlice';
 
@@ -8,7 +7,6 @@ import { roomSlice } from '../features/rooms/roomSlice';
 export default configureStore({
   // TODO: maybe we can split some logic to multiple reducer
   reducer: {
-    counter: counterReducer,
     game: gameSlice,
     rooms: roomSlice.reducer,
   },

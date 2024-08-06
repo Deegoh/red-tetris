@@ -30,11 +30,9 @@ export const RoomList = () => {
 
   return (
     <div>
-      <Typography variant='h3' className=''>
-        List
-      </Typography>
+      <Typography variant='h3'>List</Typography>
       <div
-        className='flex flex-col gap-2 overflow-y-scroll max-h-56'
+        className='flex flex-col gap-2 overflow-y-auto max-h-56'
         data-testid='rooms'>
         {rooms.map((element) => {
           // TODO add name room, nbr player, owner, options
