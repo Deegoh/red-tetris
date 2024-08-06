@@ -18,20 +18,22 @@ const renderBoard = (board, mode) => {
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-// TODO Fix ghost with new systeme color
-//       const currentPosition = board[row][col];
-//       if (currentPosition === emptyColor) {
-//         color = 'bg-tile';
-//       } else {
-//         color = 'bg-tile-' + currentPosition.replace('#', '');
-//       }
-//       if (currentPosition.indexOf('#') !== -1) {
-//         color += ' opacity-25';
-//       }
-//       map.push(<Square position={index} key={index++} color={color} />);
-      const colorId = board[row][col];
+      let colorId = board[row][col];
+      let ghost = false;
+
+      if (colorId.includes('#')) {
+        colorId = colorId.replace('#', '');
+        ghost = true;
+      }
+
       map.push(
-        <Square mode={mode} position={index} key={index++} color={colorId} />
+        <Square
+          ghost={ghost}
+          mode={mode}
+          position={index}
+          key={index++}
+          color={colorId}
+        />
       );
     }
   }
@@ -47,14 +49,16 @@ export const Board = ({
   const board = useSelector((state) => state.game.board);
 
   return (
-    <div
-      {...rest}
-      className={`${className} board bg-board p-1 rounded grid grid-cols-10 gap-[1px]`}>
-      {renderBoard(board, mode)}
+    <div className='bg-board p-1 rounded'>
+      <div
+        {...rest}
+        className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
+        {renderBoard(board, mode)}
 
-      <Typography className='col-span-full text-white mx-auto'>
-        {player}
-      </Typography>
+        <Typography className='col-span-full text-white mx-auto'>
+          {player}
+        </Typography>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Square } from './Square.jsx';
-import { emptyColor, tetrominoes, tetrominoesBlocks } from './tetrominoes.js';
+import { tetrominoes, tetrominoesBlocks } from './tetrominoes.js';
 import { useSelector } from 'react-redux';
 
 export const randomTetromino = () => {

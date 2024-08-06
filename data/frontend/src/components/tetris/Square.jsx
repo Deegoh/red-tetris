@@ -1,8 +1,9 @@
 import { emptyColor } from './tetrominoes.js';
 import useBreakpoint from './useBreakpoint.jsx';
 
-export const Square = ({ color, position, mode = 'player' }) => {
+export const Square = ({ ghost = false, color, position, mode = 'player' }) => {
   const screen = useBreakpoint();
+
   const childClassesVariants = {
     I: 'bg-tile-I',
     O: 'bg-tile-O',
@@ -12,6 +13,16 @@ export const Square = ({ color, position, mode = 'player' }) => {
     S: 'bg-tile-S',
     Z: 'bg-tile-Z',
     '.': 'bg-tile',
+  };
+
+  const shadowVariants = {
+    I: 'shadow-ghost shadow-tile-I/40',
+    O: 'shadow-ghost shadow-tile-O/40',
+    T: 'shadow-ghost shadow-tile-T/40',
+    L: 'shadow-ghost shadow-tile-L/40',
+    J: 'shadow-ghost shadow-tile-J/40',
+    S: 'shadow-ghost shadow-tile-S/40',
+    Z: 'shadow-ghost shadow-tile-Z/40',
   };
 
   const parentClassesVariants = {
@@ -40,10 +51,17 @@ export const Square = ({ color, position, mode = 'player' }) => {
     size /= 2;
   }
 
+  let parentClasses = parentClassesVariants[color];
   let childClasses = childClassesVariants[color];
+
+  if (ghost) {
+    childClasses += '/70';
+    parentClasses += ' ' + shadowVariants[color];
+  }
+
   if (size > 10 && color === emptyColor) {
     childClasses += ' rounded';
-  } else {
+  } else if (color === emptyColor) {
     childClasses += ' rounded-[2px]';
   }
 
@@ -51,7 +69,7 @@ export const Square = ({ color, position, mode = 'player' }) => {
     <div
       style={{ '--tile-size': `${size}px` }}
       data-position={position}
-      className={`rounded size-tile ${parentClassesVariants[color]}`}>
+      className={`rounded size-tile ${parentClasses}`}>
       <div className={`size-full ${childClasses}`} />
     </div>
   );
