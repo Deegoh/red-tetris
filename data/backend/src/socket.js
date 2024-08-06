@@ -116,6 +116,7 @@ const setSocketListeners = (socket, io) => {
           socket.emit("notify", {
             status: "error",
             text: "username already taken in the room",
+            page: "/",
           });
         }
       });
@@ -153,8 +154,11 @@ const setSocketListeners = (socket, io) => {
     const roomname = sdns.get(socket.id)?.roomname;
 
     checkRoom(roomname, "/", (room) => {
-      if (room.status === "playing" || ["left", "right"].includes(req.action)) {
-        room.players.get(pseudo).action(req.action);
+      if (
+        room.status === "playing" ||
+        ["left", "right", "up"].includes(req.action)
+      ) {
+        room.players.get(pseudo).action(req.action, true);
       }
     });
   });

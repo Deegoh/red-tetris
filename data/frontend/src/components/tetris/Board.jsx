@@ -18,6 +18,17 @@ const renderBoard = (board, mode) => {
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
+// TODO Fix ghost with new systeme color
+//       const currentPosition = board[row][col];
+//       if (currentPosition === emptyColor) {
+//         color = 'bg-tile';
+//       } else {
+//         color = 'bg-tile-' + currentPosition.replace('#', '');
+//       }
+//       if (currentPosition.indexOf('#') !== -1) {
+//         color += ' opacity-25';
+//       }
+//       map.push(<Square position={index} key={index++} color={color} />);
       const colorId = board[row][col];
       map.push(
         <Square mode={mode} position={index} key={index++} color={colorId} />

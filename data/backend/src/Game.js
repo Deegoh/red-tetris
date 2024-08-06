@@ -16,7 +16,7 @@ class Game {
   }
 
   init() {
-    this.rseed += 1;
+    this.rseed = Date.now();
 
     this.fast = setInterval(() => {
       if (this.status !== "launching") {
@@ -24,7 +24,7 @@ class Game {
           p.frame(this.status);
         });
       }
-    }, 1000 / 10);
+    }, 1000 / 20);
   }
 
   initPlayer(pseudo, socket) {

@@ -39,6 +39,9 @@ export const gameSlice = createSlice({
     boardUpdated: (state, action) => {
       state.board = action.payload;
     },
+    updateScore: (state, action) => {
+      state.score = action.payload;
+    },
   },
 });
 
@@ -52,6 +55,7 @@ export const {
   tetrominoPreviewUpdated,
   tetrominoRotated,
   boardUpdated,
+  updateScore,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
