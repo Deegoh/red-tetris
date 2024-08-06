@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit'
-import gameSlice from '../features/game/gameSlice.js'
-import { roomSlice } from '../features/rooms/roomSlice'
+import { configureStore } from '@reduxjs/toolkit';
+import gameSlice from '../features/game/gameSlice.js';
+import { roomSlice } from '../features/rooms/roomSlice';
 
 //Tuto here https://react-redux.js.org/tutorials/quick-start
 
@@ -10,4 +10,4 @@ export default configureStore({
     game: gameSlice,
     rooms: roomSlice.reducer,
   },
-})
+});

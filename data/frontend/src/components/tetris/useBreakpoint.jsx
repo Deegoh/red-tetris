@@ -1,36 +1,36 @@
-import { useState, useEffect } from 'react'
-import theme from 'tailwindcss/defaultTheme.js'
+import { useState, useEffect } from 'react';
+import theme from 'tailwindcss/defaultTheme.js';
 
 const useBreakpoint = () => {
-  const [breakpoint, setBreakpoint] = useState('')
+  const [breakpoint, setBreakpoint] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
-      const width = window.innerWidth
-      const breakpoints = theme.screens
+      const width = window.innerWidth;
+      const breakpoints = theme.screens;
 
       if (width >= parseInt(breakpoints['2xl'])) {
-        setBreakpoint('2xl')
+        setBreakpoint('2xl');
       } else if (width >= parseInt(breakpoints.xl)) {
-        setBreakpoint('xl')
+        setBreakpoint('xl');
       } else if (width >= parseInt(breakpoints.lg)) {
-        setBreakpoint('lg')
+        setBreakpoint('lg');
       } else if (width >= parseInt(breakpoints.md)) {
-        setBreakpoint('md')
+        setBreakpoint('md');
       } else if (width >= parseInt(breakpoints.sm)) {
-        setBreakpoint('sm')
+        setBreakpoint('sm');
       } else {
-        setBreakpoint('xs')
+        setBreakpoint('xs');
       }
-    }
+    };
 
-    window.addEventListener('resize', handleResize)
-    handleResize()
+    window.addEventListener('resize', handleResize);
+    handleResize();
 
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  return breakpoint
-}
+  return breakpoint;
+};
 
-export default useBreakpoint
+export default useBreakpoint;
