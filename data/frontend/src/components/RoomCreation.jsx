@@ -22,9 +22,7 @@ export const RoomCreation = () => {
 
   return (
     <>
-      <Typography variant='h3' className=''>
-        Room
-      </Typography>
+      <Typography variant='h3'>Room</Typography>
       <label className='mx-auto text-left' htmlFor='pseudo'>
         Pseudo:
         <input

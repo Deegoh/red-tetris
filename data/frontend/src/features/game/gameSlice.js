@@ -12,12 +12,7 @@ const initialState = {
 };
 
 const getNextRotation = (game) => {
-  const nextRotation = parseInt(game.rotation) + 1;
-  const nbrRotation = tetrominoesBlocks[game.previewTermino].length;
-  if (nextRotation >= nbrRotation) {
-    return 0;
-  }
-  return nextRotation;
+  return (game.rotation + 1) % tetrominoesBlocks[game.previewTermino].length;
 };
 
 export const gameSlice = createSlice({
