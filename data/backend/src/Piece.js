@@ -312,4 +312,4 @@ function tend() {
   ];
 }
 
-module.exports = { genBag, t3, t2, t1, tend };
+module.exports = { genBag, t3, t2, t1, tend, IPiece, OPiece, TPiece, SPiece, ZPiece, JPiece, LPiece };

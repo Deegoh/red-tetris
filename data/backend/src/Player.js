@@ -2,11 +2,10 @@ const { rows, cols, emptyColor } = require("./constants");
 const { tend, genBag } = require("./Piece");
 const { sfc32 } = require("./utils");
 
-const generateDefaultBoard = () => {
-  return Array(rows)
-    .fill()
-    .map(() => Array(cols).fill(emptyColor));
-};
+// https://tetris.wiki/Tetris_Guideline
+// https://tetris.wiki/Tetris_(NES,_Nintendo)
+// https://tetris.wiki/Wall_kick
+// https://tetris.wiki/Scoring
 
 class Player {
   constructor(pseudo, socket) {
@@ -38,7 +37,7 @@ class Player {
   }
 
   init(rseed) {
-    this.board = generateDefaultBoard();
+    this.board = this.generateDefaultBoard();
 
     this.random = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, rseed);
 
@@ -54,6 +53,13 @@ class Player {
     this.summonPiece();
   }
 
+  generateDefaultBoard() {
+    return Array(rows)
+      .fill()
+      .map(() => Array(cols).fill(emptyColor));
+  }
+  
+
   newGenPiece() {
     if (this.bag.length === 0) {
       this.bag = genBag().concat(genBag());
@@ -61,9 +67,6 @@ class Player {
     const choosen = this.bag.splice(this.random() % this.bag.length, 1);
     if (choosen.length === 1) {
       return choosen[0];
-    } //
-    else {
-      return undefined;
     }
   }
 
@@ -130,10 +133,12 @@ class Player {
         const dy = i + py;
         if (this.piece.forms[rot][i][j] !== ".") {
           // dy moved for upper "buffer"
+          // console.log(dx, dy, cols, rows);
           if (dx < 0 || dx >= cols || dy >= rows) {
             return false;
           } //
           else if (dy >= 0 && this.board[dy][dx] !== ".") {
+            // console.log(dx, dy, this.board[dy][dx], this.board);
             return false;
           }
         }
@@ -174,8 +179,6 @@ class Player {
         this.score +=
           linesEmpty + linesRemoved === 20 ? 800 * (this.level + 1) : 0;
         break;
-      case 0:
-        break;
     }
     for (let i = 0; i < linesRemoved; i++) {
       this.board.unshift(Array(cols).fill(emptyColor));
@@ -192,7 +195,7 @@ class Player {
   gameover() {
     console.log("gameover");
     if (this.pseudo === "god") {
-      this.board = generateDefaultBoard();
+      this.board = this.generateDefaultBoard();
       return;
     }
     this.state = "lost";
@@ -270,8 +273,6 @@ class Player {
       case "left":
         if (this.safeMove(this.x - 1, this.y, this.rot)) {
           this.x -= 1;
-        } else {
-          console.log("forbidden move");
         }
         break;
 
@@ -292,8 +293,6 @@ class Player {
       case "right":
         if (this.safeMove(this.x + 1, this.y, this.rot)) {
           this.x += 1;
-        } else {
-          console.log("forbidden move");
         }
         break;
 

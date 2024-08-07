@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const { setSocketListeners } = require("./socket");
+const { TetrisServer } = require("./socket");
 
 const app = express();
 
@@ -23,20 +23,11 @@ const io = new Server(
     : undefined,
 );
 
+const tetris = new TetrisServer();
+
 io.on("connection", (socket) => {
-  setSocketListeners(socket, io);
+  tetris.setSocketListeners(socket, io);
 });
-
-function getConnecteds() {
-  const connecteds = [];
-  io.sockets.sockets.forEach((v) => connecteds.push(v.id));
-  return connecteds;
-}
-
-// setInterval(() => {
-//   // console.log('statataata', io.sockets.sockets);
-//   console.log('statataata', getConnecteds());
-// }, 10000)
 
 server.listen(8080, () => {
   console.log("listening on *:8080");

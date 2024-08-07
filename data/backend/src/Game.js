@@ -12,7 +12,7 @@ class Game {
 
     this.status = "waiting";
     this.slow = undefined;
-    this.slow = undefined;
+    this.fast = undefined;
   }
 
   init() {
@@ -29,10 +29,8 @@ class Game {
 
   initPlayer(pseudo, socket) {
     this.players.set(pseudo, new Player(pseudo, socket));
-    console.log("connect room successs", this.players);
 
     const p = this.players.get(pseudo);
-
     p.init(this.rseed);
   }
 
