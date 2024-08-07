@@ -1,10 +1,10 @@
-const { Game } = require("./Game");
-const { rows, cols } = require("./constants");
-const { t3, t2, t1 } = require("./Piece");
+const { Game } = require('./Game');
+const { rows, cols } = require('./constants');
+const { t3, t2, t1 } = require('./Piece');
 
-const { Server } = require("socket.io");
-const { createServer } = require("node:http");
-const ioc = require("socket.io-client");
+const { Server } = require('socket.io');
+const { createServer } = require('node:http');
+const ioc = require('socket.io-client');
 
 function waitFor(socket, event) {
   return new Promise((resolve) => {
@@ -12,14 +12,14 @@ function waitFor(socket, event) {
   });
 }
 
-jest.mock("./Player", () => ({
+jest.mock('./Player', () => ({
   Player: jest.fn().mockImplementation(function () {
     this.init = jest.fn();
     this.frame = jest.fn();
   }),
 }));
 
-describe("game tests", () => {
+describe('game tests', () => {
   let io, serverSocket, clientSocket;
 
   beforeAll((done) => {
@@ -30,11 +30,11 @@ describe("game tests", () => {
       const port = httpServer.address().port;
       clientSocket = ioc(`http://localhost:${port}`);
 
-      io.on("connection", (socket) => {
+      io.on('connection', (socket) => {
         serverSocket = socket;
       });
 
-      clientSocket.on("connect", done);
+      clientSocket.on('connect', done);
     });
   });
 
@@ -44,16 +44,16 @@ describe("game tests", () => {
   });
 
   beforeEach(() => {
-    jest.useFakeTimers({ doNotFake: ["nextTick", "setImmediate"] });
-    jest.spyOn(global, "setInterval");
+    jest.useFakeTimers({ doNotFake: ['nextTick', 'setImmediate'] });
+    jest.spyOn(global, 'setInterval');
   });
 
   afterEach(() => {
     jest.useRealTimers();
   });
 
-  it("should init game", () => {
-    const testGame = new Game(32, "testuser");
+  it('should init game', () => {
+    const testGame = new Game(32, 'testuser');
     testGame.init();
 
     expect(setInterval).toHaveBeenCalledTimes(1);
@@ -61,15 +61,15 @@ describe("game tests", () => {
     expect(testGame.fast).not.toBeUndefined();
   });
 
-  it("should init player from game", () => {
-    const testGame = new Game(32, "testuser");
+  it('should init player from game', () => {
+    const testGame = new Game(32, 'testuser');
     testGame.init();
     testGame.rseed = 1337;
 
     expect(testGame.players.size).toBe(0);
 
-    testGame.initPlayer("testplayer", undefined);
-    const testPlayer = testGame.players.get("testplayer");
+    testGame.initPlayer('testplayer', undefined);
+    const testPlayer = testGame.players.get('testplayer');
 
     expect(testGame.players.size).toBe(1);
 
@@ -82,27 +82,26 @@ describe("game tests", () => {
     expect(testPlayer.frame).toHaveBeenCalledTimes(1);
   });
 
-
-  it("should start game", async () => {
-    const testGame = new Game("32", "testuser");
+  it('should start game', async () => {
+    const testGame = new Game('32', 'testuser');
     testGame.init();
 
-    serverSocket.join("32");
+    serverSocket.join('32');
 
     testGame.start(io);
-    expect(testGame.status).toBe("launching");
+    expect(testGame.status).toBe('launching');
 
     const res = [];
 
-    const req3 = waitFor(clientSocket, "updateBoard");
+    const req3 = waitFor(clientSocket, 'updateBoard');
     jest.advanceTimersByTime(500);
     res.push(await req3);
 
-    const req2 = waitFor(clientSocket, "updateBoard");
+    const req2 = waitFor(clientSocket, 'updateBoard');
     jest.advanceTimersByTime(1000);
     res.push(await req2);
 
-    const req1 = waitFor(clientSocket, "updateBoard");
+    const req1 = waitFor(clientSocket, 'updateBoard');
     jest.advanceTimersByTime(1000);
     res.push(await req1);
 
@@ -131,6 +130,6 @@ describe("game tests", () => {
 
     jest.advanceTimersByTime(1000);
 
-    expect(testGame.status).toBe("playing");
+    expect(testGame.status).toBe('playing');
   });
 });

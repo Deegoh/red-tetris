@@ -20,4 +20,5 @@ const config = {
   requirePragma: false,
   useTabs: false,
 }
-module.export = { config }
+
+module.exports = config

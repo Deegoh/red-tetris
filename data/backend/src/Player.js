@@ -1,6 +1,6 @@
-const { rows, cols, emptyColor } = require("./constants");
-const { tend, genBag } = require("./Piece");
-const { sfc32 } = require("./utils");
+const { rows, cols, emptyColor } = require('./constants');
+const { tend, genBag } = require('./Piece');
+const { sfc32 } = require('./utils');
 
 // https://tetris.wiki/Tetris_Guideline
 // https://tetris.wiki/Tetris_(NES,_Nintendo)
@@ -41,7 +41,7 @@ class Player {
 
     this.random = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, rseed);
 
-    this.state = "alive";
+    this.state = 'alive';
 
     this.level = 0;
     this.lines = 0;
@@ -58,7 +58,6 @@ class Player {
       .fill()
       .map(() => Array(cols).fill(emptyColor));
   }
-  
 
   newGenPiece() {
     if (this.bag.length === 0) {
@@ -89,17 +88,17 @@ class Player {
 
   frame(gameStatus) {
     if (
-      this.state === "alive" &&
-      gameStatus === "playing" &&
+      this.state === 'alive' &&
+      gameStatus === 'playing' &&
       this.sequence === 0
     ) {
-      this.action("down");
+      this.action('down');
     }
 
     const copy = structuredClone(this.board);
 
-    if (this.state === "alive") {
-      if (gameStatus === "playing") {
+    if (this.state === 'alive') {
+      if (gameStatus === 'playing') {
         let tmpy = this.y;
         for (let i = 0; i < rows; i++) {
           if (this.safeMove(this.x, tmpy + 1, this.rot)) {
@@ -109,13 +108,13 @@ class Player {
             break;
           }
         }
-        this.printPiece(copy, this.x, tmpy, "#");
+        this.printPiece(copy, this.x, tmpy, '#');
       }
 
       this.printPiece(copy, this.x, this.y);
     }
 
-    this.socket.emit("updateBoard", {
+    this.socket.emit('updateBoard', {
       board: copy,
       next: this.next.id,
       score: this.score,
@@ -131,13 +130,13 @@ class Player {
       for (let j = 0; j < 4; j++) {
         const dx = j + px;
         const dy = i + py;
-        if (this.piece.forms[rot][i][j] !== ".") {
+        if (this.piece.forms[rot][i][j] !== '.') {
           // dy moved for upper "buffer"
           // console.log(dx, dy, cols, rows);
           if (dx < 0 || dx >= cols || dy >= rows) {
             return false;
           } //
-          else if (dy >= 0 && this.board[dy][dx] !== ".") {
+          else if (dy >= 0 && this.board[dy][dx] !== '.') {
             // console.log(dx, dy, this.board[dy][dx], this.board);
             return false;
           }
@@ -151,9 +150,9 @@ class Player {
     let linesEmpty = 0;
     let linesRemoved = 0;
     for (let i = rows - 1; i >= 0; i--) {
-      if (this.board[i].every((v) => v === ".")) {
+      if (this.board[i].every((v) => v === '.')) {
         linesEmpty++;
-      } else if (this.board[i].every((v) => v !== ".")) {
+      } else if (this.board[i].every((v) => v !== '.')) {
         this.board.splice(i, 1);
         linesRemoved++;
       }
@@ -193,12 +192,12 @@ class Player {
   }
 
   gameover() {
-    console.log("gameover");
-    if (this.pseudo === "god") {
+    console.log('gameover');
+    if (this.pseudo === 'god') {
       this.board = this.generateDefaultBoard();
       return;
     }
-    this.state = "lost";
+    this.state = 'lost';
 
     this.drawEnd(0);
   }
@@ -217,13 +216,13 @@ class Player {
     }
   }
 
-  printPiece(dest, x, y, mod = "") {
+  printPiece(dest, x, y, mod = '') {
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 4; j++) {
         const dx = j + x;
         const dy = i + y;
         if (
-          this.piece.forms[this.rot][i][j] !== "." &&
+          this.piece.forms[this.rot][i][j] !== '.' &&
           dx >= 0 &&
           dy >= 0 &&
           dx < cols &&
@@ -236,16 +235,16 @@ class Player {
   }
 
   action(act, player = false) {
-    if (this.state !== "alive") {
+    if (this.state !== 'alive') {
       return;
     }
     switch (act) {
-      case "up":
+      case 'up':
         if (
           this.safeMove(
             this.x,
             this.y,
-            (this.rot + 1) % this.piece.forms.length,
+            (this.rot + 1) % this.piece.forms.length
           )
         ) {
           this.rot = (this.rot + 1) % this.piece.forms.length;
@@ -253,7 +252,7 @@ class Player {
           this.safeMove(
             this.x - 1,
             this.y,
-            (this.rot + 1) % this.piece.forms.length,
+            (this.rot + 1) % this.piece.forms.length
           )
         ) {
           this.x -= 1;
@@ -262,7 +261,7 @@ class Player {
           this.safeMove(
             this.x + 1,
             this.y,
-            (this.rot + 1) % this.piece.forms.length,
+            (this.rot + 1) % this.piece.forms.length
           )
         ) {
           this.x += 1;
@@ -270,13 +269,13 @@ class Player {
         }
         break;
 
-      case "left":
+      case 'left':
         if (this.safeMove(this.x - 1, this.y, this.rot)) {
           this.x -= 1;
         }
         break;
 
-      case "down":
+      case 'down':
         if (this.safeMove(this.x, this.y + 1, this.rot)) {
           this.y += 1;
           if (player === true) {
@@ -290,13 +289,13 @@ class Player {
         }
         break;
 
-      case "right":
+      case 'right':
         if (this.safeMove(this.x + 1, this.y, this.rot)) {
           this.x += 1;
         }
         break;
 
-      case "space":
+      case 'space':
         for (let i = 0; i < rows; i++) {
           if (this.safeMove(this.x, this.y + 1, this.rot)) {
             this.y += 1;

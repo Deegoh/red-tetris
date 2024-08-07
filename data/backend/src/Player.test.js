@@ -1,12 +1,11 @@
-const { Player } = require("./Player");
-const { IPiece, TPiece, tend, OPiece } = require("./Piece");
-const { rows, cols } = require("./constants");
-const { sfc32 } = require("./utils");
+const { Player } = require('./Player');
+const { IPiece, TPiece, tend, OPiece } = require('./Piece');
+const { rows, cols } = require('./constants');
+const { sfc32 } = require('./utils');
 
-const { Server } = require("socket.io");
-const { createServer } = require("node:http");
-const ioc = require("socket.io-client");
-
+const { Server } = require('socket.io');
+const { createServer } = require('node:http');
+const ioc = require('socket.io-client');
 
 jest.mock('./constants', () => ({
   ...jest.requireActual('./constants'),
@@ -19,6 +18,12 @@ jest.mock('./Piece', () => ({
   // tend: jest.fn()
 }));
 
+const wsMock = {
+  id: '4',
+  conn: {
+    remoteAddress: '4',
+  },
+};
 
 function waitFor(socket, event) {
   return new Promise((resolve) => {
@@ -26,7 +31,7 @@ function waitFor(socket, event) {
   });
 }
 
-describe("player tests", () => {
+describe('player tests', () => {
   let io, serverSocket, clientSocket;
 
   beforeAll((done) => {
@@ -37,11 +42,11 @@ describe("player tests", () => {
       const port = httpServer.address().port;
       clientSocket = ioc(`http://localhost:${port}`);
 
-      io.on("connection", (socket) => {
+      io.on('connection', (socket) => {
         serverSocket = socket;
       });
 
-      clientSocket.on("connect", done);
+      clientSocket.on('connect', done);
     });
   });
 
@@ -51,15 +56,15 @@ describe("player tests", () => {
   });
 
   beforeEach(() => {
-    jest.useFakeTimers({ doNotFake: ["nextTick", "setImmediate"] });
+    jest.useFakeTimers({ doNotFake: ['nextTick', 'setImmediate'] });
   });
 
   afterEach(() => {
     jest.useRealTimers();
   });
 
-  it("should init player", () => {
-    const testPlayer = new Player('32', {id: 4, conn: {remoteAddress: '4'}});
+  it('should init player', () => {
+    const testPlayer = new Player('32', wsMock);
     testPlayer.init(1337);
 
     expect(testPlayer.board).not.toBeUndefined();
@@ -72,15 +77,14 @@ describe("player tests", () => {
     expect(testPlayer.random()).toBe(1133219677);
 
     expect(testPlayer.piece).not.toBeUndefined();
-    expect(testPlayer.piece.id).toBe('O')
+    expect(testPlayer.piece.id).toBe('O');
     expect(testPlayer.next).not.toBeUndefined();
-    expect(testPlayer.next.id).toBe('J')
+    expect(testPlayer.next.id).toBe('J');
     expect(testPlayer.bag.length).toBe(12);
   });
 
-
-  it("should test collision", () => {
-    const testPlayer = new Player('32', {id: 4, conn: {remoteAddress: '4'}});
+  it('should test collision', () => {
+    const testPlayer = new Player('32', wsMock);
 
     testPlayer.board = testPlayer.generateDefaultBoard();
     testPlayer.piece = new IPiece();
@@ -88,25 +92,30 @@ describe("player tests", () => {
     testPlayer.y = 0;
     testPlayer.rot = 0;
 
-    expect(testPlayer.safeMove(testPlayer.x, testPlayer.y, testPlayer.rot)).toBe(true);
-    expect(testPlayer.safeMove(testPlayer.x+1, testPlayer.y+1, testPlayer.rot)).toBe(false);
-  
+    expect(
+      testPlayer.safeMove(testPlayer.x, testPlayer.y, testPlayer.rot)
+    ).toBe(true);
+    expect(
+      testPlayer.safeMove(testPlayer.x + 1, testPlayer.y + 1, testPlayer.rot)
+    ).toBe(false);
+
     testPlayer.board = [
-      ['T','T','T','T'],
-      ['T','T','T','T'],
-      ['T','T','T','T'],
-      ['T','T','T','T'],
+      ['T', 'T', 'T', 'T'],
+      ['T', 'T', 'T', 'T'],
+      ['T', 'T', 'T', 'T'],
+      ['T', 'T', 'T', 'T'],
     ];
 
-    expect(testPlayer.safeMove(testPlayer.x, testPlayer.y, testPlayer.rot)).toBe(false);
+    expect(
+      testPlayer.safeMove(testPlayer.x, testPlayer.y, testPlayer.rot)
+    ).toBe(false);
   });
 
-
-  it("should test frame sending", async () => {
+  it('should test frame sending', async () => {
     const testPlayer = new Player('32', serverSocket);
 
     testPlayer.board = testPlayer.generateDefaultBoard();
-    
+
     testPlayer.piece = new TPiece();
     testPlayer.next = new TPiece();
     testPlayer.x = 0;
@@ -126,10 +135,10 @@ describe("player tests", () => {
     boardInfos = await waitFor(clientSocket, 'updateBoard');
     expect(boardInfos.board).not.toBeUndefined();
     expect(boardInfos.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['T','T','T','.'],
-      ['.','T','.','.'],
-      ['.','.','.','.'],
+      ['.', '.', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      ['.', 'T', '.', '.'],
+      ['.', '.', '.', '.'],
     ]);
 
     testPlayer.rot += 2;
@@ -138,21 +147,20 @@ describe("player tests", () => {
     boardInfos = await waitFor(clientSocket, 'updateBoard');
     expect(boardInfos.board).not.toBeUndefined();
     expect(boardInfos.board).toStrictEqual([
-      ['.','T','.','.'],
-      ['T','T','T','.'],
-      ['.','.','.','.'],
-      ['.','.','.','.'],
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
     ]);
-
 
     testPlayer.frame('playing');
     boardInfos = await waitFor(clientSocket, 'updateBoard');
     expect(boardInfos.board).not.toBeUndefined();
     expect(boardInfos.board).toStrictEqual([
-      ['.','T','.','.'],
-      ['T','T','T','.'],
-      ['.','#T','.','.'],
-      ['#T','#T','#T','.'],
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      ['.', '#T', '.', '.'],
+      ['#T', '#T', '#T', '.'],
     ]);
 
     testPlayer.sequence = 0;
@@ -162,78 +170,73 @@ describe("player tests", () => {
     expect(testPlayer.y).toBe(1);
     expect(boardInfos.board).not.toBeUndefined();
     expect(boardInfos.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['.','T','.','.'],
-      ['T','T','T','.'],
-      ['#T','#T','#T','.'],
+      ['.', '.', '.', '.'],
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      ['#T', '#T', '#T', '.'],
     ]);
   });
 
-
-  it("should test tetris detection", () => {
-    const testPlayer = new Player('32', {id: 4, conn: {remoteAddress: '4'}});
+  it('should test tetris detection', () => {
+    const testPlayer = new Player('32', wsMock);
 
     for (let i = 0; i < rows; i++) {
       testPlayer.score = 0;
       testPlayer.lines = 9;
       testPlayer.level = 0;
       testPlayer.board = [
-        ['.','.','.','.'],
-        ['.','.','.','.'],
-        ['.','.','.','.'],
-        ['.','.','.','.'],
+        ['.', '.', '.', '.'],
+        ['.', '.', '.', '.'],
+        ['.', '.', '.', '.'],
+        ['.', '.', '.', '.'],
       ];
       for (let j = 0; j <= i; j++) {
         for (let k = 0; k < cols; k++) {
-          testPlayer.board[(rows - j) - 1][k] = 'I';
+          testPlayer.board[rows - (j + 1)][k] = 'I';
         }
       }
       testPlayer.checkTetris();
-  
+
       expect(testPlayer.board).not.toBeUndefined();
       expect(testPlayer.board).toStrictEqual([
-        ['.','.','.','.'],
-        ['.','.','.','.'],
-        ['.','.','.','.'],
-        ['.','.','.','.'],
+        ['.', '.', '.', '.'],
+        ['.', '.', '.', '.'],
+        ['.', '.', '.', '.'],
+        ['.', '.', '.', '.'],
       ]);
       expect(testPlayer.lines).toBe(10 + i);
       expect(testPlayer.level).toBe(1);
     }
 
-    
     testPlayer.board = [
-      ['.','Z','.','.'],
-      ['Z','Z','S','.'],
-      ['Z','T','S','S'],
-      ['T','T','T','S'],
-    ]
+      ['.', 'Z', '.', '.'],
+      ['Z', 'Z', 'S', '.'],
+      ['Z', 'T', 'S', 'S'],
+      ['T', 'T', 'T', 'S'],
+    ];
 
     testPlayer.checkTetris();
 
     expect(testPlayer.board).not.toBeUndefined();
     expect(testPlayer.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['.','.','.','.'],
-      ['.','Z','.','.'],
-      ['Z','Z','S','.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', 'Z', '.', '.'],
+      ['Z', 'Z', 'S', '.'],
     ]);
     expect(testPlayer.score).toBe(8600);
     expect(testPlayer.lines).toBe(15);
     expect(testPlayer.level).toBe(1);
-
   });
 
-
-  it("should test game over", () => {
-
-    const testPlayer = new Player('32', {id: 4, conn: {remoteAddress: '4'}});
+  it('should test game over', () => {
+    const testPlayer = new Player('32', wsMock);
 
     testPlayer.board = [
-      ['T','T','T','.'],
-      ['L','T','.','T'],
-      ['L','.','T','T'],
-      ['L','L','.','T'],
+      ['T', 'T', 'T', '.'],
+      ['L', 'T', '.', 'T'],
+      ['L', '.', 'T', 'T'],
+      ['L', 'L', '.', 'T'],
     ];
     testPlayer.state = 'alive';
     testPlayer.bag = [];
@@ -247,20 +250,20 @@ describe("player tests", () => {
 
     expect(testPlayer.board).not.toBeUndefined();
     expect(testPlayer.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['.','.','.','.'],
-      ['L','.','T','T'],
-      ['L','L','.','T'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['L', '.', 'T', 'T'],
+      ['L', 'L', '.', 'T'],
     ]);
 
     jest.advanceTimersByTime(400);
 
     expect(testPlayer.board).not.toBeUndefined();
     expect(testPlayer.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['.','.','.','.'],
-      ['.','.','.','.'],
-      ['.','.','.','.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
     ]);
 
     jest.advanceTimersByTime(700);
@@ -268,12 +271,11 @@ describe("player tests", () => {
     expect(testPlayer.board).toStrictEqual(tend());
   });
 
-
-  it("should execute actions if possible", async() => {
+  it('should execute actions if possible', async () => {
     const testPlayer = new Player('32', serverSocket);
 
     testPlayer.board = testPlayer.generateDefaultBoard();
-    
+
     testPlayer.piece = new TPiece();
     testPlayer.next = new OPiece();
     testPlayer.bag = [];
@@ -286,7 +288,6 @@ describe("player tests", () => {
     testPlayer.lines = 0;
     testPlayer.level = 0;
 
-    
     testPlayer.state = 'lost';
     testPlayer.action('down');
     expect(testPlayer.x).toBe(0);
@@ -297,7 +298,7 @@ describe("player tests", () => {
     //   ['.','.','.','.'],
     //   ['.','.','.','.'],
     // ]
-    
+
     testPlayer.state = 'alive';
     testPlayer.action('right');
     expect(testPlayer.x).toBe(1);
@@ -353,10 +354,10 @@ describe("player tests", () => {
 
     testPlayer.action('down');
     expect(testPlayer.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['.','.','.','.'],
-      ['T','T','T','.'],
-      ['.','T','.','.']
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      ['.', 'T', '.', '.'],
     ]);
 
     // [
@@ -369,13 +370,13 @@ describe("player tests", () => {
     testPlayer.board = testPlayer.generateDefaultBoard();
     testPlayer.action('space', true);
     expect(testPlayer.board).toStrictEqual([
-      ['.','.','.','.'],
-      ['.','.','.','.'],
-      ['.','O','O','.'],
-      ['.','O','O','.']
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', 'O', 'O', '.'],
+      ['.', 'O', 'O', '.'],
     ]);
     expect(testPlayer.score).toBe(6);
-    
+
     // testPlayer.sequence = 1;
     // testPlayer.frame('waiting');
     // console.log((await waitFor(clientSocket, 'updateBoard')).board);
