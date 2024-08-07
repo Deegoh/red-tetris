@@ -1,5 +1,5 @@
-const { t3, t2, t1 } = require("./Piece");
-const { Player } = require("./Player");
+const { t3, t2, t1 } = require('./Piece');
+const { Player } = require('./Player');
 
 class Game {
   constructor(id, owner) {
@@ -10,16 +10,16 @@ class Game {
 
     this.rseed = 42;
 
-    this.status = "waiting";
+    this.status = 'waiting';
     this.slow = undefined;
-    this.slow = undefined;
+    this.fast = undefined;
   }
 
   init() {
     this.rseed = Date.now();
 
     this.fast = setInterval(() => {
-      if (this.status !== "launching") {
+      if (this.status !== 'launching') {
         this.players.forEach((p) => {
           p.frame(this.status);
         });
@@ -29,26 +29,24 @@ class Game {
 
   initPlayer(pseudo, socket) {
     this.players.set(pseudo, new Player(pseudo, socket));
-    console.log("connect room successs", this.players);
 
     const p = this.players.get(pseudo);
-
     p.init(this.rseed);
   }
 
   start(io) {
-    this.status = "launching";
+    this.status = 'launching';
     setTimeout(() => {
-      io.to(this.id).emit("updateBoard", { board: t3() });
+      io.to(this.id).emit('updateBoard', { board: t3() });
     }, 100);
     setTimeout(() => {
-      io.to(this.id).emit("updateBoard", { board: t2() });
+      io.to(this.id).emit('updateBoard', { board: t2() });
     }, 1100);
     setTimeout(() => {
-      io.to(this.id).emit("updateBoard", { board: t1() });
+      io.to(this.id).emit('updateBoard', { board: t1() });
     }, 2100);
     setTimeout(() => {
-      this.status = "playing";
+      this.status = 'playing';
     }, 3100);
   }
 }

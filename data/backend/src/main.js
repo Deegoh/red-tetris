@@ -1,7 +1,7 @@
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const { setSocketListeners } = require("./socket");
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const { TetrisServer } = require('./TetrisServer');
 
 const app = express();
 
@@ -13,31 +13,22 @@ const server = http.createServer(app);
 
 const io = new Server(
   server,
-  process.env.NODE_ENV === "development"
+  process.env.NODE_ENV === 'development'
     ? {
         cors: {
           origin: `http://localhost:${process.env.PORT_FRONT}`,
-          methods: ["GET", "POST"],
+          methods: ['GET', 'POST'],
         },
       }
-    : undefined,
+    : undefined
 );
 
-io.on("connection", (socket) => {
-  setSocketListeners(socket, io);
+const tetris = new TetrisServer();
+
+io.on('connection', (socket) => {
+  tetris.setSocketListeners(socket, io);
 });
 
-function getConnecteds() {
-  const connecteds = [];
-  io.sockets.sockets.forEach((v) => connecteds.push(v.id));
-  return connecteds;
-}
-
-// setInterval(() => {
-//   // console.log('statataata', io.sockets.sockets);
-//   console.log('statataata', getConnecteds());
-// }, 10000)
-
 server.listen(8080, () => {
-  console.log("listening on *:8080");
+  console.log('listening on *:8080');
 });

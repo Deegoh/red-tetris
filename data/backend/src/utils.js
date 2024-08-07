@@ -27,8 +27,8 @@
 //   return random;
 // }
 
-//stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
-https: function sfc32(a, b, c, d) {
+// https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
+function sfc32(a, b, c, d) {
   return function () {
     a |= 0;
     b |= 0;

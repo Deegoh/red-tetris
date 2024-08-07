@@ -1,5 +1,5 @@
 const rows = 20;
 const cols = 10;
-const emptyColor = ".";
+const emptyColor = '.';
 
 module.exports = { rows, cols, emptyColor };

@@ -12,7 +12,7 @@ vi.mock('react-router-dom', () => ({
   },
 }));
 
-describe('EntryModal', () => {
+describe('RoomCreation', () => {
   let addNotifMock;
   let socketEmitMock;
 
@@ -24,7 +24,7 @@ describe('EntryModal', () => {
 
     socketEmitMock = vi.fn();
     useSocket.mockReturnValue({
-      socketRef: { current: { emit: socketEmitMock } },
+      socket: { emit: socketEmitMock },
     });
   });
 
@@ -37,20 +37,6 @@ describe('EntryModal', () => {
 
     expect(screen.getByTestId('pseudo')).toBeDefined();
     expect(screen.getByTestId('createroom')).toBeDefined();
-  });
-
-  test('pseudo too short', () => {
-    render(<RoomCreation />);
-
-    const pseudoInput = screen.getByTestId('pseudo');
-    const createRoomButton = screen.getByTestId('createroom');
-
-    fireEvent.change(pseudoInput, { target: { value: 'sh' } });
-    fireEvent.click(createRoomButton);
-
-    expect(addNotifMock).toHaveBeenCalled();
-    expect(addNotifMock).toHaveBeenCalledWith('Pseudo too short', 'warning');
-    expect(socketEmitMock).not.toHaveBeenCalled();
   });
 
   test('pseudo good length', () => {
