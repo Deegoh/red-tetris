@@ -14,6 +14,8 @@ jest.mock('./Game', () => ({
   Game: jest.fn().mockImplementation(function (...args) {
     const g = new (jest.requireActual('./Game').Game)(...args);
     g.init = jest.fn();
+    g.start = jest.fn();
+    g.status = 'waiting';
     return g;
   }),
 }));
@@ -119,7 +121,7 @@ describe('socket test', () => {
     );
   });
 
-  it('should trigger connection validation', async () => {
+  it('should join room', async () => {
     clientSocket.emit('createRoom', { pseudo: 'test' });
 
     await Promise.all([
@@ -127,12 +129,12 @@ describe('socket test', () => {
       waitFor(clientSocket, 'room_list'),
     ]);
 
-    clientSocket.emit('connectRoom', { pseudo: 'test', room: '5' });
+    clientSocket.emit('joinRoom', { pseudo: 'test2', room: '1' });
 
     const notif = await waitFor(clientSocket, 'notify');
     expect(notif).toStrictEqual(
       expect.objectContaining({
-        status: 'error',
+        status: 'success',
       })
     );
   });
@@ -150,4 +152,95 @@ describe('socket test', () => {
     const rooms = await waitFor(clientSocket, 'room_list');
     expect(rooms.length).toBe(1);
   });
+
+  it('should trigger connection validation', async () => {
+    clientSocket.emit('createRoom', { pseudo: 'test' });
+
+    await Promise.all([
+      waitFor(clientSocket, 'notify'),
+      waitFor(clientSocket, 'room_list'),
+    ]);
+
+    clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
+    await waitFor(clientSocket, 'room_list');
+
+    clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
+
+    const notif = await waitFor(clientSocket, 'notify');
+    expect(notif).toStrictEqual(
+      expect.objectContaining({
+        status: 'error',
+      })
+    );
+  });
+
+  it('should trigger start game validation', async () => {
+    clientSocket.emit('createRoom', { pseudo: 'test' });
+
+    await Promise.all([
+      waitFor(clientSocket, 'notify'),
+      waitFor(clientSocket, 'room_list'),
+    ]);
+
+    clientSocket.emit('connectRoom', { pseudo: 'tes2t', room: '1' });
+    await waitFor(clientSocket, 'room_list');
+
+    clientSocket.emit('startGame');
+
+    const notif = await waitFor(clientSocket, 'notify');
+    expect(notif).toStrictEqual(
+      expect.objectContaining({
+        status: 'error',
+      })
+    );
+  });
+
+  it('should start game', async () => {
+    clientSocket.emit('createRoom', { pseudo: 'test' });
+
+    await Promise.all([
+      waitFor(clientSocket, 'notify'),
+      waitFor(clientSocket, 'room_list'),
+    ]);
+
+    clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
+    await waitFor(clientSocket, 'room_list');
+
+    clientSocket.emit('startGame');
+
+    const notif = await waitFor(clientSocket, 'notify');
+    expect(notif).toStrictEqual(
+      expect.objectContaining({
+        status: 'success',
+      })
+    );
+    clientSocket.emit('startGame');
+    await new Promise((r) => setTimeout(r, 200));
+  });
+
+  it('should send game actions', async () => {
+    jest.mock('./Game', () => ({
+      Game: jest.fn().mockImplementation(function (...args) {
+        const g = new (jest.requireActual('./Game').Game)(...args);
+        g.init = jest.fn();
+        g.start = jest.fn();
+        g.status = 'waiting';
+        return g;
+      }),
+    }));
+
+    clientSocket.emit('createRoom', { pseudo: 'test' });
+
+    await Promise.all([
+      waitFor(clientSocket, 'notify'),
+      waitFor(clientSocket, 'room_list'),
+    ]);
+
+    clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
+    await waitFor(clientSocket, 'room_list');
+
+    clientSocket.emit('gameAction', { action: 'left' });
+    clientSocket.emit('gameAction', { action: 'down' });
+    await new Promise((r) => setTimeout(r, 200));
+  }, 20000);
 });
