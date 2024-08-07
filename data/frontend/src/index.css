@@ -2,10 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'Tetris';
+    font-weight: normal;
+    font-style: normal;
+    src:
+      url('../assets/fonts/modern-tetris.eot?') format('eot'),
+      url('../assets/fonts/modern-tetris.woff') format('woff'),
+      url('../assets/fonts/modern-tetris.ttf') format('truetype'),
+      url('../assets/fonts/modern-tetris.svg#Modern-Tetris') format('svg');
+  }
+}
+
 :root {
   --cols: 10;
   --rows: 20;
   --tile-size: 20px;
+  --I: 0 255 255;
+  --O: 255 255 0;
+  --T: 128 0 128;
+  --L: 255 127 0;
+  --J: 0 0 255;
+  --S: 0 255 0;
+  --Z: 255 0 0;
 }
 
 div[role='alert'] button {

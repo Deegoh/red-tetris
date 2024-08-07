@@ -14,13 +14,13 @@ function App() {
           element={
             <div className='container mx-auto flex flex-col items-center'>
               <Home />
-              <Footer />
             </div>
           }
         />
         <Route path='/create' element={<Game />} />
         <Route path='/join' element={<Home />} />
       </Routes>
+      <Footer />
       <AdminTools />
       <NotificationsContainer />
     </>

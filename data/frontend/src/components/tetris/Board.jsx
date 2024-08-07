@@ -1,44 +1,62 @@
 import { Square } from './Square.jsx';
-import { emptyColor } from './tetrominoes.js';
 import { useSelector } from 'react-redux';
+import { Typography } from '@material-tailwind/react';
+import { useEffect, useState } from 'react';
 
 export const rows = 20;
 export const cols = 10;
 
-export const generateDefaultMap = () => {
-  return Array(rows)
-    .fill()
-    .map(() => Array(cols).fill(emptyColor));
-};
-
-const renderBoard = (board) => {
+const renderBoard = (board, mode) => {
   const map = [];
   let index = 0;
-  let color = 'bg-tile';
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const currentPosition = board[row][col];
-      if (currentPosition === emptyColor) {
-        color = 'bg-tile';
-      } else {
-        color = 'bg-tile-' + currentPosition.replace('#', '');
+      let colorId = board[row][col];
+      let ghost = false;
+
+      if (colorId.includes('#')) {
+        colorId = colorId.replace('#', '');
+        ghost = true;
       }
-      if (currentPosition.indexOf('#') !== -1) {
-        color += ' opacity-25';
-      }
-      map.push(<Square position={index} key={index++} color={color} />);
+
+      map.push(
+        <Square
+          ghost={ghost}
+          mode={mode}
+          position={index}
+          key={index++}
+          color={colorId}
+        />
+      );
     }
   }
   return map;
 };
 
-export const Board = () => {
+export const Board = ({ player, className = '', ...rest }) => {
   const board = useSelector((state) => state.game.board);
+  const [mode, setMode] = useState('player');
+
+  useEffect(() => {
+    if (player) {
+      setMode('view');
+    }
+  }, [player]);
 
   return (
-    <div className='board grid grid-cols-10 gap-0 bg-tile'>
-      {renderBoard(board)}
+    <div className='bg-board p-1 rounded'>
+      <div
+        {...rest}
+        className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
+        {renderBoard(board, mode)}
+
+        {player && (
+          <Typography className='col-span-full text-white mx-auto'>
+            {player}
+          </Typography>
+        )}
+      </div>
     </div>
   );
 };
