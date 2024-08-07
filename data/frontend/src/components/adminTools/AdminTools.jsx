@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { Btn } from '../Btn.jsx';
 import { tetrominoes, tetrominoesBlocks } from '../tetris/tetrominoes.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { randomTetromino } from '../tetris/PreviewBlock.jsx';
-import { generateDefaultMap } from '../tetris/Board.jsx';
+import { generateDefaultMap } from '../tetris/generateDefaultMap.jsx';
 import {
   boardUpdated,
   tetrominoPreviewUpdated,
-  tetrominoRotated,
 } from '../../features/game/gameSlice.js';
 
 export const AdminTools = () => {
@@ -15,6 +13,7 @@ export const AdminTools = () => {
   const [previewTetromino, setpreviewTetromino] = useState('default');
 
   const game = useSelector((state) => state.game);
+  const rooms = useSelector((state) => state.rooms);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,6 +31,10 @@ export const AdminTools = () => {
     };
   });
 
+  const randomTetromino = () => {
+    return tetrominoes.charAt(Math.floor(Math.random() * tetrominoes.length));
+  };
+
   const updateInput = (event) => {
     const newTetromino = event.target.value;
     setpreviewTetromino(newTetromino);
@@ -44,9 +47,6 @@ export const AdminTools = () => {
     const termino = randomTetromino();
     setpreviewTetromino(termino);
     dispatch(tetrominoPreviewUpdated(termino));
-  };
-  const toggleAutoLog = () => {
-    setAutoLog(!autoLog);
   };
 
   return (
@@ -68,18 +68,23 @@ export const AdminTools = () => {
           log gameStore
         </Btn>
 
-        <label>
-          <span>Termino Preview</span>
-          <input value={previewTetromino} onChange={updateInput} type='text' />
-        </label>
+        <Btn
+          onClick={() => {
+            console.log(rooms);
+          }}>
+          log gameStore
+        </Btn>
+
         <div className='flex gap-4'>
+          <label>
+            <span>Termino Preview</span>
+            <input
+              value={previewTetromino}
+              onChange={updateInput}
+              type='text'
+            />
+          </label>
           <Btn onClick={setRandomTermino}>Random preview</Btn>
-          <Btn
-            onClick={() => {
-              dispatch(tetrominoRotated());
-            }}>
-            Rotation preview
-          </Btn>
         </div>
 
         <Btn

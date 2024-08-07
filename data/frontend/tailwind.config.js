@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-undef
 const withMT = require('@material-tailwind/react/utils/withMT');
 
+// eslint-disable-next-line no-undef
 module.exports = withMT({
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [
@@ -40,6 +42,9 @@ module.exports = withMT({
           S: '0 0 1px 5px rgb(var(--S) / <alpha-value>)',
           Z: '0 0 1px 5px rgb(var(--Z) / <alpha-value>)',
         },
+      },
+      borderWidth: {
+        tile: 'var(--shadow-size)',
       },
       size: {
         tile: 'var(--tile-size)',

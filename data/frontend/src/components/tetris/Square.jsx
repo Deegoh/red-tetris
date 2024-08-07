@@ -1,7 +1,7 @@
 import { emptyColor } from './tetrominoes.js';
 import useBreakpoint from './useBreakpoint.jsx';
 
-export const Square = ({ ghost = false, color, position, mode = 'player' }) => {
+export const Square = ({ ghost, color, position, mode = 'player' }) => {
   const screen = useBreakpoint();
 
   const childClassesVariants = {
@@ -16,24 +16,13 @@ export const Square = ({ ghost = false, color, position, mode = 'player' }) => {
   };
 
   const shadowVariants = {
-    I: 'shadow-ghost shadow-tile-I/40',
-    O: 'shadow-ghost shadow-tile-O/40',
-    T: 'shadow-ghost shadow-tile-T/40',
-    L: 'shadow-ghost shadow-tile-L/40',
-    J: 'shadow-ghost shadow-tile-J/40',
-    S: 'shadow-ghost shadow-tile-S/40',
-    Z: 'shadow-ghost shadow-tile-Z/40',
-  };
-
-  const parentClassesVariants = {
-    I: 'border-[5px] border-b-tile-I/35 border-t-tile-I/85 border-x-tile-I/60',
-    O: 'border-[5px] border-b-tile-O/35 border-t-tile-O/85 border-x-tile-O/60',
-    T: 'border-[5px] border-b-tile-T/35 border-t-tile-T/85 border-x-tile-T/60',
-    L: 'border-[5px] border-b-tile-L/35 border-t-tile-L/85 border-x-tile-L/60',
-    J: 'border-[5px] border-b-tile-J/35 border-t-tile-J/85 border-x-tile-J/60',
-    S: 'border-[5px] border-b-tile-S/35 border-t-tile-S/85 border-x-tile-S/60',
-    Z: 'border-[5px] border-b-tile-Z/35 border-t-tile-Z/85 border-x-tile-Z/60',
-    '.': '',
+    I: 'shadow-ghost shadow-tile-I/30',
+    O: 'shadow-ghost shadow-tile-O/30',
+    T: 'shadow-ghost shadow-tile-T/30',
+    L: 'shadow-ghost shadow-tile-L/30',
+    J: 'shadow-ghost shadow-tile-J/30',
+    S: 'shadow-ghost shadow-tile-S/30',
+    Z: 'shadow-ghost shadow-tile-Z/30',
   };
 
   let size = 35;
@@ -47,9 +36,22 @@ export const Square = ({ ghost = false, color, position, mode = 'player' }) => {
       size = 30;
       break;
   }
-  if (mode !== 'player') {
+
+  if (mode === 'view') {
     size /= 2;
   }
+  let sizeShadow = Math.floor(size / 4);
+
+  const parentClassesVariants = {
+    I: 'border-tile border-b-tile-I/35 border-t-tile-I/85 border-x-tile-I/60',
+    O: 'border-tile border-b-tile-O/35 border-t-tile-O/85 border-x-tile-O/60',
+    T: 'border-tile border-b-tile-T/35 border-t-tile-T/85 border-x-tile-T/60',
+    L: 'border-tile border-b-tile-L/35 border-t-tile-L/85 border-x-tile-L/60',
+    J: 'border-tile border-b-tile-J/35 border-t-tile-J/85 border-x-tile-J/60',
+    S: 'border-tile border-b-tile-S/35 border-t-tile-S/85 border-x-tile-S/60',
+    Z: 'border-tile border-b-tile-Z/35 border-t-tile-Z/85 border-x-tile-Z/60',
+    '.': '',
+  };
 
   let parentClasses = parentClassesVariants[color];
   let childClasses = childClassesVariants[color];
@@ -65,9 +67,14 @@ export const Square = ({ ghost = false, color, position, mode = 'player' }) => {
     childClasses += ' rounded-[2px]';
   }
 
+  const style = {
+    '--tile-size': `${size}px`,
+    '--shadow-size': `${sizeShadow}px`,
+  };
+
   return (
     <div
-      style={{ '--tile-size': `${size}px` }}
+      style={style}
       data-position={position}
       className={`rounded size-tile ${parentClasses}`}>
       <div className={`size-full ${childClasses}`} />

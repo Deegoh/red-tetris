@@ -1,10 +1,6 @@
 import { Square } from './Square.jsx';
-import { tetrominoes, tetrominoesBlocks } from './tetrominoes.js';
+import { tetrominoesBlocks } from './tetrominoes.js';
 import { useSelector } from 'react-redux';
-
-export const randomTetromino = () => {
-  return tetrominoes.charAt(Math.floor(Math.random() * tetrominoes.length));
-};
 
 const parseAndFormatTetromino = (shape, rotation) => {
   const size = 16;
@@ -17,7 +13,9 @@ const parseAndFormatTetromino = (shape, rotation) => {
   for (let index = 0; index < size; index++) {
     let colorId =
       tetrominoesBlocks[shape][rotation][Math.floor(index / 4)][index % 4];
-    tetromino.push(<Square position={index} key={index} color={colorId} />);
+    tetromino.push(
+      <Square mode={'player'} position={index} key={index} color={colorId} />
+    );
   }
   return tetromino;
 };
@@ -25,6 +23,7 @@ const parseAndFormatTetromino = (shape, rotation) => {
 export const PreviewTetrominoes = () => {
   const { previewTermino, rotation } = useSelector((state) => state.game);
   const previewBlock = parseAndFormatTetromino(previewTermino, rotation);
+
   return (
     <div className='bg-board p-1 rounded shrink-1 preview-block grid grid-cols-4 gap-[1px] content-start'>
       {previewBlock}
