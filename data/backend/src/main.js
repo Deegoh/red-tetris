@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const { TetrisServer } = require("./socket");
+const { TetrisServer } = require("./TetrisServer");
 
 const app = express();
 

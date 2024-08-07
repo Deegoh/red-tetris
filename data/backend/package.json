@@ -1,3 +1,4 @@
+
 {
     "name": "red-tetris-backend",
     "version": "0.0.1",
@@ -5,7 +6,9 @@
     "scripts": {
         "dev": "nodemon --legacy-watch src/main.js",
         "test": "jest",
+        "testlive": "jest --watchAll",
         "coverage": "jest --coverage",
+        "coverage2": "jest --no-cache --coverage --detectOpenHandles",
         "prettier": "prettier --ignore-unknown --write src"
     },
     "dependencies": {
