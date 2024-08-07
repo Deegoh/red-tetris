@@ -1,12 +1,5 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  tetrominoHardDropped,
-  tetrominoLeftMoved,
-  tetrominoRightMoved,
-  tetrominoRotated,
-  tetrominoSoftDropped,
-} from '../../features/game/gameSlice.js';
 import { useSocket } from 'src/app/socket.jsx';
 
 // Left and right arrows: Horizontal move to the right or left
@@ -21,6 +14,7 @@ export const ControlsStore = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
+      // TODO remove code
       // if (game.status !== 'running') {
       //   return;
       // }

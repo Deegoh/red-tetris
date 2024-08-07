@@ -4,7 +4,7 @@ import { Score } from './tetris/Score.jsx';
 import { ControlsStore } from './tetris/ControlsStore.jsx';
 import { Btn } from './Btn.jsx';
 import { useDispatch } from 'react-redux';
-import { gameRestarted, gameStarted } from '../features/game/gameSlice.js';
+import { gameRestarted } from '../features/game/gameSlice.js';
 import { PreviewBoard } from './tetris/PreviewBoard.jsx';
 import useBreakpoint from './tetris/useBreakpoint.jsx';
 import { useSocket } from 'src/app/socket.jsx';
@@ -40,7 +40,6 @@ export const Game = () => {
       addNotif('Socket not loaded (yet?)', 'error');
     }
   }, [addNotif, socket]);
-
 
   return (
     <div className='flex mx-auto gap-2 pb-16'>
