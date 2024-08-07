@@ -11,8 +11,11 @@ function waitFor(socket, event) {
 }
 
 jest.mock('./Game', () => ({
-  ...jest.requireActual('./Game'),
-  init: jest.fn(),
+  Game: jest.fn().mockImplementation(function (...args) {
+    const g = new (jest.requireActual('./Game').Game)(...args);
+    g.init = jest.fn();
+    return g;
+  }),
 }));
 
 describe('socket test', () => {
