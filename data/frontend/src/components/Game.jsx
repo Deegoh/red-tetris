@@ -64,7 +64,7 @@ export const Game = () => {
         <PreviewTetrominoes />
         <Score justify='left' />
       </div>
-      {screen !== 'xs' && <PreviewBoard />}
+      {/*{screen !== 'xs' && <PreviewBoard />}*/}
       <ControlsStore />
       {/* TODO: add message alert like countdown or whatever*/}
     </div>
