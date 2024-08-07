@@ -72,7 +72,7 @@ export const AdminTools = () => {
           onClick={() => {
             console.log(rooms);
           }}>
-          log gameStore
+          log roomsStore
         </Btn>
 
         <div className='flex gap-4'>
