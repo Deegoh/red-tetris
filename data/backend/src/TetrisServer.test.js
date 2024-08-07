@@ -2,7 +2,7 @@ const { Server } = require('socket.io');
 const { createServer } = require('node:http');
 const ioc = require('socket.io-client');
 
-const { setSocketListeners, TetrisServer } = require('./socket');
+const { TetrisServer } = require('./TetrisServer');
 
 function waitFor(socket, event) {
   return new Promise((resolve) => {
