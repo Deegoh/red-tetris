@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 import { setRooms } from '../features/rooms/roomSlice';
 import { useDispatch } from 'react-redux';
 import { boardUpdated, updateScore } from 'src/features/game/gameSlice';
+import { tetrominoPreviewUpdated } from '../features/game/gameSlice.js';
 
 const SocketContext = createContext(undefined);
 
@@ -43,6 +44,9 @@ export function SocketProvider({ children }) {
           }
           if (res?.score !== undefined) {
             dispatch(updateScore(`${res.score} L${res.lines}S ^${res.level}`));
+          }
+          if (res?.next !== undefined) {
+            dispatch(tetrominoPreviewUpdated(`${res.next}`));
           }
         });
       });
