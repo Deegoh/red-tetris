@@ -50,6 +50,7 @@ describe('socket test', () => {
 
   beforeEach(() => {
     tetrisServer.init();
+    serverSocket.conn.remoteAddress = 'myip';
   });
 
   it('ping should be received', () => {
@@ -69,6 +70,7 @@ describe('socket test', () => {
     expect(shortNotif).toStrictEqual(
       expect.objectContaining({
         status: 'error',
+        code: 'PSEUDO_LENGTH',
       })
     );
 
@@ -78,6 +80,7 @@ describe('socket test', () => {
     expect(charNotif).toStrictEqual(
       expect.objectContaining({
         status: 'error',
+        code: 'SPECIALS_CHARS',
       })
     );
   });
@@ -98,12 +101,13 @@ describe('socket test', () => {
     expect(notif).toStrictEqual(
       expect.objectContaining({
         status: 'success',
+        code: 'ROOM_CREATED',
       })
     );
     expect(rooms.length).toBe(2);
   });
 
-  it('should trigger room validation', async () => {
+  it('should trigger join room validation', async () => {
     clientSocket.emit('createRoom', { pseudo: 'test' });
 
     await Promise.all([
@@ -112,11 +116,30 @@ describe('socket test', () => {
     ]);
 
     clientSocket.emit('joinRoom', { pseudo: 'test2', room: '5' });
-
     const notif = await waitFor(clientSocket, 'notify');
     expect(notif).toStrictEqual(
       expect.objectContaining({
         status: 'error',
+        code: 'ROOM_404',
+      })
+    );
+
+    clientSocket.emit('joinRoom', { pseudo: 'test', room: '1' });
+    const notif2 = await waitFor(clientSocket, 'notify');
+    expect(notif2).toStrictEqual(
+      expect.objectContaining({
+        status: 'info',
+        code: 'ALREADY_SUBSCRIBED',
+      })
+    );
+
+    serverSocket.conn.remoteAddress = 'spoofIP';
+    clientSocket.emit('joinRoom', { pseudo: 'test', room: '1' });
+    const notif3 = await waitFor(clientSocket, 'notify');
+    expect(notif3).toStrictEqual(
+      expect.objectContaining({
+        status: 'error',
+        code: 'USERNAME_TAKEN',
       })
     );
   });
@@ -130,11 +153,11 @@ describe('socket test', () => {
     ]);
 
     clientSocket.emit('joinRoom', { pseudo: 'test2', room: '1' });
-
     const notif = await waitFor(clientSocket, 'notify');
     expect(notif).toStrictEqual(
       expect.objectContaining({
         status: 'success',
+        code: 'ROOM_JOINED',
       })
     );
   });
@@ -148,9 +171,27 @@ describe('socket test', () => {
     ]);
 
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
-
-    const rooms = await waitFor(clientSocket, 'room_list');
+    const [notif, rooms] = await Promise.all([
+      waitFor(clientSocket, 'notify'),
+      waitFor(clientSocket, 'room_list'),
+    ]);
+    // const rooms = await waitFor(clientSocket, 'room_list');
     expect(rooms.length).toBe(1);
+    expect(notif).toStrictEqual(
+      expect.objectContaining({
+        status: 'success',
+        code: 'ROOM_CONNECTED',
+      })
+    );
+
+    clientSocket.emit('connectRoom', { pseudo: 'test2', room: '1' });
+    const notif2 = await waitFor(clientSocket, 'notify');
+    expect(notif2).toStrictEqual(
+      expect.objectContaining({
+        status: 'success',
+        code: 'ROOM_CONNECTED',
+      })
+    );
   });
 
   it('should trigger connection validation', async () => {
@@ -164,12 +205,23 @@ describe('socket test', () => {
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
     await waitFor(clientSocket, 'room_list');
 
+    serverSocket.id = 'spoofIdentif';
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
+    const notif2 = await waitFor(clientSocket, 'notify');
+    expect(notif2).toStrictEqual(
+      expect.objectContaining({
+        status: 'warning',
+        code: 'MOVE_HANDLE',
+      })
+    );
 
-    const notif = await waitFor(clientSocket, 'notify');
-    expect(notif).toStrictEqual(
+    serverSocket.conn.remoteAddress = 'spoofIP';
+    clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
+    const notif3 = await waitFor(clientSocket, 'notify');
+    expect(notif3).toStrictEqual(
       expect.objectContaining({
         status: 'error',
+        code: 'USERNAME_TAKEN',
       })
     );
   });
@@ -182,15 +234,15 @@ describe('socket test', () => {
       waitFor(clientSocket, 'room_list'),
     ]);
 
-    clientSocket.emit('connectRoom', { pseudo: 'tes2t', room: '1' });
+    clientSocket.emit('connectRoom', { pseudo: 'test2', room: '1' });
     await waitFor(clientSocket, 'room_list');
 
     clientSocket.emit('startGame');
-
     const notif = await waitFor(clientSocket, 'notify');
     expect(notif).toStrictEqual(
       expect.objectContaining({
         status: 'error',
+        code: 'NOT_OWNER',
       })
     );
   });
@@ -207,13 +259,14 @@ describe('socket test', () => {
     await waitFor(clientSocket, 'room_list');
 
     clientSocket.emit('startGame');
-
     const notif = await waitFor(clientSocket, 'notify');
     expect(notif).toStrictEqual(
       expect.objectContaining({
         status: 'success',
+        code: 'STARTING_GAME',
       })
     );
+
     clientSocket.emit('startGame');
     await new Promise((r) => setTimeout(r, 200));
   });
@@ -224,13 +277,21 @@ describe('socket test', () => {
         const g = new (jest.requireActual('./Game').Game)(...args);
         g.init = jest.fn();
         g.start = jest.fn();
-        g.status = 'waiting';
+        g.status = 'playing';
         return g;
       }),
     }));
 
-    clientSocket.emit('createRoom', { pseudo: 'test' });
+    clientSocket.emit('gameAction', { action: 'left' });
+    const notif = await waitFor(clientSocket, 'notify');
+    expect(notif).toStrictEqual(
+      expect.objectContaining({
+        status: 'error',
+        code: 'NOT_REGISTERED',
+      })
+    );
 
+    clientSocket.emit('createRoom', { pseudo: 'test' });
     await Promise.all([
       waitFor(clientSocket, 'notify'),
       waitFor(clientSocket, 'room_list'),

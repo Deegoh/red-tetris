@@ -42,6 +42,7 @@ class TetrisServer {
         else {
           socket.emit('notify', {
             status: 'error',
+            code: 'SPECIALS_CHARS',
             text: "no special characters except $-_.+!*'()",
             page: page,
           });
@@ -50,6 +51,7 @@ class TetrisServer {
       else {
         socket.emit('notify', {
           status: 'error',
+          code: 'PSEUDO_LENGTH',
           text: 'name must be between 3 and 32 characters long',
           page: page,
         });
@@ -63,11 +65,19 @@ class TetrisServer {
       else {
         socket.emit('notify', {
           status: 'error',
+          code: 'ROOM_404',
           text: "room doesn't exists",
           page: page,
         });
       }
     };
+
+    socket.on('disconnect', (reason) => {
+      // const roomname = this.sdns.get(socket.id)?.roomname
+      // socket.leave(roomname.toString());
+
+      this.sdns.delete(socket.id);
+    });
 
     socket.on('createRoom', (req) => {
       const pseudo = req?.pseudo?.toString().trim();
@@ -76,10 +86,13 @@ class TetrisServer {
         const current = findFirstUnusedId(this.games);
 
         this.games.set(current, new Game(current, pseudo));
-        this.games.get(current).init();
+        const room = this.games.get(current);
+        room.init();
+        room.initPlayer(pseudo, socket);
 
         socket.emit('notify', {
           status: 'success',
+          code: 'ROOM_CREATED',
           text: 'created',
           page: `/create#${current}[${pseudo}]`,
         });
@@ -93,11 +106,34 @@ class TetrisServer {
 
       checkPseudo(pseudo, undefined, () => {
         checkRoom(roomname, undefined, (room) => {
-          socket.emit('notify', {
-            status: 'success',
-            text: 'connecting',
-            page: `/create#${room.id}[${pseudo}]`,
-          });
+          const player = room.players.get(pseudo);
+
+          if (player === undefined) {
+            room.initPlayer(pseudo, socket);
+
+            socket.emit('notify', {
+              status: 'success',
+              code: 'ROOM_JOINED',
+              text: 'connecting',
+              page: `/create#${room.id}[${pseudo}]`,
+            });
+          } //
+          else if (player.remoteAddress === socket.conn.remoteAddress) {
+            socket.emit('notify', {
+              status: 'info',
+              code: 'ALREADY_SUBSCRIBED',
+              text: 'you are already subscribed to this room',
+              page: `/create#${room.id}[${pseudo}]`,
+            });
+          } //
+          else {
+            socket.emit('notify', {
+              status: 'error',
+              code: 'USERNAME_TAKEN',
+              text: 'username already taken in the room',
+              page: '/',
+            });
+          }
         });
       });
     });
@@ -110,16 +146,48 @@ class TetrisServer {
         checkRoom(roomname, '/', (room) => {
           if (!room.players.has(pseudo)) {
             room.initPlayer(pseudo, socket);
-            socket.join(room.id);
+          }
+
+          const player = room.players.get(pseudo);
+
+          if (
+            player !== undefined &&
+            player.remoteAddress == socket.conn.remoteAddress
+          ) {
+            const entry = this.sdns.get(socket.id);
+            if (entry !== undefined) {
+              socket.leave(entry.roomname.toString());
+            }
+            //
+            if (
+              player.socket !== undefined &&
+              player.socketId !== socket.id &&
+              player.socket.connected == true
+            ) {
+              player.socket.emit('notify', {
+                status: 'warning',
+                code: 'MOVE_HANDLE',
+                text: 'moving handle to another game agent',
+                page: '/',
+              });
+              this.sdns.delete(player.socketId);
+            }
+            player.setSocket(socket);
             this.sdns.set(socket.id, { pseudo: pseudo, roomname: room.id });
+            socket.join(room.id);
+
+            socket.emit('notify', {
+              status: 'success',
+              code: 'ROOM_CONNECTED',
+              text: 'connecting',
+            });
 
             io.emit('room_list', Array.from(this.games.keys()));
           } //
           else {
-            // if (prod && host match    => connect)   -------------------
-
             socket.emit('notify', {
               status: 'error',
+              code: 'USERNAME_TAKEN',
               text: 'username already taken in the room',
               page: '/',
             });
@@ -140,6 +208,7 @@ class TetrisServer {
 
             socket.emit('notify', {
               status: 'success',
+              code: 'STARTING_GAME',
               text: 'Starting in 3',
             });
           }
@@ -148,6 +217,7 @@ class TetrisServer {
           console.log(room.owner, pseudo, roomname);
           socket.emit('notify', {
             status: 'error',
+            code: 'NOT_OWNER',
             text: 'you are not the owner of the room',
           });
         }
@@ -155,17 +225,29 @@ class TetrisServer {
     });
 
     socket.on('gameAction', (req) => {
-      const pseudo = this.sdns.get(socket.id)?.pseudo;
-      const roomname = this.sdns.get(socket.id)?.roomname;
+      const entry = this.sdns.get(socket.id);
 
-      checkRoom(roomname, '/', (room) => {
-        if (
-          room.status === 'playing' ||
-          ['left', 'right', 'up'].includes(req.action)
-        ) {
-          room.players.get(pseudo).action(req.action, true);
-        }
-      });
+      if (entry !== undefined) {
+        const pseudo = entry.pseudo;
+        const roomname = entry.roomname;
+
+        checkRoom(roomname, '/', (room) => {
+          if (
+            room.status === 'playing' ||
+            ['left', 'right', 'up'].includes(req.action)
+          ) {
+            room.players.get(pseudo).action(req.action, true);
+          }
+        });
+      } //
+      else {
+        socket.emit('notify', {
+          status: 'error',
+          code: 'NOT_REGISTERED',
+          text: 'you are not registered in a room (anymore?)',
+          page: '/',
+        });
+      }
     });
 
     socket.emit('room_list', Array.from(this.games.keys()));
