@@ -6,7 +6,10 @@ const initialState = {
   status: 'idle',
   previewTermino: 'default',
   rotation: 0,
-  score: '0 0 0',
+  score: 0,
+  rows: 0,
+  level: 0,
+  incomingGarbage: 0,
   board: generateDefaultMap(),
 };
 
@@ -30,6 +33,15 @@ export const gameSlice = createSlice({
     updateScore: (state, action) => {
       state.score = action.payload;
     },
+    updateRows: (state, action) => {
+      state.rows = action.payload;
+    },
+    updateLevel: (state, action) => {
+      state.level = action.payload;
+    },
+    updateGarbage: (state, action) => {
+      state.incomingGarbage = action.payload;
+    },
   },
 });
 
@@ -39,6 +51,9 @@ export const {
   tetrominoPreviewUpdated,
   boardUpdated,
   updateScore,
+  updateRows,
+  updateLevel,
+  updateGarbage,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

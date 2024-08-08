@@ -1,10 +1,16 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from './notifications';
 import { io } from 'socket.io-client';
 import { setRooms } from '../features/rooms/roomSlice';
 import { useDispatch } from 'react-redux';
-import { boardUpdated, updateScore } from 'src/features/game/gameSlice';
+import {
+  boardUpdated,
+  updateScore,
+  updateRows,
+  updateLevel,
+  updateGarbage,
+} from 'src/features/game/gameSlice';
 import { tetrominoPreviewUpdated } from '../features/game/gameSlice.js';
 
 const SocketContext = createContext(undefined);
@@ -43,7 +49,10 @@ export function SocketProvider({ children }) {
             dispatch(boardUpdated(res.board));
           }
           if (res?.score !== undefined) {
-            dispatch(updateScore(`${res.score} L${res.lines}S ^${res.level}`));
+            dispatch(updateScore(res.score));
+            dispatch(updateRows(res.lines));
+            dispatch(updateLevel(res.level));
+            dispatch(updateGarbage(res.garbage));
           }
           if (res?.next !== undefined) {
             dispatch(tetrominoPreviewUpdated(`${res.next}`));

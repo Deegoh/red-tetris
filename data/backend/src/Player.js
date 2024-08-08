@@ -125,6 +125,7 @@ class Player {
       score: this.score,
       lines: this.lines,
       level: this.level,
+      garbage: this.garbageToDo,
     });
 
     this.sequence = (this.sequence + 1) % this.sequenceBreak;
