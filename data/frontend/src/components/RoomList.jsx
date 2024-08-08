@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { useSocket } from 'src/app/socket.jsx';
 import { useNotification } from 'src/app/notifications.jsx';
 
-export const RoomList = () => {
+export const RoomList = ({ pseudo }) => {
   const rooms = useSelector((state) => state.rooms.value);
   const { socket } = useSocket();
 
@@ -13,19 +13,13 @@ export const RoomList = () => {
 
   const joinRoom = useCallback(
     (room) => {
-      const pseudo = 'myoa';
-
-      if (pseudo.length > 3) {
-        if (socket !== undefined) {
-          socket.emit('joinRoom', { pseudo: pseudo, room: room });
-        } else {
-          addNotif('Socket not loaded (yet?)', 'error');
-        }
+      if (socket !== undefined) {
+        socket.emit('joinRoom', { pseudo: pseudo, room: room });
       } else {
-        addNotif('Pseudo too short', 'warning');
+        addNotif('Socket not loaded (yet?)', 'error');
       }
     },
-    [addNotif, socket]
+    [addNotif, pseudo, socket]
   );
 
   return (
