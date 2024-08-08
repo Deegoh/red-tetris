@@ -6,18 +6,18 @@ const { Server } = require('socket.io');
 const { createServer } = require('node:http');
 const ioc = require('socket.io-client');
 
+const wsMock = {
+  id: '4',
+  conn: {
+    remoteAddress: '4',
+  },
+};
+
 function waitFor(socket, event) {
   return new Promise((resolve) => {
     socket.once(event, resolve);
   });
 }
-
-jest.mock('./Player', () => ({
-  Player: jest.fn().mockImplementation(function () {
-    this.init = jest.fn();
-    this.frame = jest.fn();
-  }),
-}));
 
 describe('game tests', () => {
   let io, serverSocket, clientSocket;
@@ -68,13 +68,11 @@ describe('game tests', () => {
 
     expect(testGame.players.size).toBe(0);
 
-    testGame.initPlayer('testplayer', undefined);
+    testGame.initPlayer('testplayer', wsMock);
     const testPlayer = testGame.players.get('testplayer');
+    testPlayer.frame = jest.fn();
 
     expect(testGame.players.size).toBe(1);
-
-    expect(testPlayer.init).toHaveBeenCalled();
-    expect(testPlayer.init).toHaveBeenCalledWith(1337);
 
     expect(testPlayer.frame).not.toHaveBeenCalled();
     jest.advanceTimersByTime(55);
@@ -131,5 +129,33 @@ describe('game tests', () => {
     jest.advanceTimersByTime(1000);
 
     expect(testGame.status).toBe('playing');
+  });
+
+  it('should give garbage to players', () => {
+    const testGame = new Game(32, 'testuser');
+    testGame.init();
+
+    testGame.initPlayer('testplayer', wsMock);
+    testGame.initPlayer('testplayer2', wsMock);
+
+    const testPlayer = testGame.players.get('testplayer');
+    const testPlayer2 = testGame.players.get('testplayer2');
+
+    testPlayer.state = 'alive';
+    testPlayer2.state = 'alive';
+    testPlayer.garbageToDo = 0;
+    testPlayer2.garbageToDo = 0;
+
+    testGame.garbageType = 'no';
+    testPlayer2.garbageCallback('testplayer2', 3);
+
+    expect(testPlayer.garbageToDo).toBe(0);
+    expect(testPlayer2.garbageToDo).toBe(0);
+
+    testGame.garbageType = 'full';
+    testPlayer2.garbageCallback('testplayer2', 3);
+
+    expect(testPlayer.garbageToDo).toBe(2);
+    expect(testPlayer2.garbageToDo).toBe(0);
   });
 });

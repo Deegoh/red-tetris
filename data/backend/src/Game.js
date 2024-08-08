@@ -9,6 +9,7 @@ class Game {
     this.owner = owner;
 
     this.rseed = 42;
+    this.garbageType = 'hole'; // 'full' | 'no' | 'hole'
 
     this.status = 'waiting';
     this.slow = undefined;
@@ -31,7 +32,24 @@ class Game {
     this.players.set(pseudo, new Player(pseudo, socket));
 
     const p = this.players.get(pseudo);
-    p.init(this.rseed);
+    p.init(
+      this.rseed,
+      (...args) => {
+        this.garbageCallback(...args);
+      },
+      this.garbageType
+    );
+  }
+
+  garbageCallback(pseudo, size) {
+    if (size <= 1 || this.garbageType === 'no') {
+      return;
+    }
+    this.players.forEach((p, key) => {
+      if (p.state === 'alive' && key !== pseudo) {
+        p.garbageToDo += size - 1;
+      }
+    });
   }
 
   start(io) {

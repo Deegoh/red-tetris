@@ -4,6 +4,10 @@ import useBreakpoint from './useBreakpoint.jsx';
 export const Square = ({ ghost, color, position, mode = 'player' }) => {
   const screen = useBreakpoint();
 
+  if (color === 'U') {
+    color = 'W';
+  }
+
   const childClassesVariants = {
     I: 'bg-tile-I',
     O: 'bg-tile-O',
@@ -12,6 +16,7 @@ export const Square = ({ ghost, color, position, mode = 'player' }) => {
     J: 'bg-tile-J',
     S: 'bg-tile-S',
     Z: 'bg-tile-Z',
+    W: 'bg-tile-W',
     '.': 'bg-tile',
   };
 
@@ -23,6 +28,7 @@ export const Square = ({ ghost, color, position, mode = 'player' }) => {
     J: 'shadow-ghost shadow-tile-J/30',
     S: 'shadow-ghost shadow-tile-S/30',
     Z: 'shadow-ghost shadow-tile-Z/30',
+    W: 'shadow-ghost shadow-tile-W/30',
   };
 
   let size = 35;
@@ -50,6 +56,7 @@ export const Square = ({ ghost, color, position, mode = 'player' }) => {
     J: 'border-tile border-b-tile-J/35 border-t-tile-J/85 border-x-tile-J/60',
     S: 'border-tile border-b-tile-S/35 border-t-tile-S/85 border-x-tile-S/60',
     Z: 'border-tile border-b-tile-Z/35 border-t-tile-Z/85 border-x-tile-Z/60',
+    W: 'border-tile border-b-tile-W/35 border-t-tile-W/85 border-x-tile-W/60',
     '.': '',
   };
 
