@@ -10,9 +10,7 @@ const { sfc32 } = require('./utils');
 class Player {
   constructor(pseudo, socket) {
     this.pseudo = pseudo;
-    this.socket = socket;
-    this.socketId = socket.id;
-    this.addr = socket.conn.remoteAddress;
+    this.setSocket(socket);
 
     this.state = undefined;
 
@@ -34,6 +32,13 @@ class Player {
     this.x = undefined;
     this.y = undefined;
     this.rot = undefined;
+  }
+
+  //mandatory mainly for tests
+  setSocket(socket) {
+    this.socket = socket;
+    this.socketId = socket.id;
+    this.remoteAddress = socket.conn.remoteAddress;
   }
 
   init(rseed) {
