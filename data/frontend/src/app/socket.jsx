@@ -55,7 +55,7 @@ export function SocketProvider({ children }) {
             dispatch(updateGarbage(res.garbage));
           }
           if (res?.next !== undefined) {
-            dispatch(tetrominoPreviewUpdated(`${res.next}`));
+            dispatch(tetrominoPreviewUpdated(res.next));
           }
         });
       });
