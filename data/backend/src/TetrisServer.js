@@ -20,23 +20,20 @@ class TetrisServer {
   };
 
   listGames = () => {
-    if (this.games !== undefined) {
-      const list = Array.from(this.games.values()).map((g) => {
-        return {
-          id: g.id,
-          owner: g.owner,
-          actives: Array.from(g.players.values()).reduce((current, p) => {
-            return Array.from(this.sdns.values()).find((d) => {
-              return g.id === d.roomname && p.pseudo === d.pseudo;
-            }) !== undefined
-              ? current + 1
-              : current;
-          }, 0),
-        };
-      });
-      return list;
-    }
-    return [];
+    const list = Array.from(this.games?.values()).map((g) => {
+      return {
+        id: g.id,
+        owner: g.owner,
+        actives: Array.from(g.players.values()).reduce((current, p) => {
+          return Array.from(this.sdns.values()).find((d) => {
+            return g.id === d.roomname && p.pseudo === d.pseudo;
+          }) !== undefined
+            ? current + 1
+            : current;
+        }, 0),
+      };
+    });
+    return list;
   };
 
   setSocketListeners = (socket, io) => {
@@ -108,7 +105,7 @@ class TetrisServer {
 
         this.games.set(current, new Game(current, pseudo));
         const room = this.games.get(current);
-        room.init();
+        room.init(io, this.sdns, this.games);
         room.initPlayer(pseudo, socket);
 
         socket.emit('notify', {

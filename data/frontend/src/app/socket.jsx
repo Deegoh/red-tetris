@@ -10,6 +10,7 @@ import {
   updateRows,
   updateLevel,
   updateGarbage,
+  updateGameState,
 } from 'src/features/game/gameSlice';
 import { tetrominoPreviewUpdated } from '../features/game/gameSlice.js';
 
@@ -56,6 +57,12 @@ export function SocketProvider({ children }) {
           }
           if (res?.next !== undefined) {
             dispatch(tetrominoPreviewUpdated(res.next));
+          }
+        });
+
+        socket.on('updateGameState', (res) => {
+          if (res !== undefined) {
+            dispatch(updateGameState(res));
           }
         });
       });
