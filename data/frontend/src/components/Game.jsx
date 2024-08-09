@@ -8,14 +8,16 @@ import { gameRestarted } from '../features/game/gameSlice.js';
 import { PreviewBoard } from './tetris/PreviewBoard.jsx';
 import useBreakpoint from './tetris/useBreakpoint.jsx';
 import { useSocket } from 'src/app/socket.jsx';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNotification } from 'src/app/notifications.jsx';
 
 export const Game = () => {
   const screen = useBreakpoint();
+  const [pseudo, setPseudo] = useState(undefined);
   const dispatch = useDispatch();
   const { socket } = useSocket();
   const { addNotif } = useNotification();
+  const owner = useSelector((state) => state.game.gameState.owner);
   const previewMode = useSelector((state) => state.game.previewTetromino);
   const holdMode = useSelector((state) => state.game.holdTetromino);
 
@@ -38,10 +40,13 @@ export const Game = () => {
 
     if (socket !== undefined) {
       socket.emit('connectRoom', { pseudo: user, room: room });
+      setPseudo(user);
     } else {
       addNotif('Socket not loaded (yet?)', 'error');
     }
   }, [addNotif, socket]);
+
+  console.log(owner);
 
   return (
     <>
@@ -65,18 +70,22 @@ export const Game = () => {
         {/*{screen !== 'xs' && <PreviewBoard />}*/}
 
         <div className='flex flex-row gap-4 mx-auto'>
-          <Btn
-            onClick={() => {
-              socket.emit('startGame');
-            }}>
-            Play
-          </Btn>
-          <Btn
-            onClick={() => {
-              dispatch(gameRestarted());
-            }}>
-            Restart
-          </Btn>
+          {owner === pseudo && (
+            <>
+              <Btn
+                onClick={() => {
+                  socket.emit('startGame');
+                }}>
+                Play
+              </Btn>
+              <Btn
+                onClick={() => {
+                  dispatch(gameRestarted());
+                }}>
+                Restart
+              </Btn>
+            </>
+          )}
         </div>
       </div>
     </>
