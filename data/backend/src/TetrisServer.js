@@ -19,6 +19,26 @@ class TetrisServer {
     this.sdns = new Map();
   };
 
+  listGames = () => {
+    if (this.games !== undefined) {
+      const list = Array.from(this.games.values()).map((g) => {
+        return {
+          id: g.id,
+          owner: g.owner,
+          actives: Array.from(g.players.values()).reduce((current, p) => {
+            return Array.from(this.sdns.values()).find((d) => {
+              return g.id === d.roomname && p.pseudo === d.pseudo;
+            }) !== undefined
+              ? current + 1
+              : current;
+          }, 0),
+        };
+      });
+      return list;
+    }
+    return [];
+  };
+
   setSocketListeners = (socket, io) => {
     console.log(socket.id, socket.conn.id, socket.conn.remoteAddress);
 
@@ -77,6 +97,7 @@ class TetrisServer {
       // socket.leave(roomname.toString());
 
       this.sdns.delete(socket.id);
+      io.emit('room_list', this.listGames());
     });
 
     socket.on('createRoom', (req) => {
@@ -96,7 +117,7 @@ class TetrisServer {
           text: 'created',
           page: `/create#${current}[${pseudo}]`,
         });
-        io.emit('room_list', Array.from(this.games.keys()));
+        io.emit('room_list', this.listGames());
       });
     });
 
@@ -182,7 +203,7 @@ class TetrisServer {
               text: 'connecting',
             });
 
-            io.emit('room_list', Array.from(this.games.keys()));
+            io.emit('room_list', this.listGames());
           } //
           else {
             socket.emit('notify', {
@@ -250,7 +271,7 @@ class TetrisServer {
       }
     });
 
-    socket.emit('room_list', Array.from(this.games.keys()));
+    socket.emit('room_list', this.listGames());
   };
 }
 

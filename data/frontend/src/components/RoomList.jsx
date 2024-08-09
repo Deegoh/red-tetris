@@ -34,10 +34,12 @@ export const RoomList = ({ pseudo }) => {
             <div
               key={element}
               className='flex justify-around items-baseline mr-3'>
-              <span className='grow'>{element}</span>
+              <span className='grow'>Id {element.id}</span>
+              <span className='grow'>Owner {element.owner}</span>
+              <span className='grow'>Connecteds {element.actives}</span>
               <Btn
                 onClick={() => {
-                  joinRoom(element);
+                  joinRoom(element.id);
                 }}>
                 Join
               </Btn>
