@@ -37,13 +37,19 @@ class Game {
   start(io) {
     this.status = 'launching';
     setTimeout(() => {
-      io.to(this.id).emit('updateBoard', { board: t3() });
+      io.to(this.id).emit('updateBoard', {
+        boardState: { id: -30, board: t3() },
+      });
     }, 100);
     setTimeout(() => {
-      io.to(this.id).emit('updateBoard', { board: t2() });
+      io.to(this.id).emit('updateBoard', {
+        boardState: { id: -29, board: t2() },
+      });
     }, 1100);
     setTimeout(() => {
-      io.to(this.id).emit('updateBoard', { board: t1() });
+      io.to(this.id).emit('updateBoard', {
+        boardState: { id: -28, board: t1() },
+      });
     }, 2100);
     setTimeout(() => {
       this.status = 'playing';

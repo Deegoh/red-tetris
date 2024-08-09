@@ -1,28 +1,9 @@
 import { Typography } from '@material-tailwind/react';
-import { createSelector } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 
 export const Score = ({ justify = 'left' }) => {
   // https://redux.js.org/usage/deriving-data-selectors#optimizing-selectors-with-memoization
-  const selectGameState = (state) => state.game;
-
-  // Then, create a selector for the score data
-  const selectScoreData = createSelector(
-    [selectGameState],
-    (gameState) => gameState.score
-  );
-
-  // Finally, create a selector that derives the individual score components
-  const selectScoreComponents = createSelector(
-    [selectScoreData],
-    (scoreData) => {
-      const [score, rows, level] = scoreData.split(' ');
-      return { score, rows, level };
-    }
-  );
-
-  // In your component, you can now use it like this:
-  const { score, rows, level } = useSelector(selectScoreComponents);
+  const { score, rows, level } = useSelector((state) => state.game);
 
   let classes = ' items-start';
   if (justify === 'left') {
