@@ -30,7 +30,7 @@ export const Home = () => {
             />
           </label>
           <RoomCreation pseudo={pseudo} />
-          <hr />
+          <hr className={'border-dark-red'} />
           <RoomList pseudo={pseudo} />
         </div>
       </DialogDefault>
