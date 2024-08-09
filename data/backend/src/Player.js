@@ -121,7 +121,7 @@ class Player {
 
     this.socket.emit('updateBoard', {
       board: copy,
-      next: this.next.id,
+      next: { id: this.next.id, form: this.next.forms[0] },
       score: this.score,
       lines: this.lines,
       level: this.level,
