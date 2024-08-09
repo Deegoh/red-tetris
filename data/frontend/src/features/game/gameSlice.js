@@ -51,7 +51,6 @@ export const gameSlice = createSlice({
     },
     updateGameState: (state, action) => {
       state.gameState = action.payload;
-      console.log(state.gameState);
     },
   },
 });
