@@ -10,6 +10,7 @@ const initialState = {
   rows: 0,
   level: 0,
   incomingGarbage: 0,
+  boardId: -1,
   board: generateDefaultMap(),
 };
 
@@ -30,7 +31,10 @@ export const gameSlice = createSlice({
       }
     },
     boardUpdated: (state, action) => {
-      state.board = action.payload;
+      if (state.boardId !== action.payload.id) {
+        state.boardId = action.payload.id;
+        state.board = action.payload.board;
+      }
     },
     updateScore: (state, action) => {
       state.score = action.payload;

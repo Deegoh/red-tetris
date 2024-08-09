@@ -112,20 +112,20 @@ describe('game tests', () => {
       // expect(res[i].board[0].length).toBe(cols);
 
       expect(res[i]).not.toBeUndefined();
-      expect(res[i].board).not.toBeUndefined();
+      expect(res[i].boardState?.board).not.toBeUndefined();
       switch (i) {
         case 0:
-          expect(res[i].board).toStrictEqual(t3());
+          expect(res[i].boardState?.board).toStrictEqual(t3());
           break;
         case 1:
-          expect(res[i].board).toStrictEqual(t2());
+          expect(res[i].boardState?.board).toStrictEqual(t2());
           break;
         case 2:
-          expect(res[i].board).toStrictEqual(t1());
+          expect(res[i].boardState?.board).toStrictEqual(t1());
           break;
       }
-      expect(res[i].board.length).toBe(rows);
-      expect(res[i].board[0].length).toBe(cols);
+      expect(res[i].boardState?.board.length).toBe(rows);
+      expect(res[i].boardState?.board[0].length).toBe(cols);
     }
 
     jest.advanceTimersByTime(1000);

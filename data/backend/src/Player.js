@@ -15,6 +15,7 @@ class Player {
     this.state = undefined;
 
     this.board = undefined;
+    this.boardId = undefined;
 
     // this.loop = undefined;
     this.random = undefined;
@@ -43,6 +44,7 @@ class Player {
 
   init(rseed) {
     this.board = this.generateDefaultBoard();
+    this.boardId = 0;
 
     this.random = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, rseed);
 
@@ -120,7 +122,7 @@ class Player {
     }
 
     this.socket.emit('updateBoard', {
-      board: copy,
+      boardState: { id: this.boardId, board: copy },
       next: { id: this.next.id, form: this.next.forms[0] },
       score: this.score,
       lines: this.lines,
@@ -201,6 +203,7 @@ class Player {
     console.log('gameover');
     if (this.pseudo === 'god') {
       this.board = this.generateDefaultBoard();
+      this.boardId += 1;
       return;
     }
     this.state = 'lost';
@@ -210,14 +213,17 @@ class Player {
 
   drawEnd(depth) {
     this.board[depth] = Array(cols).fill(emptyColor);
+    this.boardId += 1;
 
     if (depth < rows) {
       setTimeout(() => {
         this.drawEnd(depth + 1);
       }, 200);
-    } else {
+    } //
+    else {
       setTimeout(() => {
         this.board = tend();
+        this.boardId += 1;
       }, 500);
     }
   }
@@ -318,6 +324,7 @@ class Player {
         this.summonPiece();
         break;
     }
+    this.boardId += 1;
   }
 }
 

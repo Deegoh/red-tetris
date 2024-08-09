@@ -133,8 +133,8 @@ describe('player tests', () => {
 
     testPlayer.frame('waiting');
     boardInfos = await waitFor(clientSocket, 'updateBoard');
-    expect(boardInfos.board).not.toBeUndefined();
-    expect(boardInfos.board).toStrictEqual([
+    expect(boardInfos.boardState?.board).not.toBeUndefined();
+    expect(boardInfos.boardState?.board).toStrictEqual([
       ['.', '.', '.', '.'],
       ['T', 'T', 'T', '.'],
       ['.', 'T', '.', '.'],
@@ -145,8 +145,8 @@ describe('player tests', () => {
 
     testPlayer.frame('waiting');
     boardInfos = await waitFor(clientSocket, 'updateBoard');
-    expect(boardInfos.board).not.toBeUndefined();
-    expect(boardInfos.board).toStrictEqual([
+    expect(boardInfos.boardState?.board).not.toBeUndefined();
+    expect(boardInfos.boardState?.board).toStrictEqual([
       ['.', 'T', '.', '.'],
       ['T', 'T', 'T', '.'],
       ['.', '.', '.', '.'],
@@ -155,8 +155,8 @@ describe('player tests', () => {
 
     testPlayer.frame('playing');
     boardInfos = await waitFor(clientSocket, 'updateBoard');
-    expect(boardInfos.board).not.toBeUndefined();
-    expect(boardInfos.board).toStrictEqual([
+    expect(boardInfos.boardState?.board).not.toBeUndefined();
+    expect(boardInfos.boardState?.board).toStrictEqual([
       ['.', 'T', '.', '.'],
       ['T', 'T', 'T', '.'],
       ['.', '#T', '.', '.'],
@@ -168,8 +168,8 @@ describe('player tests', () => {
     testPlayer.frame('playing');
     boardInfos = await waitFor(clientSocket, 'updateBoard');
     expect(testPlayer.y).toBe(1);
-    expect(boardInfos.board).not.toBeUndefined();
-    expect(boardInfos.board).toStrictEqual([
+    expect(boardInfos.boardState?.board).not.toBeUndefined();
+    expect(boardInfos.boardState?.board).toStrictEqual([
       ['.', '.', '.', '.'],
       ['.', 'T', '.', '.'],
       ['T', 'T', 'T', '.'],

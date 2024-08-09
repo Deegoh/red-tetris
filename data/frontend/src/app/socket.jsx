@@ -45,8 +45,8 @@ export function SocketProvider({ children }) {
         });
 
         socket.on('updateBoard', (res) => {
-          if (res?.board !== undefined) {
-            dispatch(boardUpdated(res.board));
+          if (res?.boardState?.board !== undefined) {
+            dispatch(boardUpdated(res.boardState));
           }
           if (res?.score !== undefined) {
             dispatch(updateScore(res.score));
