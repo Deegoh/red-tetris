@@ -25,6 +25,7 @@ module.exports = withMT({
           J: 'rgb(var(--J) / <alpha-value>)',
           S: 'rgb(var(--S) / <alpha-value>)',
           Z: 'rgb(var(--Z) / <alpha-value>)',
+          W: 'rgb(var(--W) / <alpha-value>)',
           DEFAULT: 'rgb(78 78 78 / <alpha-value>)',
         },
         board: 'rgba(0,0,0,0.7)',
@@ -41,6 +42,7 @@ module.exports = withMT({
           J: '0 0 1px 5px rgb(var(--J) / <alpha-value>)',
           S: '0 0 1px 5px rgb(var(--S) / <alpha-value>)',
           Z: '0 0 1px 5px rgb(var(--Z) / <alpha-value>)',
+          W: '0 0 1px 5px rgb(var(--W) / <alpha-value>)',
         },
       },
       borderWidth: {

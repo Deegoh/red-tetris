@@ -179,6 +179,10 @@ describe('player tests', () => {
 
   it('should test tetris detection', () => {
     const testPlayer = new Player('32', wsMock);
+    const garbageCallbackMock = jest.fn();
+
+    testPlayer.garbageCallback = garbageCallbackMock;
+    testPlayer.garbageToDo = 0;
 
     for (let i = 0; i < rows; i++) {
       testPlayer.score = 0;
@@ -206,6 +210,8 @@ describe('player tests', () => {
       ]);
       expect(testPlayer.lines).toBe(10 + i);
       expect(testPlayer.level).toBe(1);
+      expect(garbageCallbackMock).toHaveBeenCalled();
+      expect(garbageCallbackMock).toHaveBeenCalledWith('32', i + 1);
     }
 
     testPlayer.board = [
@@ -246,7 +252,7 @@ describe('player tests', () => {
 
     expect(testPlayer.state).toBe('lost');
 
-    jest.advanceTimersByTime(300);
+    jest.runOnlyPendingTimers();
 
     expect(testPlayer.board).not.toBeUndefined();
     expect(testPlayer.board).toStrictEqual([
@@ -256,7 +262,8 @@ describe('player tests', () => {
       ['L', 'L', '.', 'T'],
     ]);
 
-    jest.advanceTimersByTime(400);
+    jest.runOnlyPendingTimers();
+    jest.runOnlyPendingTimers();
 
     expect(testPlayer.board).not.toBeUndefined();
     expect(testPlayer.board).toStrictEqual([
@@ -266,15 +273,20 @@ describe('player tests', () => {
       ['.', '.', '.', '.'],
     ]);
 
-    jest.advanceTimersByTime(700);
+    jest.runOnlyPendingTimers();
+    jest.runOnlyPendingTimers();
 
     expect(testPlayer.board).toStrictEqual(tend());
   });
 
   it('should execute actions if possible', async () => {
     const testPlayer = new Player('32', serverSocket);
+    const garbageCallbackMock = jest.fn();
 
     testPlayer.board = testPlayer.generateDefaultBoard();
+
+    testPlayer.garbageCallback = garbageCallbackMock;
+    testPlayer.garbageToDo = 0;
 
     testPlayer.piece = new TPiece();
     testPlayer.next = new OPiece();
@@ -359,6 +371,8 @@ describe('player tests', () => {
       ['T', 'T', 'T', '.'],
       ['.', 'T', '.', '.'],
     ]);
+    expect(garbageCallbackMock).toHaveBeenCalled();
+    expect(garbageCallbackMock).toHaveBeenCalledWith('32', 0);
 
     // [
     //   [ '.', 'O', 'O', '.' ],
@@ -380,5 +394,63 @@ describe('player tests', () => {
     // testPlayer.sequence = 1;
     // testPlayer.frame('waiting');
     // console.log((await waitFor(clientSocket, 'updateBoard')).board);
+  });
+
+  it('should test garbage summoning', async () => {
+    const testPlayer = new Player('32', serverSocket);
+    testPlayer.gameover = jest.fn();
+
+    testPlayer.board = [
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+    ];
+    testPlayer.garbageType = 'full';
+    testPlayer.garbageToDo = 2;
+    testPlayer.summonGarbage();
+    jest.runOnlyPendingTimers();
+
+    expect(testPlayer.board).not.toBeUndefined();
+    expect(testPlayer.board).toStrictEqual([
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      ['U', 'U', 'U', 'U'],
+      ['U', 'U', 'U', 'U'],
+    ]);
+
+    testPlayer.board = [
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+    ];
+    testPlayer.garbageType = 'hole';
+    testPlayer.garbageToDo = 2;
+    testPlayer.summonGarbage();
+    jest.runOnlyPendingTimers();
+
+    expect(testPlayer.board).not.toBeUndefined();
+    expect(testPlayer.board).toEqual([
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+      expect.arrayContaining(['.', 'W']),
+      expect.arrayContaining(['.', 'W']),
+    ]);
+
+    testPlayer.board = [
+      ['.', '.', '.', '.'],
+      ['.', '.', '.', '.'],
+      ['.', 'T', '.', '.'],
+      ['T', 'T', 'T', '.'],
+    ];
+    testPlayer.garbageType = 'hole';
+    testPlayer.garbageToDo = 4;
+    testPlayer.summonGarbage();
+    jest.runOnlyPendingTimers();
+    jest.runOnlyPendingTimers();
+    jest.runOnlyPendingTimers();
+
+    expect(testPlayer.gameover).toHaveBeenCalled();
   });
 });

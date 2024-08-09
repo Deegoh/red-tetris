@@ -17,6 +17,10 @@ class Player {
     this.board = undefined;
     this.boardId = undefined;
 
+    this.garbageCallback = undefined;
+    this.garbageType = undefined;
+    this.garbageToDo = undefined;
+
     // this.loop = undefined;
     this.random = undefined;
 
@@ -42,11 +46,16 @@ class Player {
     this.remoteAddress = socket.conn.remoteAddress;
   }
 
-  init(rseed) {
+  init(rseed, garbageCallback, garbageType) {
+
     this.board = this.generateDefaultBoard();
     this.boardId = 0;
 
     this.random = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, rseed);
+
+    this.garbageCallback = garbageCallback;
+    this.garbageType = garbageType;
+    this.garbageToDo = 0;
 
     this.state = 'alive';
 
@@ -90,6 +99,32 @@ class Player {
     this.sequence = 1;
     if (!this.safeMove(this.x, this.y, this.rot)) {
       this.gameover();
+    }
+  }
+
+  summonGarbage() {
+    if (this.garbageToDo > 0) {
+      const removedLine = this.board.shift();
+
+      const couldDoGameOver = removedLine.some((v) => v !== '.');
+      const wallType = this.garbageType === 'full' ? 'U' : 'W';
+
+      const newLine = Array(cols).fill(wallType);
+      if (wallType === 'W') {
+        newLine[Math.floor(Math.random() * cols)] = emptyColor;
+      }
+
+      this.board.push(newLine);
+      this.garbageToDo -= 1;
+
+      if (this.garbageToDo > 0) {
+        setTimeout(() => {
+          this.summonGarbage();
+        }, 100);
+      } //
+      else if (couldDoGameOver) {
+        this.gameover();
+      }
     }
   }
 
@@ -160,7 +195,8 @@ class Player {
     for (let i = rows - 1; i >= 0; i--) {
       if (this.board[i].every((v) => v === '.')) {
         linesEmpty++;
-      } else if (this.board[i].every((v) => v !== '.')) {
+      } //
+      else if (this.board[i].every((v) => v !== '.' && v !== 'U')) {
         this.board.splice(i, 1);
         linesRemoved++;
       }
@@ -187,6 +223,8 @@ class Player {
           linesEmpty + linesRemoved === 20 ? 800 * (this.level + 1) : 0;
         break;
     }
+    this.garbadeToDo = Math.max(0, this.garbageToDo - linesRemoved);
+    this.garbageCallback(this.pseudo, linesRemoved - this.garbageToDo);
     for (let i = 0; i < linesRemoved; i++) {
       this.board.unshift(Array(cols).fill(emptyColor));
       this.lines++;
@@ -206,9 +244,12 @@ class Player {
       this.boardId += 1;
       return;
     }
-    this.state = 'lost';
 
-    this.drawEnd(0);
+    if (this.state === 'alive') {
+      this.state = 'lost';
+
+      this.drawEnd(0);
+    }
   }
 
   drawEnd(depth) {
@@ -218,7 +259,7 @@ class Player {
     if (depth < rows) {
       setTimeout(() => {
         this.drawEnd(depth + 1);
-      }, 200);
+      }, 150);
     } //
     else {
       setTimeout(() => {
@@ -297,6 +338,7 @@ class Player {
         } else {
           this.printPiece(this.board, this.x, this.y);
           this.checkTetris();
+          this.summonGarbage();
           this.summonPiece();
         }
         break;
@@ -321,6 +363,7 @@ class Player {
         }
         this.printPiece(this.board, this.x, this.y);
         this.checkTetris();
+        this.summonGarbage();
         this.summonPiece();
         break;
     }
