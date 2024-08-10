@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 export const GarbageBar = () => {
-  const garbageValue = useSelector((state) => state.incomingGarbage);
+  const garbageValue = useSelector((state) => state.game.incomingGarbage);
 
   return (
     <div className='bg-board rounded-full h-full w-4 md:w-8 p-1 content-end place-self-end'>
