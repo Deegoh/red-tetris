@@ -10,6 +10,7 @@ import useBreakpoint from './tetris/useBreakpoint.jsx';
 import { useSocket } from 'src/app/socket.jsx';
 import { useEffect, useState } from 'react';
 import { useNotification } from 'src/app/notifications.jsx';
+import { GarbageBar } from './tetris/GarbageBar.jsx';
 
 export const Game = () => {
   const screen = useBreakpoint();
@@ -54,6 +55,7 @@ export const Game = () => {
         <div className={'mx-auto flex gap-4'}>
           <div className='flex flex-col gap-4 justify-between'>
             <PreviewTetrominoes tetromino={holdMode}>Hold</PreviewTetrominoes>
+            <GarbageBar />
           </div>
 
           <Board />
