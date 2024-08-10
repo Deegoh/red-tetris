@@ -16,12 +16,14 @@ export const Home = () => {
         New way to play Tetris
       </Typography>
       <DialogDefault btnText='Play'>
-        <div className='bg-gradient-107 from-dark-red from-10% to-light-red to-90% mx-auto w-full flex flex-col p-12 text-center text-black bg-gray-300 gap-4 rounded'>
+        <div className='bg-gradient-107 from-dark-red from-10% to-light-red to-90% mx-auto w-full flex flex-col p-2 py-8 md:p-12 text-center text-black bg-gray-300 gap-4 rounded'>
           <Typography variant='h3'>Room</Typography>
-          <label className='mx-auto text-left' htmlFor='pseudo'>
-            Pseudo:
+          <label
+            className='flex flex-col mx-auto text-left pb-4'
+            htmlFor='pseudo'>
+            Pseudo
             <input
-              className='ml-1'
+              className='rounded'
               id='pseudo'
               data-testid='pseudo'
               type='text'
@@ -29,9 +31,9 @@ export const Home = () => {
               onChange={(e) => setPseudo(e.target.value)}
             />
           </label>
-          <RoomCreation pseudo={pseudo} />
           <hr className={'border-dark-red'} />
           <RoomList pseudo={pseudo} />
+          <RoomCreation pseudo={pseudo} />
         </div>
       </DialogDefault>
     </div>
