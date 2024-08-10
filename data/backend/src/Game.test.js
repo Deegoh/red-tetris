@@ -56,9 +56,11 @@ describe('game tests', () => {
     const testGame = new Game(32, 'testuser');
     testGame.init();
 
-    expect(setInterval).toHaveBeenCalledTimes(1);
-    expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 50);
+    expect(setInterval).toHaveBeenCalledTimes(2);
+    expect(setInterval).toHaveBeenNthCalledWith(1, expect.any(Function), 50);
+    expect(setInterval).toHaveBeenNthCalledWith(2, expect.any(Function), 1500);
     expect(testGame.fast).not.toBeUndefined();
+    expect(testGame.slow).not.toBeUndefined();
   });
 
   it('should init player from game', () => {
@@ -70,11 +72,17 @@ describe('game tests', () => {
 
     testGame.initPlayer('testplayer', wsMock);
     const testPlayer = testGame.players.get('testplayer');
+    testPlayer.state = 'spectate';
     testPlayer.frame = jest.fn();
 
     expect(testGame.players.size).toBe(1);
 
     expect(testPlayer.frame).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(55);
+    expect(testPlayer.frame).not.toHaveBeenCalled();
+
+    testPlayer.state = 'alive';
     jest.advanceTimersByTime(55);
     expect(testPlayer.frame).toHaveBeenCalled();
     expect(testPlayer.frame).toHaveBeenCalledTimes(1);
@@ -82,7 +90,7 @@ describe('game tests', () => {
 
   it('should start game', async () => {
     const testGame = new Game('32', 'testuser');
-    testGame.init();
+    testGame.init(io, new Map(), new Map());
 
     serverSocket.join('32');
 
@@ -129,6 +137,45 @@ describe('game tests', () => {
     jest.advanceTimersByTime(1000);
 
     expect(testGame.status).toBe('playing');
+
+    testGame.initPlayer('testplayer', undefined);
+    const testPlayer = testGame.players.get('testplayer');
+
+    expect(testPlayer.state).toBe('spectate');
+  });
+
+  it('should test players timeout in game', () => {
+    const fakeSdns = new Map();
+    const fakeGames = new Map();
+
+    const testGame = new Game(32, 'testplayer');
+    fakeGames.set('32', testGame);
+
+    testGame.init(io, fakeSdns, fakeGames);
+
+    testGame.initPlayer('testplayer', undefined);
+    fakeSdns.set('4', { pseudo: 'testplayer', roomname: 32 });
+    testGame.players.get('testplayer').pseudo = 'testplayer';
+    testGame.players.get('testplayer').socketId = '4';
+    testGame.players.get('testplayer').timeout = 0;
+
+    testGame.initPlayer('testplayer2', undefined);
+    fakeSdns.set('5', { pseudo: 'testplayer2', roomname: 32 });
+    testGame.players.get('testplayer2').pseudo = 'testplayer2';
+    testGame.players.get('testplayer2').socketId = '5';
+    testGame.players.get('testplayer2').timeout = 0;
+
+    jest.advanceTimersByTime(15000);
+    expect(testGame.owner).toBe('testplayer');
+
+    fakeSdns.set('4', { pseudo: 'testplayer', roomname: 42 });
+    jest.advanceTimersByTime(15000);
+    expect(testGame.owner).toBe('testplayer2');
+
+    fakeSdns.set('5', { pseudo: 'testplayer2', roomname: 42 });
+    expect(fakeGames.size).toBe(1);
+    jest.advanceTimersByTime(15000);
+    expect(fakeGames.size).toBe(0);
   });
 
   it('should give garbage to players', () => {

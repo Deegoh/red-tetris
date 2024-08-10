@@ -12,6 +12,7 @@ const initialState = {
   incomingGarbage: 0,
   boardId: -1,
   board: generateDefaultMap(),
+  gameState: undefined,
 };
 
 export const gameSlice = createSlice({
@@ -48,6 +49,9 @@ export const gameSlice = createSlice({
     updateGarbage: (state, action) => {
       state.incomingGarbage = action.payload;
     },
+    updateGameState: (state, action) => {
+      state.gameState = action.payload;
+    },
   },
 });
 
@@ -60,6 +64,7 @@ export const {
   updateRows,
   updateLevel,
   updateGarbage,
+  updateGameState,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

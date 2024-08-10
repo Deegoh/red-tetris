@@ -23,6 +23,7 @@ class Player {
 
     // this.loop = undefined;
     this.random = undefined;
+    this.timeout = 0;
 
     this.level = undefined;
     this.lines = undefined;
