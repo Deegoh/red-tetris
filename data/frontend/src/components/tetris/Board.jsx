@@ -2,9 +2,7 @@ import { Square } from './Square.jsx';
 import { useSelector } from 'react-redux';
 import { Typography } from '@material-tailwind/react';
 import { useEffect, useMemo, useState } from 'react';
-
-export const rows = 20;
-export const cols = 10;
+import { rows, cols } from './const.jsx';
 
 export const Board = ({ player, className = '', ...rest }) => {
   const board = useSelector((state) => state.game.board);

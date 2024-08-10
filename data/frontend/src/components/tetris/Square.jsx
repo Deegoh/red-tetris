@@ -1,5 +1,4 @@
-import { rows } from './Board.jsx';
-import { emptyColor } from './tetrominoes.js';
+import { rows, emptyColor } from './const.jsx';
 import useBreakpoint from './useBreakpoint.jsx';
 
 export const Square = ({ ghost, color, position, mode = 'player' }) => {
