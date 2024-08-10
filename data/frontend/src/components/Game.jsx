@@ -17,7 +17,7 @@ export const Game = () => {
   const dispatch = useDispatch();
   const { socket } = useSocket();
   const { addNotif } = useNotification();
-  const owner = useSelector((state) => state.game.gameState.owner);
+  const owner = useSelector((state) => state.game.gameState?.owner);
   const previewMode = useSelector((state) => state.game.previewTetromino);
   const holdMode = useSelector((state) => state.game.holdTetromino);
 
@@ -45,8 +45,6 @@ export const Game = () => {
       addNotif('Socket not loaded (yet?)', 'error');
     }
   }, [addNotif, socket]);
-
-  console.log(owner);
 
   return (
     <>
