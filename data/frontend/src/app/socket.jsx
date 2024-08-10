@@ -12,7 +12,10 @@ import {
   updateGarbage,
   updateGameState,
 } from 'src/features/game/gameSlice';
-import { tetrominoPreviewUpdated } from '../features/game/gameSlice.js';
+import {
+  tetrominoHoldUpdated,
+  tetrominoPreviewUpdated,
+} from '../features/game/gameSlice.js';
 
 const SocketContext = createContext(undefined);
 
@@ -57,6 +60,9 @@ export function SocketProvider({ children }) {
           }
           if (res?.next !== undefined) {
             dispatch(tetrominoPreviewUpdated(res.next));
+          }
+          if (res?.hold !== undefined) {
+            dispatch(tetrominoHoldUpdated(res.hold));
           }
         });
 

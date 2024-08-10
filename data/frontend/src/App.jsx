@@ -2,7 +2,6 @@ import { Footer } from './components/Footer.jsx';
 import { Home } from './components/Home.jsx';
 import { Route, Routes } from 'react-router-dom';
 import { Game } from './components/Game.jsx';
-import { AdminTools } from './components/adminTools/AdminTools.jsx';
 import { NotificationsContainer } from './components/NotificationsContainer';
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
         <Route path='/join' element={<Home />} />
       </Routes>
       <Footer />
-      <AdminTools />
       <NotificationsContainer />
     </>
   );

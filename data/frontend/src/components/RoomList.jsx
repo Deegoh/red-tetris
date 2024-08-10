@@ -22,30 +22,52 @@ export const RoomList = ({ pseudo }) => {
     [addNotif, pseudo, socket]
   );
 
+  const TABLE_HEAD = ['Id', 'Owner', 'Players', ''];
+
   return (
     <div>
       <Typography variant='h3'>List</Typography>
-      <div
-        className='flex flex-col gap-2 overflow-y-auto max-h-56'
-        data-testid='rooms'>
-        {rooms.map((element) => {
-          // TODO add name room, nbr player, owner, options
-          return (
-            <div
-              key={element}
-              className='flex justify-around items-baseline mr-3'>
-              <span className='grow'>Id {element.id}</span>
-              <span className='grow'>Owner {element.owner}</span>
-              <span className='grow'>Connecteds {element.actives}</span>
-              <Btn
-                onClick={() => {
-                  joinRoom(element.id);
-                }}>
-                Join
-              </Btn>
-            </div>
-          );
-        })}
+
+      <div className='overflow-y-auto max-h-56'>
+        <table className='w-full min-w-max table-auto text-left'>
+          <thead>
+            <tr>
+              {TABLE_HEAD.map((head) => (
+                <th key={head} className='border-b border-dark-red p-4'>
+                  <Typography variant='h4'>{head}</Typography>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rooms.map(({ id, owner, actives }, index) => {
+              const isLast = index === rooms.length - 1;
+              const classes = isLast ? 'p-4' : 'p-4 border-b border-dark-red';
+
+              return (
+                <tr key={id}>
+                  <td className={classes}>
+                    <Typography>{id}</Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography>{owner}</Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography>{actives}</Typography>
+                  </td>
+                  <td className={classes + ' text-center'}>
+                    <Btn
+                      onClick={() => {
+                        joinRoom(id);
+                      }}>
+                      Join
+                    </Btn>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

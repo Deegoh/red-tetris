@@ -1,30 +1,39 @@
 import { Square } from './Square.jsx';
-import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { Typography } from '@material-tailwind/react';
 
-const parseAndFormatTetromino = (shape) => {
-  const size = 16;
-  const tetromino = [];
+export const PreviewTetrominoes = ({ tetromino, children }) => {
+  const previewBlock = useMemo(() => {
+    const size = 16;
+    const map = [];
 
-  if (shape === undefined) {
-    return;
-  }
+    if (tetromino === undefined) {
+      return;
+    }
 
-  for (let index = 0; index < size; index++) {
-    let colorId = shape[Math.floor(index / 4)][index % 4];
-    tetromino.push(
-      <Square mode={'player'} position={index} key={index} color={colorId} />
-    );
-  }
-  return tetromino;
-};
-
-export const PreviewTetrominoes = () => {
-  const previewTermino = useSelector((state) => state.game.previewTermino);
-  const previewBlock = parseAndFormatTetromino(previewTermino);
+    for (let index = 0; index < size; index++) {
+      let colorId = tetromino[Math.floor(index / 4)][index % 4];
+      map.push(
+        <Square mode={'player'} position={index} key={index} color={colorId} />
+      );
+    }
+    return map;
+  }, [tetromino]);
 
   return (
-    <div className='bg-board p-1 rounded shrink-1 preview-block grid grid-cols-4 gap-[1px] content-start'>
-      {previewBlock}
-    </div>
+    <>
+      {previewBlock && (
+        <div className={'w-max bg-board rounded text-white flex flex-col'}>
+          <div className='bg-board p-1 rounded shrink-1 preview-block grid grid-cols-4 gap-[1px] content-start'>
+            {previewBlock}
+          </div>
+          {children && (
+            <Typography className={'mx-auto'} variant='h4'>
+              {children}
+            </Typography>
+          )}
+        </div>
+      )}
+    </>
   );
 };
