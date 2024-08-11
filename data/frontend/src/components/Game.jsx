@@ -18,6 +18,7 @@ export const Game = () => {
   const { socket } = useSocket();
   const { addNotif } = useNotification();
   const owner = useSelector((state) => state.game.gameState?.owner);
+  const gameStatus = useSelector((state) => state.game.gameState?.status);
   const previewMode = useSelector((state) => state.game.previewTetromino);
   const holdMode = useSelector((state) => state.game.holdTetromino);
 
@@ -68,7 +69,7 @@ export const Game = () => {
         {/*{screen !== 'xs' && <PreviewBoard />}*/}
 
         <div className='flex flex-row gap-4 mx-auto'>
-          {owner === pseudo && (
+          {owner === pseudo && gameStatus === 'waiting' && (
             <>
               <Btn
                 onClick={() => {
