@@ -8,8 +8,8 @@ import { useNotification } from 'src/app/notifications.jsx';
 export const RoomList = ({ pseudo }) => {
   const rooms = useSelector((state) => state.rooms.value);
   const { socket } = useSocket();
-
   const { addNotif } = useNotification();
+  const TABLE_HEAD = ['Id', 'Owner', 'Players', ''];
 
   const joinRoom = useCallback(
     (room) => {
@@ -22,52 +22,44 @@ export const RoomList = ({ pseudo }) => {
     [addNotif, pseudo, socket]
   );
 
-  const TABLE_HEAD = ['Id', 'Owner', 'Players', ''];
-
   return (
     <div>
       <Typography variant='h3'>List</Typography>
 
       <div className='overflow-y-auto max-h-56'>
-        <table className='w-full min-w-max table-auto text-left'>
-          <thead>
-            <tr>
-              {TABLE_HEAD.map((head) => (
-                <th key={head} className='border-b border-dark-red p-4'>
-                  <Typography variant='h4'>{head}</Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rooms.map(({ id, owner, actives }, index) => {
-              const isLast = index === rooms.length - 1;
-              const classes = isLast ? 'p-4' : 'p-4 border-b border-dark-red';
+        <div className='grid grid-cols-4 auto-cols-max'>
+          {TABLE_HEAD.map((head) => (
+            <Typography
+              key={head}
+              className={'border-b border-dark-red p-1 md:p-4'}
+              variant='h4'>
+              {head}
+            </Typography>
+          ))}
+          {rooms.map(({ id, owner, actives }, index) => {
+            const isLast = index === rooms.length - 1;
+            const classes = isLast
+              ? 'p-1 md:p-4'
+              : 'p-1 md:p-4 border-b border-dark-red';
 
-              return (
-                <tr key={id}>
-                  <td className={classes}>
-                    <Typography>{id}</Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography>{owner}</Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography>{actives}</Typography>
-                  </td>
-                  <td className={classes + ' text-center'}>
-                    <Btn
-                      onClick={() => {
-                        joinRoom(id);
-                      }}>
-                      Join
-                    </Btn>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+            return (
+              <div key={id} className='contents'>
+                <Typography className={classes}>{id}</Typography>
+                <Typography className={classes}>{owner}</Typography>
+                <Typography className={classes}>{actives}</Typography>
+                <div className={classes + ' text-center'}>
+                  <Btn
+                    className='!px-1 !py-0'
+                    onClick={() => {
+                      joinRoom(id);
+                    }}>
+                    Join
+                  </Btn>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

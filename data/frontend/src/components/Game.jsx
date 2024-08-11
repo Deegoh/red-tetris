@@ -68,7 +68,7 @@ export const Game = () => {
         {/*{screen !== 'xs' && <PreviewBoard />}*/}
 
         <div className='flex flex-row gap-4 mx-auto'>
-          {owner === pseudo && (
+          {owner && owner === pseudo && (
             <>
               <Btn
                 onClick={() => {

@@ -1,5 +1,4 @@
-import { emptyColor } from './tetrominoes.js';
-import { cols, rows } from './Board.jsx';
+import { emptyColor, cols, rows } from './const.jsx';
 
 export const generateDefaultMap = () => {
   return Array(rows)
