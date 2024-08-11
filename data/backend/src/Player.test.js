@@ -13,16 +13,17 @@ jest.mock('./constants', () => ({
   cols: 4,
 }));
 
-jest.mock('./Piece', () => ({
-  ...jest.requireActual('./Piece'),
-  // tend: jest.fn()
-}));
-
 const wsMock = {
   id: '4',
   conn: {
     remoteAddress: '4',
   },
+};
+
+const gameMock = {
+  rseed: 1337,
+  garbageCallback: jest.fn(),
+  endCheck: jest.fn(),
 };
 
 function waitFor(socket, event) {
@@ -64,7 +65,7 @@ describe('player tests', () => {
   });
 
   it('should init player', () => {
-    const testPlayer = new Player('32', wsMock);
+    const testPlayer = new Player('32', wsMock, gameMock);
     testPlayer.init(1337);
 
     expect(testPlayer.board).not.toBeUndefined();
@@ -84,7 +85,7 @@ describe('player tests', () => {
   });
 
   it('should test collision', () => {
-    const testPlayer = new Player('32', wsMock);
+    const testPlayer = new Player('32', wsMock, gameMock);
 
     testPlayer.board = testPlayer.generateDefaultBoard();
     testPlayer.piece = new IPiece();
@@ -112,7 +113,7 @@ describe('player tests', () => {
   });
 
   it('should test frame sending', async () => {
-    const testPlayer = new Player('32', serverSocket);
+    const testPlayer = new Player('32', serverSocket, gameMock);
 
     testPlayer.board = testPlayer.generateDefaultBoard();
 
@@ -178,10 +179,8 @@ describe('player tests', () => {
   });
 
   it('should test tetris detection', () => {
-    const testPlayer = new Player('32', wsMock);
-    const garbageCallbackMock = jest.fn();
+    const testPlayer = new Player('32', wsMock, gameMock);
 
-    testPlayer.garbageCallback = garbageCallbackMock;
     testPlayer.garbageToDo = 0;
 
     for (let i = 0; i < rows; i++) {
@@ -210,8 +209,8 @@ describe('player tests', () => {
       ]);
       expect(testPlayer.lines).toBe(10 + i);
       expect(testPlayer.level).toBe(1);
-      expect(garbageCallbackMock).toHaveBeenCalled();
-      expect(garbageCallbackMock).toHaveBeenCalledWith('32', i + 1);
+      expect(gameMock.garbageCallback).toHaveBeenCalled();
+      expect(gameMock.garbageCallback).toHaveBeenCalledWith('32', i + 1);
     }
 
     testPlayer.board = [
@@ -236,7 +235,7 @@ describe('player tests', () => {
   });
 
   it('should test game over', () => {
-    const testPlayer = new Player('32', wsMock);
+    const testPlayer = new Player('32', wsMock, gameMock);
 
     testPlayer.board = [
       ['T', 'T', 'T', '.'],
@@ -276,16 +275,15 @@ describe('player tests', () => {
     jest.runOnlyPendingTimers();
     jest.runOnlyPendingTimers();
 
+    expect(gameMock.endCheck).toHaveBeenCalled();
     expect(testPlayer.board).toStrictEqual(tend());
   });
 
   it('should execute actions if possible', async () => {
-    const testPlayer = new Player('32', serverSocket);
-    const garbageCallbackMock = jest.fn();
+    const testPlayer = new Player('32', serverSocket, gameMock);
 
     testPlayer.board = testPlayer.generateDefaultBoard();
 
-    testPlayer.garbageCallback = garbageCallbackMock;
     testPlayer.garbageToDo = 0;
 
     testPlayer.piece = new TPiece();
@@ -371,8 +369,8 @@ describe('player tests', () => {
       ['T', 'T', 'T', '.'],
       ['.', 'T', '.', '.'],
     ]);
-    expect(garbageCallbackMock).toHaveBeenCalled();
-    expect(garbageCallbackMock).toHaveBeenCalledWith('32', 0);
+    expect(gameMock.garbageCallback).toHaveBeenCalled();
+    expect(gameMock.garbageCallback).toHaveBeenCalledWith('32', 0);
 
     // [
     //   [ '.', 'O', 'O', '.' ],
@@ -397,7 +395,7 @@ describe('player tests', () => {
   });
 
   it('should test garbage summoning', async () => {
-    const testPlayer = new Player('32', serverSocket);
+    const testPlayer = new Player('32', serverSocket, gameMock);
     testPlayer.gameover = jest.fn();
 
     testPlayer.board = [
@@ -406,7 +404,7 @@ describe('player tests', () => {
       ['.', 'T', '.', '.'],
       ['T', 'T', 'T', '.'],
     ];
-    testPlayer.garbageType = 'full';
+    testPlayer.game.garbageType = 'full';
     testPlayer.garbageToDo = 2;
     testPlayer.summonGarbage();
     jest.runOnlyPendingTimers();
@@ -425,7 +423,7 @@ describe('player tests', () => {
       ['.', 'T', '.', '.'],
       ['T', 'T', 'T', '.'],
     ];
-    testPlayer.garbageType = 'hole';
+    testPlayer.game.garbageType = 'hole';
     testPlayer.garbageToDo = 2;
     testPlayer.summonGarbage();
     jest.runOnlyPendingTimers();
@@ -444,7 +442,7 @@ describe('player tests', () => {
       ['.', 'T', '.', '.'],
       ['T', 'T', 'T', '.'],
     ];
-    testPlayer.garbageType = 'hole';
+    testPlayer.game.garbageType = 'hole';
     testPlayer.garbageToDo = 4;
     testPlayer.summonGarbage();
     jest.runOnlyPendingTimers();

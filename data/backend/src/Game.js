@@ -1,4 +1,4 @@
-const { t3, t2, t1 } = require('./Piece');
+const { t3, t2, t1, twin } = require('./Piece');
 const { Player } = require('./Player');
 
 class Game {
@@ -11,7 +11,7 @@ class Game {
     this.rseed = 42;
     this.garbageType = 'hole'; // 'full' | 'no' | 'hole'
 
-    this.status = 'waiting';
+    this.status = 'waiting'; // 'waiting' | 'launching' | 'playing'
     this.slow = undefined;
     this.fast = undefined;
   }
@@ -22,7 +22,10 @@ class Game {
     this.fast = setInterval(() => {
       if (this.status !== 'launching') {
         this.players.forEach((p) => {
-          if (p.state !== 'spectate') {
+          if (
+            p.state !== 'spectate' &&
+            sdns.get(p.socketId)?.roomname === this.id
+          ) {
             p.frame(this.status);
           }
         });
@@ -58,6 +61,7 @@ class Game {
               clearInterval(this.slow);
               clearInterval(this.fast);
               games.delete(this.id);
+              return;
             }
           }
         }
@@ -81,17 +85,11 @@ class Game {
   }
 
   initPlayer(pseudo, socket) {
-    this.players.set(pseudo, new Player(pseudo, socket));
+    this.players.set(pseudo, new Player(pseudo, socket, this));
 
     const p = this.players.get(pseudo);
     if (this.status === 'waiting') {
-      p.init(
-        this.rseed,
-        (...args) => {
-          this.garbageCallback(...args);
-        },
-        this.garbageType
-      );
+      p.init();
     } //
     else {
       p.state = 'spectate';
@@ -129,6 +127,25 @@ class Game {
     setTimeout(() => {
       this.status = 'playing';
     }, 3100);
+  }
+
+  endCheck() {
+    const alives = Array.from(this.players.values()).filter((p) => {
+      return p.state === 'alive';
+    });
+    if (alives.length === 1) {
+      const pl = this.players.get(alives[0].pseudo);
+      pl.drawScreen(0, twin());
+    }
+    if (alives.length <= 1) {
+      setTimeout(() => {
+        this.status = 'waiting';
+        this.rseed = Date.now();
+        this.players.forEach((p) => {
+          p.init();
+        });
+      }, 8000);
+    }
   }
 }
 

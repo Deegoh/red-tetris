@@ -11,7 +11,16 @@ const wsMock = {
   conn: {
     remoteAddress: '4',
   },
+  emit: jest.fn(),
 };
+
+jest.mock('./Player', () => ({
+  Player: jest.fn().mockImplementation(function (...args) {
+    const p = new (jest.requireActual('./Player').Player)(...args);
+    p.setSocket = jest.fn();
+    return p;
+  }),
+}));
 
 function waitFor(socket, event) {
   return new Promise((resolve) => {
@@ -64,8 +73,13 @@ describe('game tests', () => {
   });
 
   it('should init player from game', () => {
-    const testGame = new Game(32, 'testuser');
-    testGame.init();
+    const testGame = new Game('32', 'testuser');
+    const fakeSdns = new Map();
+    fakeSdns.set(wsMock.id, {
+      pseudo: 'testplayer',
+      roomname: '32',
+    });
+    testGame.init(undefined, fakeSdns, new Map());
     testGame.rseed = 1337;
 
     expect(testGame.players.size).toBe(0);
@@ -138,7 +152,7 @@ describe('game tests', () => {
 
     expect(testGame.status).toBe('playing');
 
-    testGame.initPlayer('testplayer', undefined);
+    testGame.initPlayer('testplayer', wsMock);
     const testPlayer = testGame.players.get('testplayer');
 
     expect(testPlayer.state).toBe('spectate');
@@ -148,19 +162,19 @@ describe('game tests', () => {
     const fakeSdns = new Map();
     const fakeGames = new Map();
 
-    const testGame = new Game(32, 'testplayer');
+    const testGame = new Game('32', 'testplayer');
     fakeGames.set('32', testGame);
 
     testGame.init(io, fakeSdns, fakeGames);
 
-    testGame.initPlayer('testplayer', undefined);
-    fakeSdns.set('4', { pseudo: 'testplayer', roomname: 32 });
+    testGame.initPlayer('testplayer', wsMock);
+    fakeSdns.set('4', { pseudo: 'testplayer', roomname: '32' });
     testGame.players.get('testplayer').pseudo = 'testplayer';
     testGame.players.get('testplayer').socketId = '4';
     testGame.players.get('testplayer').timeout = 0;
 
-    testGame.initPlayer('testplayer2', undefined);
-    fakeSdns.set('5', { pseudo: 'testplayer2', roomname: 32 });
+    testGame.initPlayer('testplayer2', wsMock);
+    fakeSdns.set('5', { pseudo: 'testplayer2', roomname: '32' });
     testGame.players.get('testplayer2').pseudo = 'testplayer2';
     testGame.players.get('testplayer2').socketId = '5';
     testGame.players.get('testplayer2').timeout = 0;
@@ -168,14 +182,39 @@ describe('game tests', () => {
     jest.advanceTimersByTime(15000);
     expect(testGame.owner).toBe('testplayer');
 
-    fakeSdns.set('4', { pseudo: 'testplayer', roomname: 42 });
+    fakeSdns.set('4', { pseudo: 'testplayer', roomname: '42' });
     jest.advanceTimersByTime(15000);
     expect(testGame.owner).toBe('testplayer2');
 
-    fakeSdns.set('5', { pseudo: 'testplayer2', roomname: 42 });
+    fakeSdns.set('5', { pseudo: 'testplayer2', roomname: '42' });
     expect(fakeGames.size).toBe(1);
-    jest.advanceTimersByTime(15000);
+    jest.advanceTimersByTime(18000);
     expect(fakeGames.size).toBe(0);
+  });
+
+  it('should test game end check', () => {
+    const testGame = new Game('32', 'testplayer');
+    const fakeSdns = new Map();
+    const fakeGames = new Map();
+
+    testGame.init(io, fakeSdns, fakeGames);
+
+    testGame.initPlayer('testplayer', wsMock);
+    testGame.players.get('testplayer').pseudo = 'testplayer';
+    testGame.players.get('testplayer').state = 'alive';
+    testGame.players.get('testplayer').drawScreen = jest.fn();
+
+    testGame.initPlayer('testplayer2', wsMock);
+    testGame.players.get('testplayer2').pseudo = 'testplayer2';
+    testGame.players.get('testplayer2').state = 'alive';
+    testGame.endCheck();
+
+    testGame.players.get('testplayer2').state = 'lost';
+    testGame.endCheck();
+
+    jest.runOnlyPendingTimers();
+    expect(testGame.players.get('testplayer').drawScreen).toHaveBeenCalled();
+    expect(testGame.status).toBe('waiting');
   });
 
   it('should give garbage to players', () => {
@@ -194,13 +233,13 @@ describe('game tests', () => {
     testPlayer2.garbageToDo = 0;
 
     testGame.garbageType = 'no';
-    testPlayer2.garbageCallback('testplayer2', 3);
+    testPlayer2.game.garbageCallback('testplayer2', 3);
 
     expect(testPlayer.garbageToDo).toBe(0);
     expect(testPlayer2.garbageToDo).toBe(0);
 
     testGame.garbageType = 'full';
-    testPlayer2.garbageCallback('testplayer2', 3);
+    testPlayer2.game.garbageCallback('testplayer2', 3);
 
     expect(testPlayer.garbageToDo).toBe(2);
     expect(testPlayer2.garbageToDo).toBe(0);
