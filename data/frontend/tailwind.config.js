@@ -13,8 +13,8 @@ module.exports = withMT({
     extend: {
       backgroundImage: {
         'gradient-107': 'linear-gradient(107deg, var(--tw-gradient-stops))',
-        'home-red': 'url(./assets/tetris-hd-red.png)',
-        'home-blue': 'url(./assets/tetris-hd-blue.jpg)',
+        'home-red': 'url(/assets/tetris-hd-red.png)',
+        'home-blue': 'url(/assets/tetris-hd-blue.jpg)',
       },
       colors: {
         tile: {
