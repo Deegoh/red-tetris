@@ -10,6 +10,8 @@ class Game {
 
     this.rseed = 42;
     this.garbageType = 'hole'; // 'full' | 'no' | 'hole'
+    this.hasHold = true;
+    this
 
     this.status = 'waiting'; // 'waiting' | 'launching' | 'playing'
     this.slow = undefined;

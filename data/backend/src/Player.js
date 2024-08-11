@@ -34,6 +34,8 @@ class Player {
     this.bag = undefined;
     this.piece = undefined;
     this.next = undefined;
+    this.hold = undefined;
+    this.holdLock = false;
     this.x = undefined;
     this.y = undefined;
     this.rot = undefined;
@@ -89,6 +91,7 @@ class Player {
 
     this.piece = this.next;
     this.next = this.newGenPiece();
+    this.holdLock = false;
     this.x = Math.floor(cols / 2) - 2;
     this.y = -1;
     this.rot = 0;
@@ -156,6 +159,11 @@ class Player {
     this.socket.emit('updateBoard', {
       boardState: { id: this.boardId, board: copy },
       next: { id: this.next.id, form: this.next.forms[0] },
+      hold: this.game.hasHold
+        ? this.hold !== undefined
+          ? { id: this.hold.id, form: this.hold.forms[0] }
+          : { id: '.', form: [] }
+        : undefined,
       score: this.score,
       lines: this.lines,
       level: this.level,
@@ -362,6 +370,22 @@ class Player {
         this.checkTetris();
         this.summonGarbage();
         this.summonPiece();
+        break;
+
+      case 'enter':
+        if (this.game.hasHold === true && this.holdLock === false) {
+          if (this.hold === undefined) {
+            this.hold = this.piece;
+            this.summonPiece();
+          } else {
+            [this.piece, this.hold] = [this.hold, this.piece];
+            this.x = Math.floor(cols / 2) - 2;
+            this.y = -1;
+            this.rot = 0;
+            this.sequence = 1;
+          }
+          this.holdLock = true;
+        }
         break;
     }
     this.boardId += 1;
