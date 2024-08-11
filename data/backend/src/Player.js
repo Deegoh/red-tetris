@@ -158,7 +158,9 @@ class Player {
 
     this.socket.emit('updateBoard', {
       boardState: { id: this.boardId, board: copy },
-      next: { id: this.next.id, form: this.next.forms[0] },
+      next: this.hasPreview
+        ? { id: this.next.id, form: this.next.forms[0] }
+        : undefined,
       hold: this.game.hasHold
         ? this.hold !== undefined
           ? { id: this.hold.id, form: this.hold.forms[0] }
