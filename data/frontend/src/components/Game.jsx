@@ -3,19 +3,23 @@ import { PreviewTetrominoes } from './tetris/PreviewBlock.jsx';
 import { Score } from './tetris/Score.jsx';
 import { ControlsStore } from './tetris/ControlsStore.jsx';
 import { Btn } from './Btn.jsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { gameRestarted } from '../features/game/gameSlice.js';
 import { PreviewBoard } from './tetris/PreviewBoard.jsx';
 import useBreakpoint from './tetris/useBreakpoint.jsx';
 import { useSocket } from 'src/app/socket.jsx';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNotification } from 'src/app/notifications.jsx';
 
 export const Game = () => {
   const screen = useBreakpoint();
+  const [pseudo, setPseudo] = useState(undefined);
   const dispatch = useDispatch();
   const { socket } = useSocket();
   const { addNotif } = useNotification();
+  const owner = useSelector((state) => state.game.gameState?.owner);
+  const previewMode = useSelector((state) => state.game.previewTetromino);
+  const holdMode = useSelector((state) => state.game.holdTetromino);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -36,37 +40,52 @@ export const Game = () => {
 
     if (socket !== undefined) {
       socket.emit('connectRoom', { pseudo: user, room: room });
+      setPseudo(user);
     } else {
       addNotif('Socket not loaded (yet?)', 'error');
     }
   }, [addNotif, socket]);
 
   return (
-    <div className='flex mx-auto gap-2 pb-16'>
-      <div className='flex flex-col gap-2'>
-        <Board />
+    <>
+      <ControlsStore />
+
+      <div className={'flex flex-col items-center justify-center gap-4'}>
+        <div className={'mx-auto flex gap-4'}>
+          <div className='flex flex-col gap-4 justify-between'>
+            <PreviewTetrominoes tetromino={holdMode}>Hold</PreviewTetrominoes>
+          </div>
+
+          <Board />
+
+          <div className='flex flex-col gap-4 justify-between'>
+            <PreviewTetrominoes tetromino={previewMode}>
+              Preview
+            </PreviewTetrominoes>
+            <Score justify='left' />
+          </div>
+        </div>
+        {/*{screen !== 'xs' && <PreviewBoard />}*/}
+
         <div className='flex flex-row gap-4 mx-auto'>
-          <Btn
-            onClick={() => {
-              socket.emit('startGame');
-            }}>
-            Play
-          </Btn>
-          <Btn
-            onClick={() => {
-              dispatch(gameRestarted());
-            }}>
-            Restart
-          </Btn>
+          {owner === pseudo && (
+            <>
+              <Btn
+                onClick={() => {
+                  socket.emit('startGame');
+                }}>
+                Play
+              </Btn>
+              <Btn
+                onClick={() => {
+                  dispatch(gameRestarted());
+                }}>
+                Restart
+              </Btn>
+            </>
+          )}
         </div>
       </div>
-      <div className='flex flex-col gap-4'>
-        <PreviewTetrominoes />
-        <Score justify='left' />
-      </div>
-      {/*{screen !== 'xs' && <PreviewBoard />}*/}
-      <ControlsStore />
-      {/* TODO: add message alert like countdown or whatever*/}
-    </div>
+    </>
   );
 };

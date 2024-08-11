@@ -4,8 +4,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   roomId: 0,
   status: 'idle',
-  previewTerminoId: undefined,
-  previewTermino: undefined,
+  previewTetrominoId: undefined,
+  previewTetromino: undefined,
+  holdTetrominoId: undefined,
+  holdTetromino: undefined,
   score: 0,
   rows: 0,
   level: 0,
@@ -26,9 +28,15 @@ export const gameSlice = createSlice({
       state.status = 'idle';
     },
     tetrominoPreviewUpdated: (state, action) => {
-      if (state.previewTerminoId !== action.payload.id) {
-        state.previewTerminoId = action.payload.id;
-        state.previewTermino = action.payload.form;
+      if (state.previewTetrominoId !== action.payload.id) {
+        state.previewTetrominoId = action.payload.id;
+        state.previewTetromino = action.payload.form;
+      }
+    },
+    tetrominoHoldUpdated: (state, action) => {
+      if (state.holdTetrominoId !== action.payload.id) {
+        state.holdTetrominoId = action.payload.id;
+        state.holdTetromino = action.payload.form;
       }
     },
     boardUpdated: (state, action) => {
@@ -59,6 +67,7 @@ export const {
   gameStarted,
   gameRestarted,
   tetrominoPreviewUpdated,
+  tetrominoHoldUpdated,
   boardUpdated,
   updateScore,
   updateRows,
