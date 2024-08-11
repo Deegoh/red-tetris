@@ -8,17 +8,16 @@ const { sfc32 } = require('./utils');
 // https://tetris.wiki/Scoring
 
 class Player {
-  constructor(pseudo, socket) {
+  constructor(pseudo, socket, game) {
     this.pseudo = pseudo;
     this.setSocket(socket);
+    this.game = game;
 
     this.state = undefined;
 
     this.board = undefined;
     this.boardId = undefined;
 
-    this.garbageCallback = undefined;
-    this.garbageType = undefined;
     this.garbageToDo = undefined;
 
     // this.loop = undefined;
@@ -47,15 +46,12 @@ class Player {
     this.remoteAddress = socket.conn.remoteAddress;
   }
 
-  init(rseed, garbageCallback, garbageType) {
-
+  init() {
     this.board = this.generateDefaultBoard();
     this.boardId = 0;
 
-    this.random = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, rseed);
+    this.random = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, this.game.rseed);
 
-    this.garbageCallback = garbageCallback;
-    this.garbageType = garbageType;
     this.garbageToDo = 0;
 
     this.state = 'alive';
@@ -108,7 +104,7 @@ class Player {
       const removedLine = this.board.shift();
 
       const couldDoGameOver = removedLine.some((v) => v !== '.');
-      const wallType = this.garbageType === 'full' ? 'U' : 'W';
+      const wallType = this.game.garbageType === 'full' ? 'U' : 'W';
 
       const newLine = Array(cols).fill(wallType);
       if (wallType === 'W') {
@@ -225,7 +221,7 @@ class Player {
         break;
     }
     this.garbadeToDo = Math.max(0, this.garbageToDo - linesRemoved);
-    this.garbageCallback(this.pseudo, linesRemoved - this.garbageToDo);
+    this.game.garbageCallback(this.pseudo, linesRemoved - this.garbageToDo);
     for (let i = 0; i < linesRemoved; i++) {
       this.board.unshift(Array(cols).fill(emptyColor));
       this.lines++;
@@ -248,23 +244,23 @@ class Player {
 
     if (this.state === 'alive') {
       this.state = 'lost';
-
-      this.drawEnd(0);
+      this.game.endCheck();
+      this.drawScreen(0, tend());
     }
   }
 
-  drawEnd(depth) {
+  drawScreen(depth, form) {
     this.board[depth] = Array(cols).fill(emptyColor);
     this.boardId += 1;
 
     if (depth < rows) {
       setTimeout(() => {
-        this.drawEnd(depth + 1);
+        this.drawScreen(depth + 1, form);
       }, 150);
     } //
     else {
       setTimeout(() => {
-        this.board = tend();
+        this.board = form;
         this.boardId += 1;
       }, 500);
     }
