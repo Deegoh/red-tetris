@@ -22,6 +22,7 @@ const wsMock = {
 
 const gameMock = {
   rseed: 1337,
+  hasHold: true,
   garbageCallback: jest.fn(),
   endCheck: jest.fn(),
 };
@@ -388,6 +389,24 @@ describe('player tests', () => {
       ['.', 'O', 'O', '.'],
     ]);
     expect(testPlayer.score).toBe(6);
+
+    testPlayer.hold = undefined;
+
+    expect(testPlayer.piece.id).toBe('S');
+    expect(testPlayer.hold).toBeUndefined();
+
+    testPlayer.action('enter', true);
+    expect(testPlayer.piece.id).toBe('L');
+    expect(testPlayer.hold.id).toBe('S');
+
+    testPlayer.action('enter', true);
+    expect(testPlayer.piece.id).toBe('L');
+    expect(testPlayer.hold.id).toBe('S');
+
+    testPlayer.holdLock = false;
+    testPlayer.action('enter', true);
+    expect(testPlayer.piece.id).toBe('S');
+    expect(testPlayer.hold.id).toBe('L');
 
     // testPlayer.sequence = 1;
     // testPlayer.frame('waiting');

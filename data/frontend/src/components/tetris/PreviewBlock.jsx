@@ -12,7 +12,10 @@ export const PreviewTetrominoes = ({ tetromino, children }) => {
     }
 
     for (let index = 0; index < size; index++) {
-      let colorId = tetromino[Math.floor(index / 4)][index % 4];
+      let colorId =
+        tetromino.length !== 0
+          ? tetromino[Math.floor(index / 4)][index % 4]
+          : '.';
       map.push(
         <Square mode={'player'} position={index} key={index} color={colorId} />
       );
