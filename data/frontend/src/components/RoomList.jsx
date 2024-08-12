@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { useSocket } from 'src/app/socket.jsx';
 import { useNotification } from 'src/app/notifications.jsx';
 
-export const RoomList = ({ pseudo }) => {
+export const RoomList = ({ className, pseudo }) => {
   const rooms = useSelector((state) => state.rooms.value);
   const { socket } = useSocket();
   const { addNotif } = useNotification();
@@ -23,24 +23,24 @@ export const RoomList = ({ pseudo }) => {
   );
 
   return (
-    <div>
-      <Typography variant='h3'>List</Typography>
+    <div className={className}>
+      <Typography variant='h3'>Room List</Typography>
 
-      <div className='overflow-y-auto max-h-56'>
+      <div className='overflow-y-auto mx-auto w-[80%]'>
         <div className='grid grid-cols-4 auto-cols-max'>
           {TABLE_HEAD.map((head) => (
             <Typography
               key={head}
-              className={'border-b border-dark-red p-1 md:p-4'}
-              variant='h4'>
+              variant={'lead'}
+              className={'text-bold border-b border-dark-red py-2'}>
               {head}
             </Typography>
           ))}
           {rooms.map(({ id, owner, actives }, index) => {
             const isLast = index === rooms.length - 1;
             const classes = isLast
-              ? 'p-1 md:p-4'
-              : 'p-1 md:p-4 border-b border-dark-red';
+              ? 'p-1 md:p-4 break-all'
+              : 'p-1 md:p-4 break-all border-b border-dark-red';
 
             return (
               <div key={id} className='contents'>
