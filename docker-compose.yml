@@ -10,6 +10,28 @@ services:
     ports:
       - "${PORT_BACK}:8080"
 
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  db:
+    build: ./build/db
+
+    volumes:
+      - main_db:/var/lib/postgresql/data/
+
+    networks:
+      - tetris
+
+    environment:
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+  
+volumes:
+  main_db:
 
 networks:
   tetris:

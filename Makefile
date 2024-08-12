@@ -34,7 +34,7 @@ coverfront:
 testback:
 	${DOCKER} exec backend pnpm run testlive
 coverback:
-	${DOCKER} exec frontend pnpm run coverage
+	${DOCKER} exec backend pnpm run coverage
 
 prettierfront:
 	${DOCKER} exec frontend pnpm run prettier

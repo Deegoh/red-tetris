@@ -3,6 +3,7 @@ import { Home } from './components/Home.jsx';
 import { Route, Routes } from 'react-router-dom';
 import { Game } from './components/Game.jsx';
 import { NotificationsContainer } from './components/NotificationsContainer';
+import { Leaderboard } from './components/Leaderboard.jsx';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
           }
         />
         <Route path='/create' element={<Game />} />
-        <Route path='/join' element={<Home />} />
+        <Route path='/leaderboard' element={<Leaderboard />} />
       </Routes>
       <Footer />
       <NotificationsContainer />

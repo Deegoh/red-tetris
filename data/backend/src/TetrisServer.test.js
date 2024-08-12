@@ -10,6 +10,16 @@ function waitFor(socket, event) {
   });
 }
 
+jest.mock('./dbConnector', () => ({
+  client: {
+    connect: jest.fn(),
+    query: () =>
+      new Promise((resolve, reject) => {
+        resolve({ rows: [{}, {}] });
+      }),
+  },
+}));
+
 jest.mock('./Game', () => ({
   Game: jest.fn().mockImplementation(function (...args) {
     const g = new (jest.requireActual('./Game').Game)(...args);
@@ -85,17 +95,30 @@ describe('socket test', () => {
     );
   });
 
-  it('should receive room_list on connect', async () => {
+  it('should receive leaderboard on demand', async () => {
     clientSocket.emit('createRoom', { pseudo: 'test' });
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
+    ]);
+
+    clientSocket.emit('getLeaderboard');
+    const leaderboard = await waitFor(clientSocket, 'leaderboardRes');
+
+    expect(leaderboard.length).toBe(2);
+  });
+
+  it('should receive room list on connect', async () => {
+    clientSocket.emit('createRoom', { pseudo: 'test' });
+    await Promise.all([
+      waitFor(clientSocket, 'notify'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('createRoom', { pseudo: 'test2' });
     const [notif, rooms] = await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     expect(notif).toStrictEqual(
@@ -112,7 +135,7 @@ describe('socket test', () => {
 
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('joinRoom', { pseudo: 'test2', room: '5' });
@@ -149,7 +172,7 @@ describe('socket test', () => {
 
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('joinRoom', { pseudo: 'test2', room: '1' });
@@ -167,15 +190,15 @@ describe('socket test', () => {
 
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
     const [notif, rooms] = await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
-    // const rooms = await waitFor(clientSocket, 'room_list');
+    // const rooms = await waitFor(clientSocket, 'roomList');
     expect(rooms.length).toBe(1);
     expect(notif).toStrictEqual(
       expect.objectContaining({
@@ -199,11 +222,11 @@ describe('socket test', () => {
 
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
-    await waitFor(clientSocket, 'room_list');
+    await waitFor(clientSocket, 'roomList');
 
     serverSocket.id = 'spoofIdentif';
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
@@ -231,11 +254,11 @@ describe('socket test', () => {
 
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('connectRoom', { pseudo: 'test2', room: '1' });
-    await waitFor(clientSocket, 'room_list');
+    await waitFor(clientSocket, 'roomList');
 
     clientSocket.emit('startGame');
     const notif = await waitFor(clientSocket, 'notify');
@@ -252,11 +275,11 @@ describe('socket test', () => {
 
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
-    await waitFor(clientSocket, 'room_list');
+    await waitFor(clientSocket, 'roomList');
 
     clientSocket.emit('startGame');
     const notif = await waitFor(clientSocket, 'notify');
@@ -294,11 +317,11 @@ describe('socket test', () => {
     clientSocket.emit('createRoom', { pseudo: 'test' });
     await Promise.all([
       waitFor(clientSocket, 'notify'),
-      waitFor(clientSocket, 'room_list'),
+      waitFor(clientSocket, 'roomList'),
     ]);
 
     clientSocket.emit('connectRoom', { pseudo: 'test', room: '1' });
-    await waitFor(clientSocket, 'room_list');
+    await waitFor(clientSocket, 'roomList');
 
     clientSocket.emit('gameAction', { action: 'left' });
     clientSocket.emit('gameAction', { action: 'down' });

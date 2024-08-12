@@ -7,6 +7,16 @@ const { Server } = require('socket.io');
 const { createServer } = require('node:http');
 const ioc = require('socket.io-client');
 
+jest.mock('./dbConnector', () => ({
+  client: {
+    connect: jest.fn(),
+    query: () =>
+      new Promise((resolve, reject) => {
+        resolve({ rows: [{}, {}] });
+      }),
+  },
+}));
+
 jest.mock('./constants', () => ({
   ...jest.requireActual('./constants'),
   rows: 4,
