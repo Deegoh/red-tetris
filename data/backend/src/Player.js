@@ -122,6 +122,7 @@ class Player {
       if (this.garbageToDo > 0) {
         setTimeout(() => {
           this.summonGarbage();
+          this.boardId += 1;
         }, 100);
       } //
       else if (couldDoGameOver) {

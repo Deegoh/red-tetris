@@ -35,7 +35,12 @@ export const ControlsStore = () => {
       if (keyCode === 'Space' || keyCode === 'MetaLeft') {
         socket.emit('gameAction', { action: 'space' });
       }
-      if (keyCode === 'Enter' || keyCode === 'AltRight') {
+      if (
+        keyCode === 'Enter' ||
+        keyCode === 'AltRight' ||
+        keyCode === 'ShiftRight' ||
+        keyCode === 'ShiftLeft'
+      ) {
         socket.emit('gameAction', { action: 'enter' });
       }
     };

@@ -1,4 +1,4 @@
-import { emptyColor } from './tetrominoes.js';
+import { rows, emptyColor } from './const.jsx';
 import useBreakpoint from './useBreakpoint.jsx';
 
 export const Square = ({ ghost, color, position, mode = 'player' }) => {
@@ -31,22 +31,33 @@ export const Square = ({ ghost, color, position, mode = 'player' }) => {
     W: 'shadow-ghost shadow-tile-W/30',
   };
 
-  let size = 35;
+  const resize = () => {
+    const height = window.innerHeight;
+    let sizeTile = 35;
 
-  switch (screen) {
-    case 'xs':
-    case 'sm':
-      size = 20;
-      break;
-    case 'md':
-      size = 30;
-      break;
-  }
+    switch (screen) {
+      case 'xs':
+      case 'sm':
+        sizeTile = 20;
+        break;
+      case 'md':
+        sizeTile = 30;
+        break;
+    }
 
-  if (mode === 'view') {
-    size /= 2;
-  }
-  let sizeShadow = Math.floor(size / 4);
+    if (height < sizeTile * rows) {
+      sizeTile *= 0.6;
+    }
+
+    if (mode === 'view') {
+      sizeTile /= 2;
+    }
+
+    return sizeTile;
+  };
+
+  const size = resize();
+  const sizeShadow = Math.floor(size / 4);
 
   const parentClassesVariants = {
     I: 'border-tile border-b-tile-I/35 border-t-tile-I/85 border-x-tile-I/60',
