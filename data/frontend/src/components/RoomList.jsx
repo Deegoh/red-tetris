@@ -39,8 +39,8 @@ export const RoomList = ({ className, pseudo }) => {
           {rooms.map(({ id, owner, actives }, index) => {
             const isLast = index === rooms.length - 1;
             const classes = isLast
-              ? 'p-1 md:p-4 break-all'
-              : 'p-1 md:p-4 break-all border-b border-dark-red';
+              ? 'py-2 break-all'
+              : 'py-2 break-all border-b border-dark-red';
 
             return (
               <div key={id} className='contents'>
