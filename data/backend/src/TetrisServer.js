@@ -272,6 +272,7 @@ class TetrisServer {
     socket.on('getLeaderboard', () => {
       const query = {
         text: `SELECT pseudo, score, settings FROM scores
+        WHERE score > 0
         ORDER BY score DESC`,
       };
 

@@ -14,7 +14,7 @@ export const Leaderboard = () => {
   }, [socket]);
 
   return (
-    <div className='bg-red-400 m-auto p-6 grid min-w-[60%] max-w-[80%]'>
+    <div className='bg-red-400 m-auto p-6 flex flex-col max-h-[60%] min-w-[60%] max-w-[80%]'>
       <Typography variant='h3'>Leaderboard</Typography>
 
       <div className='grid grid-cols-3'>
@@ -30,7 +30,7 @@ export const Leaderboard = () => {
       </div>
       <hr />
 
-      <div className='overflow-y'>
+      <div className='overflow-y-scroll h-auto'>
         {leaderboard.map((v) => {
           return (
             <div key={v.pseudo}>
