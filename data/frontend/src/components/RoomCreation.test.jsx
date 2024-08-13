@@ -53,16 +53,16 @@ describe('RoomCreation', () => {
       <Provider store={store}>
         <RoomCreation pseudo='shsh' />
       </Provider>
-      );
+    );
 
     expect(screen.getByTestId('createroom')).toBeDefined();
   });
 
   test('pseudo good length', () => {
     render(
-    <Provider store={store}>
-      <RoomCreation pseudo='shsh' />
-    </Provider>
+      <Provider store={store}>
+        <RoomCreation pseudo='shsh' />
+      </Provider>
     );
 
     const createRoomButton = screen.getByTestId('createroom');

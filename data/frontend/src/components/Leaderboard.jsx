@@ -34,7 +34,7 @@ export const Leaderboard = () => {
         {leaderboard.map((v) => {
           return (
             <div key={v.pseudo}>
-              <div className='grid grid-cols-3'>
+              <div className='grid grid-cols-3' data-testid='scoreLine'>
                 <div>
                   <Typography>{v.pseudo}</Typography>
                 </div>
