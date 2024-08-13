@@ -10,7 +10,7 @@ export function EntryModal() {
   const [roomname, setRoomname] = useState('');
   const navigate = useNavigate();
 
-  const rooms = useSelector((state) => state.rooms.value);
+  const rooms = useSelector((state) => state.common.rooms);
   const [mode, setMode] = useState(undefined);
 
   const { addNotif } = useNotification();

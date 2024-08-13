@@ -11,3 +11,6 @@ services:
     environment:
       - NODE_ENV=production
 
+  db:
+    restart: "always"
+

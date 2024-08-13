@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from './notifications';
 import { io } from 'socket.io-client';
-import { setRooms } from '../features/rooms/roomSlice';
+import { setRooms, setLeaderboard } from '../features/common/commonSlice';
 import { useDispatch } from 'react-redux';
 import {
   boardUpdated,
@@ -37,8 +37,12 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (socket !== undefined) {
       socket.on('connect', () => {
-        socket.on('room_list', function (rooms) {
+        socket.on('roomList', function (rooms) {
           dispatch(setRooms(rooms));
+        });
+
+        socket.on('leaderboardRes', function (leaderboard) {
+          dispatch(setLeaderboard(leaderboard));
         });
 
         socket.on('notify', function (res) {
