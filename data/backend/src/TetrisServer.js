@@ -1,3 +1,4 @@
+const { client } = require('./dbConnector');
 const { Game } = require('./Game');
 
 function findFirstUnusedId(rooms) {
@@ -94,7 +95,7 @@ class TetrisServer {
       // socket.leave(roomname.toString());
 
       this.sdns.delete(socket.id);
-      io.emit('room_list', this.listGames());
+      io.emit('roomList', this.listGames());
     });
 
     socket.on('createRoom', (req) => {
@@ -114,7 +115,7 @@ class TetrisServer {
           text: 'created',
           page: `/create#${current}[${pseudo}]`,
         });
-        io.emit('room_list', this.listGames());
+        io.emit('roomList', this.listGames());
       });
     });
 
@@ -200,7 +201,7 @@ class TetrisServer {
               text: 'connecting',
             });
 
-            io.emit('room_list', this.listGames());
+            io.emit('roomList', this.listGames());
           } //
           else {
             socket.emit('notify', {
@@ -268,7 +269,22 @@ class TetrisServer {
       }
     });
 
-    socket.emit('room_list', this.listGames());
+    socket.on('getLeaderboard', () => {
+      const query = {
+        text: `SELECT pseudo, score, settings FROM scores
+        WHERE score > 0
+        ORDER BY score DESC`,
+      };
+
+      client.query(query).then((res) => {
+        socket.emit('leaderboardRes', res.rows);
+      });
+      // .catch((err) => {
+      //   console.log(err)
+      // });
+    });
+
+    socket.emit('roomList', this.listGames());
   };
 }
 

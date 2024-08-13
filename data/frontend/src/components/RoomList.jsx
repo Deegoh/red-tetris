@@ -6,7 +6,7 @@ import { useSocket } from 'src/app/socket.jsx';
 import { useNotification } from 'src/app/notifications.jsx';
 
 export const RoomList = ({ className, pseudo }) => {
-  const rooms = useSelector((state) => state.rooms.value);
+  const rooms = useSelector((state) => state.common.rooms);
   const { socket } = useSocket();
   const { addNotif } = useNotification();
   const TABLE_HEAD = ['Id', 'Owner', 'Players', ''];

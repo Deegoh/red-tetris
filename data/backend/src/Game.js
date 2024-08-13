@@ -137,6 +137,8 @@ class Game {
     });
     if (alives.length === 1) {
       const pl = this.players.get(alives[0].pseudo);
+      pl.state = 'won';
+      pl.saveScore();
       pl.drawScreen(0, twin());
     }
     if (alives.length <= 1) {

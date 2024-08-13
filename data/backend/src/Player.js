@@ -1,4 +1,5 @@
 const { rows, cols, emptyColor } = require('./constants');
+const { client } = require('./dbConnector');
 const { tend, genBag } = require('./Piece');
 const { sfc32 } = require('./utils');
 
@@ -57,6 +58,7 @@ class Player {
     this.garbageToDo = 0;
 
     this.state = 'alive';
+    this.hold = undefined;
 
     this.level = 0;
     this.lines = 0;
@@ -245,6 +247,19 @@ class Player {
     }
   }
 
+  saveScore() {
+    const query = {
+      text: `INSERT INTO scores(pseudo, score, level, lines, settings) 
+      VALUES($1, $2, $3, $4, $5)`,
+      values: [this.pseudo, this.score, this.level, this.lines, '-'],
+    };
+
+    client.query(query);
+    // .catch((err) => {
+    //   console.log(err)
+    // });
+  }
+
   gameover() {
     console.log('gameover');
     if (this.pseudo === 'god') {
@@ -255,6 +270,7 @@ class Player {
 
     if (this.state === 'alive') {
       this.state = 'lost';
+      this.saveScore();
       this.game.endCheck();
       this.drawScreen(0, tend());
     }
