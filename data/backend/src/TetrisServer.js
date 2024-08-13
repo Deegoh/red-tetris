@@ -100,11 +100,12 @@ class TetrisServer {
 
     socket.on('createRoom', (req) => {
       const pseudo = req?.pseudo?.toString().trim();
+      const gameSettings = req?.gameSettings;
 
       checkPseudo(pseudo, undefined, () => {
         const current = findFirstUnusedId(this.games);
 
-        this.games.set(current, new Game(current, pseudo));
+        this.games.set(current, new Game(current, pseudo, gameSettings));
         const room = this.games.get(current);
         room.init(io, this.sdns, this.games);
         room.initPlayer(pseudo, socket);

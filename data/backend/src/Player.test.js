@@ -35,6 +35,7 @@ const gameMock = {
   hasHold: true,
   garbageCallback: jest.fn(),
   endCheck: jest.fn(),
+  bagType: 2,
 };
 
 function waitFor(socket, event) {
@@ -93,6 +94,24 @@ describe('player tests', () => {
     expect(testPlayer.next).not.toBeUndefined();
     expect(testPlayer.next.id).toBe('J');
     expect(testPlayer.bag.length).toBe(12);
+  });
+
+  it('should init player with settings', () => {
+    const testPlayer = new Player('32', wsMock, {
+      ...gameMock,
+      garbageType: 'hole',
+      bagType: 0,
+      hasHold: 'true',
+      hasPreview: 'true',
+      startDifficulty: 15,
+    });
+    testPlayer.init(1337);
+
+    expect(testPlayer.piece).not.toBeUndefined();
+    expect(testPlayer.piece.id).toBe('O');
+    expect(testPlayer.next).not.toBeUndefined();
+    expect(testPlayer.next.id).toBe('S');
+    expect(testPlayer.bag.length).toBe(7);
   });
 
   it('should test collision', () => {
