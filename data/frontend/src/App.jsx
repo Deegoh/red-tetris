@@ -9,14 +9,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path='/'
-          element={
-            <div className='container mx-auto flex flex-col items-center'>
-              <Home />
-            </div>
-          }
-        />
+        <Route path='/' element={<Home />} />
         <Route path='/create' element={<Game />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
       </Routes>
