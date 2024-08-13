@@ -1,6 +1,9 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
+import configureStore from 'redux-mock-store';
+import { Provider } from 'react-redux';
+
 import { useNotification } from 'src/app/notifications';
 import { useSocket } from 'src/app/socket';
 import { RoomCreation } from './RoomCreation';
@@ -11,6 +14,19 @@ vi.mock('react-router-dom', () => ({
     vi.fn();
   },
 }));
+
+const mockStore = configureStore([]);
+const store = mockStore({
+  common: {
+    gameSettings: {
+      garbageType: 'no',
+      bagType: 2,
+      difficulty: 18 * 4,
+      hold: 'false',
+      preview: 'true',
+    },
+  },
+});
 
 describe('RoomCreation', () => {
   let addNotifMock;
@@ -33,25 +49,37 @@ describe('RoomCreation', () => {
   });
 
   test('renders', () => {
-    render(<RoomCreation />);
+    render(
+      <Provider store={store}>
+        <RoomCreation pseudo='shsh' />
+      </Provider>
+      );
 
-    expect(screen.getByTestId('pseudo')).toBeDefined();
     expect(screen.getByTestId('createroom')).toBeDefined();
   });
 
   test('pseudo good length', () => {
-    render(<RoomCreation />);
+    render(
+    <Provider store={store}>
+      <RoomCreation pseudo='shsh' />
+    </Provider>
+    );
 
-    const roomNameInput = screen.getByTestId('pseudo');
     const createRoomButton = screen.getByTestId('createroom');
 
-    fireEvent.change(roomNameInput, { target: { value: 'shsh' } });
     fireEvent.click(createRoomButton);
 
     expect(addNotifMock).not.toHaveBeenCalled();
     expect(socketEmitMock).toHaveBeenCalled();
     expect(socketEmitMock).toHaveBeenCalledWith('createRoom', {
       pseudo: 'shsh',
+      gameSettings: {
+        garbageType: 'no',
+        bagType: 2,
+        difficulty: 25 - 18,
+        hold: 'false',
+        preview: 'true',
+      },
     });
   });
 });

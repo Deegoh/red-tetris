@@ -2,16 +2,35 @@ const { t3, t2, t1, twin } = require('./Piece');
 const { Player } = require('./Player');
 
 class Game {
-  constructor(id, owner) {
+  constructor(id, owner, gameSettings) {
     this.id = id;
     this.players = new Map();
 
     this.owner = owner;
 
     this.rseed = 42;
-    this.garbageType = 'hole'; // 'full' | 'no' | 'hole'
-    this.hasHold = true;
-    this.hasPreview = true;
+    this.garbageType = ['full', 'no', 'hole'].includes(
+      gameSettings?.garbageType
+    )
+      ? gameSettings?.garbageType
+      : 'full';
+    this.hasHold =
+      gameSettings?.hold?.toString() !== undefined
+        ? gameSettings.hold.toString() === 'true'
+        : false;
+    this.hasPreview =
+      gameSettings?.preview?.toString() !== undefined
+        ? gameSettings.preview.toString() === 'true'
+        : true;
+
+    this.bagType =
+      gameSettings?.bagType !== undefined &&
+      parseInt(gameSettings?.bagType) !== NaN
+        ? parseInt(gameSettings.bagType)
+        : 2;
+    this.bagType = Math.max(Math.min(this.bagType, 10), 0);
+    this.startDifficulty =
+      gameSettings?.difficulty !== undefined ? gameSettings.difficulty : 15;
 
     this.status = 'waiting'; // 'waiting' | 'launching' | 'playing'
     this.slow = undefined;
