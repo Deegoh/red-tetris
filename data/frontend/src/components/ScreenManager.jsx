@@ -1,15 +1,21 @@
-import { Typography } from '@material-tailwind/react';
+import { Dialog, Typography } from '@material-tailwind/react';
 import { useState, useEffect } from 'react';
 import { Btn } from './Btn.jsx';
-import { PseudoInput } from './PseudoInput.jsx';
 import { useSocket } from 'src/app/socket.jsx';
 import { Game } from './Game.jsx';
-import { ConnectionScreen } from './ConnectionScreen.jsx';
+import { Lobby } from './Lobby.jsx';
 import { useNavigate } from 'react-router-dom';
+import { setPseudo } from '../features/common/commonSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { Credits } from './Credits.jsx';
+import { Header } from './Header.jsx';
 
 export const ScreenManager = () => {
-  const [pseudo, setPseudo] = useState('');
-  const [displayRooms, setDisplayRooms] = useState(false);
+  const [displayLobby, setDisplayLobby] = useState(false);
+  const pseudo = useSelector((state) => state.common.pseudo);
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
 
   const hash =
     window?.location?.hash?.length > 0 ? window.location.hash : undefined;
@@ -35,27 +41,42 @@ export const ScreenManager = () => {
 
     if (socket !== undefined) {
       socket.emit('connectRoom', { pseudo: user, room: room });
-      setPseudo(user);
     }
   }, [hash, socket]);
 
   return (
     <>
       {(hash === undefined &&
-        ((displayRooms === true && (
-          <ConnectionScreen pseudo={pseudo} setPseudo={setPseudo} />
+        ((displayLobby === true && (
+          <>
+            <Header callbackPrev={() => setDisplayLobby(false)} />
+            <Lobby />
+          </>
         )) || (
-          <div className='m-auto w-fit flex flex-col gap-4 p-8 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
+          <div className='container m-auto flex flex-col gap-4 p-8 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
             <Typography variant='h1' className='font-[Tetris] py-4'>
               Red Tetris
             </Typography>
             <Typography variant='h2' className='pb-8'>
               New way to play Tetris
             </Typography>
-            <PseudoInput pseudo={pseudo} setPseudo={setPseudo}>
+
+            <div className='flex flex-col mx-auto text-left pb-4'>
+              <label htmlFor='pseudoHome'>
+                <Typography variant={'lead'}>Pseudo</Typography>
+                <input
+                  className='rounded mb-4'
+                  id='pseudoHome'
+                  data-testid='pseudo'
+                  type='text'
+                  defaultValue={pseudo}
+                  onChange={(e) => dispatch(setPseudo(e.target.value))}
+                  required={true}
+                />
+              </label>
               <Btn
                 onClick={() => {
-                  setDisplayRooms(true);
+                  setDisplayLobby(true);
                 }}>
                 Play
               </Btn>
@@ -66,11 +87,22 @@ export const ScreenManager = () => {
                 }}>
                 Leaderboard
               </Btn>
-            </PseudoInput>
-
-            <></>
+              <Btn className={'mt-4'} onClick={handleOpen}>
+                Credits
+              </Btn>
+              <Dialog
+                className={'contents'}
+                open={open}
+                handler={handleOpen}
+                animate={{
+                  mount: { scale: 1, y: 0 },
+                  unmount: { scale: 0.9, y: -100 },
+                }}>
+                <Credits />
+              </Dialog>
+            </div>
           </div>
-        ))) || <Game pseudo={pseudo} />}
+        ))) || <Game />}
     </>
   );
 };
