@@ -25,7 +25,7 @@ export const GameMode = ({ className }) => {
     { label: 'Yes', value: 1 },
     { label: 'No', value: 0 },
   ];
-  const marks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  const marks = [0, 5, 10, 15, 20, 25];
 
   const onChangeHandle = (e) => {
     setGameMode((prev) => ({
@@ -60,7 +60,8 @@ export const GameMode = ({ className }) => {
           <input
             className={'accent-teal-500 text-black'}
             type={'range'}
-            step={10}
+            min={0}
+            max={25}
             value={gameMode.difficulty}
             onChange={onChangeHandle}
             name={'difficulty'}
