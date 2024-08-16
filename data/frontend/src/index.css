@@ -10,8 +10,7 @@
     src:
       url('../assets/fonts/modern-tetris.eot?') format('eot'),
       url('../assets/fonts/modern-tetris.woff') format('woff'),
-      url('../assets/fonts/modern-tetris.ttf') format('truetype'),
-      url('../assets/fonts/modern-tetris.svg#Modern-Tetris') format('svg');
+      url('../assets/fonts/modern-tetris.ttf') format('truetype')
   }
 }
 
