@@ -4,11 +4,11 @@ export const commonSlice = createSlice({
   name: 'common',
   initialState: {
     rooms: [],
-    leaderboard: [],
+    leaderboard: undefined,
     gameSettings: {
       garbageType: 'no',
       bagType: 2,
-      difficulty: 18,
+      difficulty: 7,
       hold: 0,
       preview: 1,
     },

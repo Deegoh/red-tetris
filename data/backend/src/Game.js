@@ -16,11 +16,11 @@ class Game {
       : 'full';
     this.hasHold =
       gameSettings?.hold?.toString() !== undefined
-        ? gameSettings.hold.toString() === 'true'
+        ? gameSettings.hold.toString() === '1'
         : false;
     this.hasPreview =
       gameSettings?.preview?.toString() !== undefined
-        ? gameSettings.preview.toString() === 'true'
+        ? gameSettings.preview.toString() === '1'
         : true;
 
     this.bagType =
@@ -30,7 +30,9 @@ class Game {
         : 2;
     this.bagType = Math.max(Math.min(this.bagType, 10), 0);
     this.startDifficulty =
-      gameSettings?.difficulty !== undefined ? (25 - gameSettings.difficulty) : 15;
+      gameSettings?.difficulty !== undefined
+        ? 25 - gameSettings.difficulty
+        : 15;
 
     this.status = 'waiting'; // 'waiting' | 'launching' | 'playing'
     this.slow = undefined;

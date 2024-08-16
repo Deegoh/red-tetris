@@ -38,7 +38,7 @@ class TetrisServer {
   };
 
   setSocketListeners = (socket, io) => {
-    console.log(socket.id, socket.conn.id, socket.conn.remoteAddress);
+    console.log(socket.id, socket.conn.remoteAddress);
 
     socket.on('ping', (req) => {
       socket.emit('pong');
@@ -114,7 +114,7 @@ class TetrisServer {
           status: 'success',
           code: 'ROOM_CREATED',
           text: 'created',
-          page: `/create#${current}[${pseudo}]`,
+          page: `/#${current}[${pseudo}]`,
         });
         io.emit('roomList', this.listGames());
       });
@@ -135,7 +135,7 @@ class TetrisServer {
               status: 'success',
               code: 'ROOM_JOINED',
               text: 'connecting',
-              page: `/create#${room.id}[${pseudo}]`,
+              page: `/#${room.id}[${pseudo}]`,
             });
           } //
           else if (player.remoteAddress === socket.conn.remoteAddress) {
@@ -143,7 +143,7 @@ class TetrisServer {
               status: 'info',
               code: 'ALREADY_SUBSCRIBED',
               text: 'you are already subscribed to this room',
-              page: `/create#${room.id}[${pseudo}]`,
+              page: `/#${room.id}[${pseudo}]`,
             });
           } //
           else {
@@ -272,7 +272,7 @@ class TetrisServer {
 
     socket.on('getLeaderboard', () => {
       const query = {
-        text: `SELECT pseudo, score, settings FROM scores
+        text: `SELECT id, pseudo, score, settings FROM scores
         WHERE score > 0
         ORDER BY score DESC`,
       };

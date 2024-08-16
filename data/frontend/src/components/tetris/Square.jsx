@@ -94,7 +94,8 @@ export const Square = ({ ghost, color, position, mode = 'player' }) => {
     <div
       style={style}
       data-position={position}
-      className={`rounded size-tile ${parentClasses}`}>
+      className={`rounded size-tile ${parentClasses}`}
+      data-testid='square'>
       <div className={`size-full ${childClasses}`} />
     </div>
   );

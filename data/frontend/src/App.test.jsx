@@ -6,35 +6,33 @@ import { Provider } from 'react-redux';
 
 import { useNotification } from 'src/app/notifications';
 import { useSocket } from 'src/app/socket';
-import { RoomCreation } from './RoomCreation';
+import App from './App';
+
 vi.mock('src/app/notifications');
 vi.mock('src/app/socket');
 vi.mock('react-router-dom', () => ({
   useNavigate: () => {
     vi.fn();
   },
+  Routes: () => {
+    return <div></div>;
+  },
+  Route: () => {
+    return <div></div>;
+  },
 }));
 
 const mockStore = configureStore([]);
-const store = mockStore({
-  common: {
-    gameSettings: {
-      garbageType: 'no',
-      bagType: 2,
-      difficulty: 18,
-      hold: 'false',
-      preview: 'true',
-    },
-  },
-});
+const store = mockStore({});
 
-describe('RoomCreation', () => {
+describe('App', () => {
   let addNotifMock;
   let socketEmitMock;
 
   beforeEach(() => {
     addNotifMock = vi.fn();
     useNotification.mockReturnValue({
+      notifications: [],
       addNotif: addNotifMock,
     });
 
@@ -51,35 +49,9 @@ describe('RoomCreation', () => {
   test('renders', () => {
     render(
       <Provider store={store}>
-        <RoomCreation pseudo='shsh' />
+        <App />
       </Provider>
     );
-
-    expect(screen.getByTestId('createroom')).toBeDefined();
-  });
-
-  test('pseudo good length', () => {
-    render(
-      <Provider store={store}>
-        <RoomCreation pseudo='shsh' />
-      </Provider>
-    );
-
-    const createRoomButton = screen.getByTestId('createroom');
-
-    fireEvent.click(createRoomButton);
-
-    expect(addNotifMock).not.toHaveBeenCalled();
-    expect(socketEmitMock).toHaveBeenCalled();
-    expect(socketEmitMock).toHaveBeenCalledWith('createRoom', {
-      pseudo: 'shsh',
-      gameSettings: {
-        garbageType: 'no',
-        bagType: 2,
-        difficulty: 18,
-        hold: 'false',
-        preview: 'true',
-      },
-    });
+    expect(screen.getByTestId('footer')).toBeDefined();
   });
 });

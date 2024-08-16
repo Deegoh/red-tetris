@@ -13,6 +13,7 @@ export const GameMode = ({ className }) => {
   const { garbageType, bagType, difficulty, hold, preview } = useSelector(
     (state) => state.common.gameSettings
   );
+
   const dispatch = useDispatch();
 
   const garbageTypeData = [
@@ -39,7 +40,9 @@ export const GameMode = ({ className }) => {
         setValue={(v) => {
           dispatch(setGarbageType(v));
         }}
-        value={garbageType}>
+        value={garbageType}
+        role='gamemodechoice'
+        data-testid='penality'>
         Penality type
       </TabGameMode>
 
@@ -49,7 +52,9 @@ export const GameMode = ({ className }) => {
         setValue={(v) => {
           dispatch(setBagType(v));
         }}
-        value={bagType}>
+        value={bagType}
+        role='gamemodechoice'
+        data-testid='bag'>
         Bag size
       </TabGameMode>
 
@@ -65,6 +70,8 @@ export const GameMode = ({ className }) => {
             onChange={(e) => {
               dispatch(setDifficulty(e.target.value));
             }}
+            role='gamemodechoice'
+            data-testid='difficulty'
             name={'difficulty'}
             list={'marks'}
           />
@@ -78,9 +85,7 @@ export const GameMode = ({ className }) => {
 
         <div className={'grid grid-cols-3 justify-between'}>
           <Typography className={'text-left'}>Easier</Typography>
-          <Typography className={'text-center'}>
-            {difficulty}
-          </Typography>
+          <Typography className={'text-center'}>{difficulty}</Typography>
           <Typography className={'text-right'}>Harder</Typography>
         </div>
       </div>
@@ -91,7 +96,9 @@ export const GameMode = ({ className }) => {
         setValue={(v) => {
           dispatch(setHold(v));
         }}
-        value={hold}>
+        value={hold}
+        role='gamemodechoice'
+        data-testid='hold'>
         Hold
       </TabGameMode>
 
@@ -101,7 +108,9 @@ export const GameMode = ({ className }) => {
         setValue={(v) => {
           dispatch(setPreview(v));
         }}
-        value={preview}>
+        value={preview}
+        role='gamemodechoice'
+        data-testid='preview'>
         Preview
       </TabGameMode>
     </div>

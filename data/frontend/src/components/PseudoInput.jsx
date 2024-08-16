@@ -10,6 +10,7 @@ export const PseudoInput = ({ pseudo, setPseudo, children }) => {
         data-testid='pseudo'
         type='text'
         value={pseudo}
+        required={true}
         onChange={(e) => setPseudo(e.target.value)}
       />
       {children}

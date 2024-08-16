@@ -8,22 +8,19 @@ import { useNotification } from 'src/app/notifications.jsx';
 export const RoomList = ({ className, pseudo }) => {
   const rooms = useSelector((state) => state.common.rooms);
   const { socket } = useSocket();
-  const { addNotif } = useNotification();
   const TABLE_HEAD = ['Id', 'Owner', 'Players', ''];
 
   const joinRoom = useCallback(
     (room) => {
       if (socket !== undefined) {
         socket.emit('joinRoom', { pseudo: pseudo, room: room });
-      } else {
-        addNotif('Socket not loaded (yet?)', 'error');
       }
     },
-    [addNotif, pseudo, socket]
+    [pseudo, socket]
   );
 
   return (
-    <div className={className}>
+    <div className={className} data-testid='roomlistpage'>
       <Typography variant='h3'>Room List</Typography>
 
       <div className='overflow-y-auto mx-auto w-[80%]'>
@@ -43,7 +40,7 @@ export const RoomList = ({ className, pseudo }) => {
               : 'py-2 break-all border-b border-dark-red';
 
             return (
-              <div key={id} className='contents'>
+              <div key={id} className='contents' data-testid='room'>
                 <Typography className={classes}>{id}</Typography>
                 <Typography className={classes}>{owner}</Typography>
                 <Typography className={classes}>{actives}</Typography>

@@ -72,8 +72,8 @@ describe('game tests', () => {
     const testGame = new Game(32, 'testuser', {
       garbageType: 'hole',
       bagType: 0,
-      hold: 'true',
-      preview: 'true',
+      hold: '1',
+      preview: '1',
       difficulty: 15,
     });
     testGame.init();

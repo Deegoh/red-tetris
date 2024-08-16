@@ -17,12 +17,15 @@ vi.mock('react-router-dom', () => ({
 
 const mockStore = configureStore([]);
 const store = mockStore({
-  rooms: {
-    value: ['test1', 'test2'],
+  common: {
+    rooms: [
+      { id: 'test1', owner: 'user1', actives: 4 },
+      { id: 'test2', owner: 'user1', actives: 4 },
+    ],
   },
 });
 
-describe('EntryModal', () => {
+describe('RoomList', () => {
   let addNotifMock;
   let socketEmitMock;
 
@@ -34,7 +37,7 @@ describe('EntryModal', () => {
 
     socketEmitMock = vi.fn();
     useSocket.mockReturnValue({
-      socketRef: { current: { emit: socketEmitMock } },
+      socket: { emit: socketEmitMock },
     });
   });
 
@@ -49,8 +52,25 @@ describe('EntryModal', () => {
       </Provider>
     );
 
-    expect(screen.getByTestId('rooms').getElementsByTagName('div').length).toBe(
-      2
+    expect(screen.getAllByTestId('room').length).toBe(2);
+  });
+
+  test('test join', () => {
+    render(
+      <Provider store={store}>
+        <RoomList pseudo='shsh' />
+      </Provider>
     );
+
+    const joinRoomButtons = screen.getAllByText('Join');
+    expect(joinRoomButtons.length).toBe(2);
+
+    fireEvent.click(joinRoomButtons[1]);
+
+    expect(socketEmitMock).toHaveBeenCalled();
+    expect(socketEmitMock).toHaveBeenCalledWith('joinRoom', {
+      pseudo: 'shsh',
+      room: 'test2',
+    });
   });
 });

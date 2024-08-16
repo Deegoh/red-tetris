@@ -1,12 +1,12 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 
 import { useNotification } from 'src/app/notifications';
 import { useSocket } from 'src/app/socket';
-import { RoomCreation } from './RoomCreation';
+import { Leaderboard } from './Leaderboard';
 vi.mock('src/app/notifications');
 vi.mock('src/app/socket');
 vi.mock('react-router-dom', () => ({
@@ -18,17 +18,14 @@ vi.mock('react-router-dom', () => ({
 const mockStore = configureStore([]);
 const store = mockStore({
   common: {
-    gameSettings: {
-      garbageType: 'no',
-      bagType: 2,
-      difficulty: 18,
-      hold: 'false',
-      preview: 'true',
-    },
+    leaderboard: [
+      { id: 1, pseudo: 'user1', score: 1337, settings: '-' },
+      { id: 2, pseudo: 'user2', score: 1030307, settings: '-' },
+    ],
   },
 });
 
-describe('RoomCreation', () => {
+describe('Leaderboard', () => {
   let addNotifMock;
   let socketEmitMock;
 
@@ -48,38 +45,15 @@ describe('RoomCreation', () => {
     vi.clearAllMocks();
   });
 
-  test('renders', () => {
+  test('renders from store', () => {
     render(
       <Provider store={store}>
-        <RoomCreation pseudo='shsh' />
+        <Leaderboard />
       </Provider>
     );
 
-    expect(screen.getByTestId('createroom')).toBeDefined();
-  });
-
-  test('pseudo good length', () => {
-    render(
-      <Provider store={store}>
-        <RoomCreation pseudo='shsh' />
-      </Provider>
-    );
-
-    const createRoomButton = screen.getByTestId('createroom');
-
-    fireEvent.click(createRoomButton);
-
-    expect(addNotifMock).not.toHaveBeenCalled();
     expect(socketEmitMock).toHaveBeenCalled();
-    expect(socketEmitMock).toHaveBeenCalledWith('createRoom', {
-      pseudo: 'shsh',
-      gameSettings: {
-        garbageType: 'no',
-        bagType: 2,
-        difficulty: 18,
-        hold: 'false',
-        preview: 'true',
-      },
-    });
+    expect(socketEmitMock).toHaveBeenCalledWith('getLeaderboard');
+    expect(screen.getAllByTestId('scoreLine').length).toBe(2);
   });
 });
