@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { gameRestarted } from '../features/game/gameSlice.js';
 import { useSocket } from 'src/app/socket.jsx';
 import { GarbageBar } from './tetris/GarbageBar.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export const Game = ({ pseudo }) => {
   const dispatch = useDispatch();
@@ -15,12 +16,16 @@ export const Game = ({ pseudo }) => {
   const gameStatus = useSelector((state) => state.game.gameState?.status);
   const previewMode = useSelector((state) => state.game.previewTetromino);
   const holdMode = useSelector((state) => state.game.holdTetromino);
+  const navigate = useNavigate();
 
   return (
     <>
       <ControlsStore />
+      <div className={'flex'}>
+        <Btn onClick={() => navigate('/')}>Back</Btn>
+      </div>
 
-      <div className={'flex flex-col items-center justify-center gap-4'}>
+      <div className={'m-auto flex flex-col gap-4'}>
         <div className={'mx-auto flex gap-4'}>
           <div className='flex flex-col gap-4 justify-between'>
             <PreviewBlock tetromino={holdMode}>Hold</PreviewBlock>

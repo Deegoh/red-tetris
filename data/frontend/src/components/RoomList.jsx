@@ -3,12 +3,12 @@ import { Typography } from '@material-tailwind/react';
 import { Btn } from './Btn.jsx';
 import { useCallback } from 'react';
 import { useSocket } from 'src/app/socket.jsx';
-import { useNotification } from 'src/app/notifications.jsx';
 
-export const RoomList = ({ className, pseudo }) => {
+export const RoomList = ({ className }) => {
   const rooms = useSelector((state) => state.common.rooms);
   const { socket } = useSocket();
   const TABLE_HEAD = ['Id', 'Owner', 'Players', ''];
+  const pseudo = useSelector((state) => state.common.pseudo);
 
   const joinRoom = useCallback(
     (room) => {

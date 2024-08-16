@@ -5,6 +5,7 @@ export const commonSlice = createSlice({
   initialState: {
     rooms: [],
     leaderboard: undefined,
+    pseudo: undefined,
     gameSettings: {
       garbageType: 'no',
       bagType: 2,
@@ -35,6 +36,9 @@ export const commonSlice = createSlice({
     setPreview: (state, action) => {
       state.gameSettings.preview = action.payload;
     },
+    setPseudo: (state, action) => {
+      state.pseudo = action.payload;
+    },
   },
 });
 
@@ -46,4 +50,5 @@ export const {
   setDifficulty,
   setHold,
   setPreview,
+  setPseudo,
 } = commonSlice.actions;
