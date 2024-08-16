@@ -18,6 +18,7 @@ vi.mock('react-router-dom', () => ({
 const mockStore = configureStore([]);
 const store = mockStore({
   common: {
+    pseudo: 'shsh',
     rooms: [
       { id: 'test1', owner: 'user1', actives: 4 },
       { id: 'test2', owner: 'user1', actives: 4 },
@@ -58,7 +59,7 @@ describe('RoomList', () => {
   test('test join', () => {
     render(
       <Provider store={store}>
-        <RoomList pseudo='shsh' />
+        <RoomList />
       </Provider>
     );
 

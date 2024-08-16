@@ -18,6 +18,7 @@ vi.mock('react-router-dom', () => ({
 const mockStore = configureStore([]);
 const store = mockStore({
   common: {
+    pseudo: 'shsh',
     gameSettings: {
       garbageType: 'no',
       bagType: 2,
@@ -51,7 +52,7 @@ describe('RoomCreation', () => {
   test('renders', () => {
     render(
       <Provider store={store}>
-        <RoomCreation pseudo='shsh' />
+        <RoomCreation />
       </Provider>
     );
 
@@ -61,7 +62,7 @@ describe('RoomCreation', () => {
   test('pseudo good length', () => {
     render(
       <Provider store={store}>
-        <RoomCreation pseudo='shsh' />
+        <RoomCreation />
       </Provider>
     );
 

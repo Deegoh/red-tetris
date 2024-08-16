@@ -5,11 +5,12 @@ import { Typography } from '@material-tailwind/react';
 import { GameMode } from './tetris/GameMode.jsx';
 import { useSelector } from 'react-redux';
 
-export const RoomCreation = ({ pseudo, className }) => {
+export const RoomCreation = ({ className }) => {
   const { socket } = useSocket();
   const { garbageType, bagType, difficulty, hold, preview } = useSelector(
     (state) => state.common.gameSettings
   );
+  const pseudo = useSelector((state) => state.common.pseudo);
 
   const createRoom = useCallback(() => {
     if (socket !== undefined) {
