@@ -1,15 +1,19 @@
 import { Typography, Tooltip } from '@material-tailwind/react';
-import { useState } from 'react';
 import { TabGameMode } from '../TabGameMode.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setGarbageType,
+  setBagType,
+  setDifficulty,
+  setHold,
+  setPreview,
+} from 'src/features/common/commonSlice.js';
 
 export const GameMode = ({ className }) => {
-  const [gameMode, setGameMode] = useState({
-    garbageType: 'no',
-    bagType: 2,
-    difficulty: 10,
-    hold: 1,
-    preview: 1,
-  });
+  const { garbageType, bagType, difficulty, hold, preview } = useSelector(
+    (state) => state.common.gameSettings
+  );
+  const dispatch = useDispatch();
 
   const garbageTypeData = [
     { label: 'Without', value: 'no' },
@@ -27,43 +31,40 @@ export const GameMode = ({ className }) => {
   ];
   const marks = [0, 5, 10, 15, 20, 25];
 
-  const onChangeHandle = (e) => {
-    setGameMode((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  console.log(gameMode);
-
   return (
     <div className={className}>
       <TabGameMode
         name={'garbageType'}
         data={garbageTypeData}
-        setValue={setGameMode}
-        value={gameMode.garbageType}>
+        setValue={(v) => {
+          dispatch(setGarbageType(v));
+        }}
+        value={garbageType}>
         Penality type
       </TabGameMode>
 
       <TabGameMode
         name={'bagType'}
         data={bagTypeData}
-        setValue={setGameMode}
-        value={gameMode.bagType}>
+        setValue={(v) => {
+          dispatch(setBagType(v));
+        }}
+        value={bagType}>
         Bag size
       </TabGameMode>
 
       <div className={'flex flex-col gap-1'}>
         <Typography variant={'lead'}>Speed difficulty</Typography>
-        <Tooltip content={gameMode.difficulty}>
+        <Tooltip content={difficulty}>
           <input
             className={'accent-teal-500 text-black'}
             type={'range'}
             min={0}
             max={25}
-            value={gameMode.difficulty}
-            onChange={onChangeHandle}
+            value={difficulty}
+            onChange={(e) => {
+              dispatch(setDifficulty(e.target.value));
+            }}
             name={'difficulty'}
             list={'marks'}
           />
@@ -78,7 +79,7 @@ export const GameMode = ({ className }) => {
         <div className={'grid grid-cols-3 justify-between'}>
           <Typography className={'text-left'}>Easier</Typography>
           <Typography className={'text-center'}>
-            {gameMode.difficulty}
+            {difficulty}
           </Typography>
           <Typography className={'text-right'}>Harder</Typography>
         </div>
@@ -87,16 +88,20 @@ export const GameMode = ({ className }) => {
       <TabGameMode
         name={'hold'}
         data={boolData}
-        setValue={setGameMode}
-        value={gameMode.hold}>
+        setValue={(v) => {
+          dispatch(setHold(v));
+        }}
+        value={hold}>
         Hold
       </TabGameMode>
 
       <TabGameMode
         name={'preview'}
         data={boolData}
-        setValue={setGameMode}
-        value={gameMode.preview}>
+        setValue={(v) => {
+          dispatch(setPreview(v));
+        }}
+        value={preview}>
         Preview
       </TabGameMode>
     </div>

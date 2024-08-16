@@ -2,10 +2,7 @@ import { Tab, Tabs, TabsHeader, Typography } from '@material-tailwind/react';
 
 export const TabGameMode = ({ name, data, value, setValue, children }) => {
   const onClickHandle = (e) => {
-    setValue((prev) => ({
-      ...prev,
-      [e.target.getAttribute('data-name')]: e.target.getAttribute('data-value'),
-    }));
+    setValue(e.target.getAttribute('data-value'));
   };
 
   return (

@@ -63,8 +63,7 @@ class Player {
     this.level = 0;
     this.lines = 0;
     this.score = 0;
-    this.sequenceBreak = 18;
-    this.sequenceBreak = Math.max(this.sequenceBreak, 15); // Should never be lower than 15 with coded levels
+    this.sequenceBreak = Math.min(Math.max(1, this.game.startDifficulty), 25);
 
     this.bag = [];
     this.summonPiece();
@@ -78,11 +77,21 @@ class Player {
 
   newGenPiece() {
     if (this.bag.length === 0) {
-      this.bag = genBag().concat(genBag());
+      this.bag = genBag();
+
+      for (let i = 1; i < this.game.bagType; i++) {
+        this.bag = this.bag.concat(genBag());
+      }
     }
-    const choosen = this.bag.splice(this.random() % this.bag.length, 1);
-    if (choosen.length === 1) {
-      return choosen[0];
+    if (this.game.bagType > 0) {
+      const choosen = this.bag.splice(this.random() % this.bag.length, 1);
+      if (choosen.length === 1) {
+        return choosen[0];
+      }
+    } //
+    else {
+      const choosen = this.bag[this.random() % this.bag.length];
+      return choosen;
     }
   }
 

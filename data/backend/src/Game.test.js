@@ -69,7 +69,13 @@ describe('game tests', () => {
   });
 
   it('should init game', () => {
-    const testGame = new Game(32, 'testuser');
+    const testGame = new Game(32, 'testuser', {
+      garbageType: 'hole',
+      bagType: 0,
+      hold: 'true',
+      preview: 'true',
+      difficulty: 15,
+    });
     testGame.init();
 
     expect(setInterval).toHaveBeenCalledTimes(2);

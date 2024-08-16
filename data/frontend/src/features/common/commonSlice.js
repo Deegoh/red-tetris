@@ -5,6 +5,13 @@ export const commonSlice = createSlice({
   initialState: {
     rooms: [],
     leaderboard: [],
+    gameSettings: {
+      garbageType: 'no',
+      bagType: 2,
+      difficulty: 18,
+      hold: 0,
+      preview: 1,
+    },
   },
   reducers: {
     setRooms: (state, action) => {
@@ -13,7 +20,30 @@ export const commonSlice = createSlice({
     setLeaderboard: (state, action) => {
       state.leaderboard = action.payload;
     },
+    setGarbageType: (state, action) => {
+      state.gameSettings.garbageType = action.payload;
+    },
+    setBagType: (state, action) => {
+      state.gameSettings.bagType = action.payload;
+    },
+    setDifficulty: (state, action) => {
+      state.gameSettings.difficulty = action.payload;
+    },
+    setHold: (state, action) => {
+      state.gameSettings.hold = action.payload;
+    },
+    setPreview: (state, action) => {
+      state.gameSettings.preview = action.payload;
+    },
   },
 });
 
-export const { setRooms, setLeaderboard } = commonSlice.actions;
+export const {
+  setRooms,
+  setLeaderboard,
+  setGarbageType,
+  setBagType,
+  setDifficulty,
+  setHold,
+  setPreview,
+} = commonSlice.actions;
