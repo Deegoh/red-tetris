@@ -11,6 +11,7 @@ import {
   updateLevel,
   updateGarbage,
   updateGameState,
+  updatePreview,
 } from 'src/features/game/gameSlice';
 import {
   tetrominoHoldUpdated,
@@ -67,6 +68,12 @@ export function SocketProvider({ children }) {
           }
           if (res?.hold !== undefined) {
             dispatch(tetrominoHoldUpdated(res.hold));
+          }
+        });
+
+        socket.on('updatePreviewBoard', (res) => {
+          if (res?.boardState !== undefined) {
+            dispatch(updatePreview(res));
           }
         });
 

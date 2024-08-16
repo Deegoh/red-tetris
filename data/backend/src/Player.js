@@ -162,10 +162,10 @@ class Player {
             break;
           }
         }
-        this.printPiece(copy, this.x, tmpy, '#');
+        this.printPiece(copy, this.x, tmpy, this.rot, this.piece, '#');
       }
 
-      this.printPiece(copy, this.x, this.y);
+      this.printPiece(copy, this.x, this.y, this.rot, this.piece);
     }
 
     this.socket.emit('updateBoard', {
@@ -181,10 +181,56 @@ class Player {
       score: this.score,
       lines: this.lines,
       level: this.level,
-      garbage: this.garbageToDo,
+      garbage: this.game.garbageType !== 'no' ? this.garbageToDo : undefined,
     });
 
+    if (this.sequence === 0) {
+      this.previewFirst();
+    }
     this.sequence = (this.sequence + 1) % this.sequenceBreak;
+  }
+
+  previewFirst() {
+    const localPlayers = Array.from(this.game.players.values()).map((p) => {
+      return {
+        pseudo: p.pseudo,
+        score: p.score,
+        state: p.state,
+      };
+    });
+    const availableToPreview = localPlayers
+      .filter((p) => {
+        return p.state === 'alive' && p.pseudo !== this.pseudo;
+      })
+      .toSorted((a, b) => {
+        return b.score - a.score;
+      });
+
+    if (availableToPreview.length >= 1) {
+      const nextFirstPlayer = this.game.players.get(
+        availableToPreview[0].pseudo
+      );
+
+      const copy = structuredClone(nextFirstPlayer.board);
+      this.printPiece(
+        copy,
+        nextFirstPlayer.x,
+        nextFirstPlayer.y,
+        nextFirstPlayer.rot,
+        nextFirstPlayer.piece
+      );
+
+      this.socket.emit('updatePreviewBoard', {
+        pseudo: nextFirstPlayer.pseudo,
+        boardState: { id: nextFirstPlayer.boardId, board: copy },
+        score: nextFirstPlayer.score,
+      });
+    } else {
+      this.socket.emit('updatePreviewBoard', {
+        boardState: undefined,
+        score: undefined,
+      });
+    }
   }
 
   safeMove(px, py, rot) {
@@ -194,12 +240,10 @@ class Player {
         const dy = i + py;
         if (this.piece.forms[rot][i][j] !== '.') {
           // dy moved for upper "buffer"
-          // console.log(dx, dy, cols, rows);
           if (dx < 0 || dx >= cols || dy >= rows) {
             return false;
           } //
           else if (dy >= 0 && this.board[dy][dx] !== '.') {
-            // console.log(dx, dy, this.board[dy][dx], this.board);
             return false;
           }
         }
@@ -270,13 +314,6 @@ class Player {
   }
 
   gameover() {
-    console.log('gameover');
-    if (this.pseudo === 'god') {
-      this.board = this.generateDefaultBoard();
-      this.boardId += 1;
-      return;
-    }
-
     if (this.state === 'alive') {
       this.state = 'lost';
       this.saveScore();
@@ -302,19 +339,19 @@ class Player {
     }
   }
 
-  printPiece(dest, x, y, mod = '') {
+  printPiece(dest, x, y, rot, piece, mod = '') {
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 4; j++) {
         const dx = j + x;
         const dy = i + y;
         if (
-          this.piece.forms[this.rot][i][j] !== '.' &&
+          piece.forms[rot][i][j] !== '.' &&
           dx >= 0 &&
           dy >= 0 &&
           dx < cols &&
           dy < rows
         ) {
-          dest[dy][dx] = `${mod}${this.piece.id}`;
+          dest[dy][dx] = `${mod}${piece.id}`;
         }
       }
     }
@@ -369,7 +406,7 @@ class Player {
           }
           // this.sequence = 1; // ?
         } else {
-          this.printPiece(this.board, this.x, this.y);
+          this.printPiece(this.board, this.x, this.y, this.rot, this.piece);
           this.checkTetris();
           this.summonGarbage();
           this.summonPiece();
@@ -394,7 +431,7 @@ class Player {
             break;
           }
         }
-        this.printPiece(this.board, this.x, this.y);
+        this.printPiece(this.board, this.x, this.y, this.rot, this.piece);
         this.checkTetris();
         this.summonGarbage();
         this.summonPiece();
