@@ -16,11 +16,11 @@ class Game {
       : 'full';
     this.hasHold =
       gameSettings?.hold?.toString() !== undefined
-        ? gameSettings.hold.toString() === 'true'
+        ? gameSettings.hold.toString() === '1'
         : false;
     this.hasPreview =
       gameSettings?.preview?.toString() !== undefined
-        ? gameSettings.preview.toString() === 'true'
+        ? gameSettings.preview.toString() === '1'
         : true;
 
     this.bagType =
