@@ -9,8 +9,8 @@ export const commonSlice = createSlice({
       garbageType: 'no',
       bagType: 2,
       difficulty: 18,
-      hold: 'false',
-      preview: 'true',
+      hold: 0,
+      preview: 1,
     },
   },
   reducers: {
