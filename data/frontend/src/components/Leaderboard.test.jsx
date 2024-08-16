@@ -19,8 +19,8 @@ const mockStore = configureStore([]);
 const store = mockStore({
   common: {
     leaderboard: [
-      { pseudo: 'user1', score: 1337, settings: '-' },
-      { pseudo: 'user2', score: 1030307, settings: '-' },
+      { id: 1, pseudo: 'user1', score: 1337, settings: '-' },
+      { id: 2, pseudo: 'user2', score: 1030307, settings: '-' },
     ],
   },
 });
