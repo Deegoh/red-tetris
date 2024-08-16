@@ -47,7 +47,7 @@ describe('store', () => {
     expect(result.current.leaderboard).toBeUndefined();
     expect(result.current.gameSettings.garbageType).toBe('no');
     expect(result.current.gameSettings.bagType).toBe(2);
-    expect(result.current.gameSettings.difficulty).toBe(72);
+    expect(result.current.gameSettings.difficulty).toBe(18);
     expect(result.current.gameSettings.hold).toBe('false');
     expect(result.current.gameSettings.preview).toBe('true');
 

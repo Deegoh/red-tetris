@@ -11,7 +11,6 @@ function App() {
       <div className='grid grow items-center'>
         <Routes>
           <Route path='/' element={<ScreenManager />} />
-          <Route path='/create' element={<Game />} />
           <Route path='/leaderboard' element={<Leaderboard />} />
         </Routes>
       </div>

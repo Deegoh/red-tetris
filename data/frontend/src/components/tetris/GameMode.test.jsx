@@ -100,7 +100,7 @@ describe('GameMode', () => {
     fireEvent.click(bagButton);
 
     expect(setBagTypeMock).toHaveBeenCalled();
-    expect(setBagTypeMock).toHaveBeenCalledWith(2);
+    expect(setBagTypeMock).toHaveBeenCalledWith('2');
   });
 
   test('test difficulty choice', async () => {
@@ -130,7 +130,7 @@ describe('GameMode', () => {
     fireEvent.click(holdButton);
 
     expect(setHoldMock).toHaveBeenCalled();
-    expect(setHoldMock).toHaveBeenCalledWith('false');
+    expect(setHoldMock).toHaveBeenCalledWith('0');
   });
 
   test('test preview choice', async () => {
@@ -145,6 +145,6 @@ describe('GameMode', () => {
     fireEvent.click(previewButton);
 
     expect(setPreviewMock).toHaveBeenCalled();
-    expect(setPreviewMock).toHaveBeenCalledWith('false');
+    expect(setPreviewMock).toHaveBeenCalledWith('0');
   });
 });

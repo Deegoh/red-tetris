@@ -68,7 +68,7 @@ export const ScreenManager = () => {
               Leaderboard
             </Btn>
           </div>
-        ))) || <Game />}
+        ))) || <Game pseudo={pseudo} />}
     </>
   );
 };
