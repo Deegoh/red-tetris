@@ -59,14 +59,16 @@ export const ScreenManager = () => {
                 }}>
                 Play
               </Btn>
+              <Btn
+                className={'mt-4'}
+                onClick={() => {
+                  navigate('/leaderboard');
+                }}>
+                Leaderboard
+              </Btn>
             </PseudoInput>
 
-            <Btn
-              onClick={() => {
-                navigate('/leaderboard');
-              }}>
-              Leaderboard
-            </Btn>
+            <></>
           </div>
         ))) || <Game pseudo={pseudo} />}
     </>
