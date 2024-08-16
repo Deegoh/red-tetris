@@ -8,9 +8,9 @@ export const commonSlice = createSlice({
     gameSettings: {
       garbageType: 'no',
       bagType: 2,
-      difficulty: 18 * 4,
-      hold: 'false',
-      preview: 'true',
+      difficulty: 18,
+      hold: 0,
+      preview: 1,
     },
   },
   reducers: {

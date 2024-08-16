@@ -18,7 +18,7 @@ export const RoomCreation = ({ pseudo, className }) => {
         gameSettings: {
           garbageType,
           bagType,
-          difficulty: Math.round((100 - difficulty) / 4),
+          difficulty: difficulty,
           hold,
           preview,
         },
