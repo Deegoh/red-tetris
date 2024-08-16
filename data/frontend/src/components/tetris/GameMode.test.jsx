@@ -110,9 +110,8 @@ describe('GameMode', () => {
       </Provider>
     );
 
-    const difficultyChoice = await screen.findByTestId('difficulty');
-    const difficultySlider = difficultyChoice.querySelector('input');
-    fireEvent.change(difficultySlider, { target: { value: 25 } });
+    const difficultyChoice = screen.queryByTestId('difficulty');
+    fireEvent.change(difficultyChoice, { target: { value: 25 } });
 
     expect(setDifficultyMock).toHaveBeenCalled();
     expect(setDifficultyMock).toHaveBeenCalledWith('25');
