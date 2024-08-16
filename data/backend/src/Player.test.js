@@ -30,14 +30,6 @@ const wsMock = {
   },
 };
 
-const gameMock = {
-  rseed: 1337,
-  hasHold: true,
-  garbageCallback: jest.fn(),
-  endCheck: jest.fn(),
-  bagType: 2,
-};
-
 function waitFor(socket, event) {
   return new Promise((resolve) => {
     socket.once(event, resolve);
@@ -46,6 +38,7 @@ function waitFor(socket, event) {
 
 describe('player tests', () => {
   let io, serverSocket, clientSocket;
+  let gameMock;
 
   beforeAll((done) => {
     const httpServer = createServer();
@@ -70,6 +63,15 @@ describe('player tests', () => {
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick', 'setImmediate'] });
+
+    gameMock = {
+      rseed: 1337,
+      hasHold: true,
+      garbageCallback: jest.fn(),
+      endCheck: jest.fn(),
+      bagType: 2,
+      players: new Map(),
+    };
   });
 
   afterEach(() => {
@@ -144,21 +146,44 @@ describe('player tests', () => {
 
   it('should test frame sending', async () => {
     const testPlayer = new Player('32', serverSocket, gameMock);
+    const testPlayer2 = new Player('42', wsMock, gameMock);
+    const testPlayer3 = new Player('52', wsMock, gameMock);
 
-    testPlayer.board = testPlayer.generateDefaultBoard();
+    gameMock.players.set('32', testPlayer);
+    gameMock.players.set('42', testPlayer2);
+    gameMock.players.set('52', testPlayer3);
 
-    testPlayer.piece = new TPiece();
-    testPlayer.next = new TPiece();
-    testPlayer.x = 0;
-    testPlayer.y = 0;
-    testPlayer.rot = 0;
-    testPlayer.sequence = 1;
+    gameMock.players.forEach((v) => {
+      v.board = testPlayer.generateDefaultBoard();
 
-    testPlayer.score = 1330;
-    testPlayer.lines = 1331;
-    testPlayer.level = 1332;
+      v.piece = new TPiece();
+      v.next = new TPiece();
+      v.x = 0;
+      v.y = 0;
+      v.rot = 0;
+      v.sequence = 1;
 
-    testPlayer.state = 'alive';
+      v.score = 1330;
+      v.lines = 1331;
+      v.level = 1332;
+
+      v.state = 'alive';
+    });
+
+    // testPlayer.board = testPlayer.generateDefaultBoard();
+
+    // testPlayer.piece = new TPiece();
+    // testPlayer.next = new TPiece();
+    // testPlayer.x = 0;
+    // testPlayer.y = 0;
+    // testPlayer.rot = 0;
+    // testPlayer.sequence = 1;
+
+    // testPlayer.score = 1330;
+    // testPlayer.lines = 1331;
+    // testPlayer.level = 1332;
+
+    // testPlayer.state = 'alive';
 
     let boardInfos;
 

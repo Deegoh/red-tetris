@@ -225,11 +225,6 @@ class Player {
         boardState: { id: nextFirstPlayer.boardId, board: copy },
         score: nextFirstPlayer.score,
       });
-    } else {
-      this.socket.emit('updatePreviewBoard', {
-        boardState: undefined,
-        score: undefined,
-      });
     }
   }
 
