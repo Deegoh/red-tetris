@@ -16,7 +16,7 @@ const io = new Server(
   process.env.NODE_ENV === 'development'
     ? {
         cors: {
-          origin: `*`,
+          origin: '*',
           methods: ['GET', 'POST'],
         },
       }

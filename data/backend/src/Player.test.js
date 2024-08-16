@@ -170,21 +170,6 @@ describe('player tests', () => {
       v.state = 'alive';
     });
 
-    // testPlayer.board = testPlayer.generateDefaultBoard();
-
-    // testPlayer.piece = new TPiece();
-    // testPlayer.next = new TPiece();
-    // testPlayer.x = 0;
-    // testPlayer.y = 0;
-    // testPlayer.rot = 0;
-    // testPlayer.sequence = 1;
-
-    // testPlayer.score = 1330;
-    // testPlayer.lines = 1331;
-    // testPlayer.level = 1332;
-
-    // testPlayer.state = 'alive';
-
     let boardInfos;
 
     testPlayer.frame('waiting');
