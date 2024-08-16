@@ -30,7 +30,7 @@ class Game {
         : 2;
     this.bagType = Math.max(Math.min(this.bagType, 10), 0);
     this.startDifficulty =
-      gameSettings?.difficulty !== undefined ? gameSettings.difficulty : 15;
+      gameSettings?.difficulty !== undefined ? (25 - gameSettings.difficulty) : 15;
 
     this.status = 'waiting'; // 'waiting' | 'launching' | 'playing'
     this.slow = undefined;

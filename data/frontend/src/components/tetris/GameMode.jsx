@@ -54,12 +54,12 @@ export const GameMode = ({ className }) => {
 
       <div className={'flex flex-col gap-1'}>
         <Typography variant={'lead'}>Speed difficulty</Typography>
-        <Tooltip content={Math.round(difficulty / 4)}>
+        <Tooltip content={difficulty}>
           <Slider
             className={'text-teal-500'}
             min={0}
             max={100}
-            step={4}
+            step={10}
             onChange={(e) => {
               dispatch(setDifficulty(e.target.value));
             }}
@@ -69,7 +69,7 @@ export const GameMode = ({ className }) => {
         <div className={'grid grid-cols-3 justify-between'}>
           <Typography className={'text-left'}>Easier</Typography>
           <Typography className={'text-center'}>
-            {Math.round(difficulty / 4)}
+            {difficulty}
           </Typography>
           <Typography className={'text-right'}>Harder</Typography>
         </div>

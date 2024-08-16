@@ -21,7 +21,7 @@ const store = mockStore({
     gameSettings: {
       garbageType: 'no',
       bagType: 2,
-      difficulty: 18 * 4,
+      difficulty: 18,
       hold: 'false',
       preview: 'true',
     },
@@ -76,7 +76,7 @@ describe('RoomCreation', () => {
       gameSettings: {
         garbageType: 'no',
         bagType: 2,
-        difficulty: 25 - 18,
+        difficulty: 18,
         hold: 'false',
         preview: 'true',
       },
