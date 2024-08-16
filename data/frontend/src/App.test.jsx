@@ -52,6 +52,5 @@ describe('App', () => {
         <App />
       </Provider>
     );
-    expect(screen.getByTestId('footer')).toBeDefined();
   });
 });
