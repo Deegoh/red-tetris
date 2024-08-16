@@ -21,12 +21,6 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState: initialState,
   reducers: {
-    gameStarted: (state) => {
-      state.status = 'running';
-    },
-    gameRestarted: (state) => {
-      state.status = 'idle';
-    },
     tetrominoPreviewUpdated: (state, action) => {
       if (state.previewTetrominoId !== action.payload.id) {
         state.previewTetrominoId = action.payload.id;

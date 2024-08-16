@@ -2,7 +2,7 @@ import { Square } from './Square.jsx';
 import { useMemo } from 'react';
 import { Typography } from '@material-tailwind/react';
 
-export const PreviewTetrominoes = ({ tetromino, children }) => {
+export const PreviewBlock = ({ tetromino, children }) => {
   const previewBlock = useMemo(() => {
     const size = 16;
     const map = [];

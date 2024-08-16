@@ -1,5 +1,5 @@
 import { Alert } from '@material-tailwind/react';
-import { useNotification } from '../app/notifications';
+import { useNotification } from 'src/app/notifications';
 
 export function NotificationsContainer() {
   const { notifications, removeNotif } = useNotification();
@@ -46,7 +46,7 @@ export function NotificationsContainer() {
   }
 
   return (
-    <div className='fixed bottom-0 right-0 mb-5 mr-5 z-[99999] space-y-2'>
+    <div className='absolute bottom-0 right-0 mb-5 mr-5 z-[99999] space-y-2'>
       {notifications.map((notif) => (
         <Alert
           key={notif.id}
@@ -59,7 +59,8 @@ export function NotificationsContainer() {
             removeNotif(notif.id);
           }}
           className={`rounded-none border-l-4 font-medium`}
-          style={{ ...notifColor(notif.type.toLowerCase()) }}>
+          style={{ ...notifColor(notif.type.toLowerCase()) }}
+          data-testid='notification'>
           <div className='flex flex-row gap-2'>{notif.text}</div>
         </Alert>
       ))}

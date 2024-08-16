@@ -20,7 +20,7 @@ export const RoomList = ({ className, pseudo }) => {
   );
 
   return (
-    <div className={className}>
+    <div className={className} data-testid='roomlistpage'>
       <Typography variant='h3'>Room List</Typography>
 
       <div className='overflow-y-auto mx-auto w-[80%]'>

@@ -1,8 +1,8 @@
 import { Tab, Tabs, TabsHeader, Typography } from '@material-tailwind/react';
 
-export const TabGameMode = ({ data, value, setValue, children }) => {
+export const TabGameMode = ({ data, value, setValue, children, ...rest }) => {
   return (
-    <div>
+    <div {...rest}>
       {children && <Typography variant={'lead'}>{children}</Typography>}
       <Tabs value={value}>
         <TabsHeader

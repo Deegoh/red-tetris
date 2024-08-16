@@ -1,6 +1,8 @@
 export const Footer = () => {
   return (
-    <footer className='flex bg-black/50 text-white absolute inset-x-0 bottom-0 py-4 flex-col items-center'>
+    <footer
+      className='h-min b-0 flex bg-black/50 text-white inset-x-0 bottom-0 py-4 flex-col items-center'
+      data-testid='footer'>
       <small>
         Made with ❤️ by{' '}
         <a

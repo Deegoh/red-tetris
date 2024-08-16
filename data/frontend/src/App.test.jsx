@@ -6,32 +6,33 @@ import { Provider } from 'react-redux';
 
 import { useNotification } from 'src/app/notifications';
 import { useSocket } from 'src/app/socket';
-import { RoomList } from './RoomList';
+import App from './App';
+
 vi.mock('src/app/notifications');
 vi.mock('src/app/socket');
 vi.mock('react-router-dom', () => ({
   useNavigate: () => {
     vi.fn();
   },
+  Routes: () => {
+    return <div></div>;
+  },
+  Route: () => {
+    return <div></div>;
+  },
 }));
 
 const mockStore = configureStore([]);
-const store = mockStore({
-  common: {
-    rooms: [
-      { id: 'test1', owner: 'user1', actives: 4 },
-      { id: 'test2', owner: 'user1', actives: 4 },
-    ],
-  },
-});
+const store = mockStore({});
 
-describe('RoomList', () => {
+describe('App', () => {
   let addNotifMock;
   let socketEmitMock;
 
   beforeEach(() => {
     addNotifMock = vi.fn();
     useNotification.mockReturnValue({
+      notifications: [],
       addNotif: addNotifMock,
     });
 
@@ -45,32 +46,12 @@ describe('RoomList', () => {
     vi.clearAllMocks();
   });
 
-  test('renders from store', () => {
+  test('renders', () => {
     render(
       <Provider store={store}>
-        <RoomList />
+        <App />
       </Provider>
     );
-
-    expect(screen.getAllByTestId('room').length).toBe(2);
-  });
-
-  test('test join', () => {
-    render(
-      <Provider store={store}>
-        <RoomList pseudo='shsh' />
-      </Provider>
-    );
-
-    const joinRoomButtons = screen.getAllByText('Join');
-    expect(joinRoomButtons.length).toBe(2);
-
-    fireEvent.click(joinRoomButtons[1]);
-
-    expect(socketEmitMock).toHaveBeenCalled();
-    expect(socketEmitMock).toHaveBeenCalledWith('joinRoom', {
-      pseudo: 'shsh',
-      room: 'test2',
-    });
+    expect(screen.getByTestId('footer')).toBeDefined();
   });
 });

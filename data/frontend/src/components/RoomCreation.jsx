@@ -27,7 +27,7 @@ export const RoomCreation = ({ pseudo, className }) => {
   }, [bagType, difficulty, garbageType, hold, preview, pseudo, socket]);
 
   return (
-    <div className={className}>
+    <div className={className} data-testid='roomcreationpage'>
       <Typography variant='h3'>Host Room</Typography>
       <GameMode className={'text-left w-[80%] mx-auto flex flex-col gap-4'} />
       <Btn

@@ -12,9 +12,13 @@ RUN pnpm build
 FROM node:lts-alpine3.16
 WORKDIR /server
 
+RUN npm install -g pnpm
+
 COPY data/backend .
 
 COPY --from=build_front /frontend/dist /build
+
+RUN pnpm install
 
 CMD ["node", "src/main.js"]
 
