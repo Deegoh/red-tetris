@@ -7,15 +7,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { gameRestarted } from '../features/game/gameSlice.js';
 import { useSocket } from 'src/app/socket.jsx';
 import { GarbageBar } from './tetris/GarbageBar.jsx';
+import { PreviewBoard } from './tetris/PreviewBoard.jsx';
+import useBreakpoint from './tetris/useBreakpoint.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export const Game = ({ pseudo }) => {
   const dispatch = useDispatch();
   const { socket } = useSocket();
+  const screen = useBreakpoint();
   const owner = useSelector((state) => state.game.gameState?.owner);
   const gameStatus = useSelector((state) => state.game.gameState?.status);
   const previewMode = useSelector((state) => state.game.previewTetromino);
   const holdMode = useSelector((state) => state.game.holdTetromino);
+  const board = useSelector((state) => state.game.board);
   const navigate = useNavigate();
 
   return (
@@ -32,12 +36,13 @@ export const Game = ({ pseudo }) => {
             <GarbageBar />
           </div>
 
-          <Board />
+          <Board board={board} />
 
           <div className='flex flex-col gap-4 justify-between'>
             <PreviewBlock tetromino={previewMode}>Preview</PreviewBlock>
             <Score justify='left' />
           </div>
+          {!['xs', 'sm'].includes(screen) && <PreviewBoard />}
         </div>
 
         <div className='flex flex-row gap-4 mx-auto'>

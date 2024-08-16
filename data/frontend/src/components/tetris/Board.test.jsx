@@ -21,9 +21,13 @@ describe('Board', () => {
   });
 
   test('renders from store', () => {
+    const board = Array(20)
+      .fill()
+      .map(() => Array(20).fill('#.'));
+
     render(
       <Provider store={store}>
-        <Board player='me' />
+        <Board player='me' board={board} />
       </Provider>
     );
 

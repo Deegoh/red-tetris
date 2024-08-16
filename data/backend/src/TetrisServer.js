@@ -45,7 +45,7 @@ class TetrisServer {
     });
 
     const checkPseudo = (pseudo, page, cb) => {
-      if (pseudo.length >= 3 && pseudo.length < 32) {
+      if (pseudo !== undefined && pseudo.length >= 3 && pseudo.length < 32) {
         if (
           Array.from(pseudo).every(
             (c) =>
@@ -234,7 +234,6 @@ class TetrisServer {
           }
         } //
         else {
-          console.log(room.owner, pseudo, roomname);
           socket.emit('notify', {
             status: 'error',
             code: 'NOT_OWNER',

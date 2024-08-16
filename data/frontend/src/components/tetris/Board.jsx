@@ -1,16 +1,18 @@
 import { Square } from './Square.jsx';
-import { useSelector } from 'react-redux';
 import { Typography } from '@material-tailwind/react';
 import { useEffect, useMemo, useState } from 'react';
 import { rows, cols } from './const.jsx';
 
-export const Board = ({ player, className = '', ...rest }) => {
-  const board = useSelector((state) => state.game.board);
+export const Board = ({ board, player, className = '', ...rest }) => {
   const [mode, setMode] = useState('player');
 
   const renderBoard = useMemo(() => {
     const map = [];
     let index = 0;
+
+    if (board === undefined) {
+      return;
+    }
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
@@ -43,17 +45,19 @@ export const Board = ({ player, className = '', ...rest }) => {
   }, [player]);
 
   return (
-    <div className='bg-board p-1 rounded'>
-      <div
-        {...rest}
-        className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
-        {renderBoard}
-        {player && (
-          <Typography className='col-span-full text-white mx-auto'>
-            {player}
-          </Typography>
-        )}
+    board !== undefined && (
+      <div className='bg-board p-1 rounded'>
+        <div
+          {...rest}
+          className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
+          {renderBoard}
+          {player && (
+            <Typography className='col-span-full text-white mx-auto'>
+              {player}
+            </Typography>
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 };

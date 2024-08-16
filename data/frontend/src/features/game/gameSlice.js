@@ -11,9 +11,15 @@ const initialState = {
   score: 0,
   rows: 0,
   level: 0,
-  incomingGarbage: 0,
+  incomingGarbage: undefined,
   boardId: -1,
   board: generateDefaultMap(),
+  preview: {
+    pseudo: undefined,
+    score: 0,
+    boardId: -1,
+    board: undefined,
+  },
   gameState: undefined,
 };
 
@@ -37,6 +43,14 @@ export const gameSlice = createSlice({
       if (state.boardId !== action.payload.id) {
         state.boardId = action.payload.id;
         state.board = action.payload.board;
+      }
+    },
+    updatePreview: (state, action) => {
+      if (state.preview.boardId !== action.payload.boardState.id) {
+        state.preview.pseudo = action.payload.pseudo;
+        state.preview.score = action.payload.score;
+        state.preview.boardId = action.payload.boardState.id;
+        state.preview.board = action.payload.boardState.board;
       }
     },
     updateScore: (state, action) => {
@@ -63,6 +77,7 @@ export const {
   tetrominoPreviewUpdated,
   tetrominoHoldUpdated,
   boardUpdated,
+  updatePreview,
   updateScore,
   updateRows,
   updateLevel,

@@ -20,6 +20,7 @@ import {
   updateGameState,
   updateGarbage,
   updateLevel,
+  updatePreview,
   updateRows,
   updateScore,
 } from 'src/features/game/gameSlice';
@@ -58,8 +59,8 @@ describe('store', () => {
       store.dispatch(setGarbageType('hole'));
       store.dispatch(setBagType(0));
       store.dispatch(setDifficulty(16));
-      store.dispatch(setHold('true'));
-      store.dispatch(setPreview('false'));
+      store.dispatch(setHold('1'));
+      store.dispatch(setPreview('0'));
     });
 
     expect(result.current.rooms.length).toBe(1);
@@ -67,8 +68,8 @@ describe('store', () => {
     expect(result.current.gameSettings.garbageType).toBe('hole');
     expect(result.current.gameSettings.bagType).toBe(0);
     expect(result.current.gameSettings.difficulty).toBe(16);
-    expect(result.current.gameSettings.hold).toBe('true');
-    expect(result.current.gameSettings.preview).toBe('false');
+    expect(result.current.gameSettings.hold).toBe('1');
+    expect(result.current.gameSettings.preview).toBe('0');
   });
 
   test('test game slice', async () => {
@@ -88,7 +89,7 @@ describe('store', () => {
     expect(result.current.score).toBe(0);
     expect(result.current.rows).toBe(0);
     expect(result.current.level).toBe(0);
-    expect(result.current.incomingGarbage).toBe(0);
+    expect(result.current.incomingGarbage).toBe(undefined);
 
     expect(result.current.gameState).toBeUndefined();
 
@@ -114,6 +115,17 @@ describe('store', () => {
         })
       );
 
+      store.dispatch(
+        updatePreview({
+          pseudo: 'test',
+          score: 1337,
+          boardState: {
+            id: 'X',
+            board: [],
+          },
+        })
+      );
+
       store.dispatch(updateScore(72));
       store.dispatch(updateRows(73));
       store.dispatch(updateLevel(74));
@@ -127,6 +139,7 @@ describe('store', () => {
     expect(result.current.holdTetrominoId).toBeDefined();
     expect(result.current.holdTetromino).toBeDefined();
     expect(result.current.boardId).not.toBe(-1);
+    expect(result.current.preview.childrenboardId).not.toBe(-1);
 
     expect(result.current.score).toBe(72);
     expect(result.current.rows).toBe(73);

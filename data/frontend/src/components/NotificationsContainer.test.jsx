@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 
 import { NotificationsContainer } from './NotificationsContainer';
 
@@ -16,20 +16,41 @@ describe('NotificationContainer', () => {
         {
           id: '1',
           text: 'test',
-          type: 'success',
+          type: 'question',
           expiring: false,
           open: true,
         },
         {
           id: '2',
           text: 'test2',
-          type: 'error',
+          type: 'info',
           expiring: false,
           open: true,
         },
         {
           id: '3',
           text: 'test3',
+          type: 'success',
+          expiring: false,
+          open: true,
+        },
+        {
+          id: '4',
+          text: 'test4',
+          type: 'warning',
+          expiring: false,
+          open: true,
+        },
+        {
+          id: '5',
+          text: 'test5',
+          type: 'error',
+          expiring: false,
+          open: true,
+        },
+        {
+          id: '6',
+          text: 'test6',
           type: 'error',
           expiring: false,
           open: false,
@@ -46,6 +67,13 @@ describe('NotificationContainer', () => {
   test('renders', () => {
     render(<NotificationsContainer />);
 
-    expect(screen.getAllByTestId('notification').length).toBe(2);
+    expect(screen.getAllByTestId('notification').length).toBe(5);
+
+    const oneNotif = screen.queryAllByTestId('notification')[0];
+    const deleteButton = oneNotif.querySelector('button');
+
+    act(() => {
+      fireEvent.click(deleteButton);
+    });
   });
 });

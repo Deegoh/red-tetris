@@ -28,13 +28,15 @@ export const GarbageBar = () => {
   };
 
   return (
-    <div
-      style={style}
-      className='bg-board rounded-full h-full p-1 content-end place-self-end'>
+    garbageValue !== undefined && (
       <div
-        style={{ height: `${garbageValue * 5}%` }}
-        className={`shadow-ghost shadow-tile-W/35 bg-tile-W w-full rounded-full mx-auto`}
-      />
-    </div>
+        style={style}
+        className='bg-board rounded-full h-full p-1 content-end place-self-end'>
+        <div
+          style={{ height: `${garbageValue * 5}%` }}
+          className={`shadow-ghost shadow-tile-W/35 bg-tile-W w-full rounded-full mx-auto`}
+        />
+      </div>
+    )
   );
 };

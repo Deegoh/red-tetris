@@ -41,8 +41,6 @@ export function NotificationsContainer() {
           color: 'rgb(229 57 53)',
         };
     }
-
-    return {};
   }
 
   return (
