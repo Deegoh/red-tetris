@@ -2,14 +2,14 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const { TetrisServer } = require('./TetrisServer');
-const fs = require("fs");
+const fs = require('fs');
 
 const app = express();
 
 app.use((req, res) => {
   if (fs.existsSync(`/build${req.url}`)) {
     res.sendFile(`/build${req.url}`);
-  }
+  } //
   else {
     res.sendFile(`/build/index.html`);
   }
