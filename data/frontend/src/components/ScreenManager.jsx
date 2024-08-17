@@ -40,6 +40,7 @@ export const ScreenManager = () => {
 
     const room = value.slice(0, firstBracket);
     const user = value.slice(firstBracket + 1, lastBracket);
+    dispatch(setPseudo(user));
 
     if (socket !== undefined) {
       socket.emit('connectRoom', { pseudo: user, room: room });
