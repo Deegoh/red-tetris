@@ -22,13 +22,13 @@ export const GameMode = ({ className }) => {
     { label: 'Hole', value: 'hole' },
   ];
   const bagTypeData = [
-    { label: '0', value: 0 },
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
+    { label: '0', value: '0' },
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
   ];
   const boolData = [
-    { label: 'Yes', value: 1 },
-    { label: 'No', value: 0 },
+    { label: 'Yes', value: '1' },
+    { label: 'No', value: '0' },
   ];
   const marks = [0, 5, 10, 15, 20, 25];
 

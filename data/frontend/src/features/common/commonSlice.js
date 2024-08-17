@@ -7,11 +7,11 @@ export const commonSlice = createSlice({
     leaderboard: undefined,
     pseudo: undefined,
     gameSettings: {
-      garbageType: 'no',
-      bagType: 2,
+      garbageType: 'full',
+      bagType: '2',
       difficulty: 7,
-      hold: 0,
-      preview: 1,
+      hold: '0',
+      preview: '1',
     },
   },
   reducers: {
