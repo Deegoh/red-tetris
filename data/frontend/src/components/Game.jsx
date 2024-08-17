@@ -3,16 +3,14 @@ import { PreviewBlock } from './tetris/PreviewBlock.jsx';
 import { Score } from './tetris/Score.jsx';
 import { ControlsStore } from './tetris/ControlsStore.jsx';
 import { Btn } from './Btn.jsx';
-import { useDispatch, useSelector } from 'react-redux';
-import { gameRestarted } from '../features/game/gameSlice.js';
+import { useSelector } from 'react-redux';
 import { useSocket } from 'src/app/socket.jsx';
 import { GarbageBar } from './tetris/GarbageBar.jsx';
 import { PreviewBoard } from './tetris/PreviewBoard.jsx';
 import useBreakpoint from './tetris/useBreakpoint.jsx';
 import { useNavigate } from 'react-router-dom';
 
-export const Game = ({ pseudo }) => {
-  const dispatch = useDispatch();
+export const Game = () => {
   const { socket } = useSocket();
   const screen = useBreakpoint();
   const owner = useSelector((state) => state.game.gameState?.owner);
@@ -20,6 +18,7 @@ export const Game = ({ pseudo }) => {
   const previewMode = useSelector((state) => state.game.previewTetromino);
   const holdMode = useSelector((state) => state.game.holdTetromino);
   const board = useSelector((state) => state.game.board);
+  const pseudo = useSelector((state) => state.common.pseudo);
   const navigate = useNavigate();
 
   return (
@@ -52,13 +51,7 @@ export const Game = ({ pseudo }) => {
                 onClick={() => {
                   socket.emit('startGame');
                 }}>
-                Play
-              </Btn>
-              <Btn
-                onClick={() => {
-                  dispatch(gameRestarted());
-                }}>
-                Restart
+                Play / Restart
               </Btn>
             </>
           )}
