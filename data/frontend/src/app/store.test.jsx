@@ -46,11 +46,11 @@ describe('store', () => {
 
     expect(result.current.rooms.length).toBe(0);
     expect(result.current.leaderboard).toBeUndefined();
-    expect(result.current.gameSettings.garbageType).toBe('no');
-    expect(result.current.gameSettings.bagType).toBe(2);
+    expect(result.current.gameSettings.garbageType).toBe('full');
+    expect(result.current.gameSettings.bagType).toBe('2');
     expect(result.current.gameSettings.difficulty).toBe(7);
-    expect(result.current.gameSettings.hold).toBe(0);
-    expect(result.current.gameSettings.preview).toBe(1);
+    expect(result.current.gameSettings.hold).toBe('0');
+    expect(result.current.gameSettings.preview).toBe('1');
 
     await act(() => {
       store.dispatch(setRooms([1]));
