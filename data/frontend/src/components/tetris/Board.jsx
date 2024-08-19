@@ -2,6 +2,7 @@ import { Square } from './Square.jsx';
 import { Typography } from '@material-tailwind/react';
 import { useEffect, useMemo, useState } from 'react';
 import { rows, cols } from './const.jsx';
+import { formatNumber } from './formatNumber.jsx';
 
 export const Board = ({ board, player, score, className = '', ...rest }) => {
   const [mode, setMode] = useState('player');
@@ -57,7 +58,7 @@ export const Board = ({ board, player, score, className = '', ...rest }) => {
                 {player}
               </Typography>
               <Typography className='col-span-full text-white mx-auto'>
-                {score}
+                {formatNumber(score)}
               </Typography>
             </>
           )}
