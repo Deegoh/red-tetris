@@ -50,7 +50,7 @@ export const Square = ({ ghost, color, position, mode = 'player' }) => {
     }
 
     if (mode === 'view') {
-      sizeTile /= 2;
+      sizeTile *= 0.2;
     }
 
     return sizeTile;
