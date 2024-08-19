@@ -28,6 +28,7 @@ class Player {
     this.level = undefined;
     this.lines = undefined;
     this.score = undefined;
+    this.pieces = undefined;
     this.sequenceBreak = undefined;
 
     this.sequence = undefined;
@@ -63,6 +64,7 @@ class Player {
     this.level = 0;
     this.lines = 0;
     this.score = 0;
+    this.pieces = 0;
     this.sequenceBreak = Math.min(Math.max(1, this.game.startDifficulty), 25);
 
     this.bag = [];
@@ -102,6 +104,7 @@ class Player {
 
     this.piece = this.next;
     this.next = this.newGenPiece();
+    this.pieces += 1;
     this.holdLock = false;
     this.x = Math.floor(cols / 2) - 2;
     this.y = -1;
@@ -185,48 +188,65 @@ class Player {
     });
 
     if (this.sequence === 0) {
-      this.previewFirst();
+      this.sendPreviews();
     }
     this.sequence = (this.sequence + 1) % this.sequenceBreak;
   }
 
-  previewFirst() {
+  sendPreviews() {
     const localPlayers = Array.from(this.game.players.values()).map((p) => {
       return {
         pseudo: p.pseudo,
         score: p.score,
+        boardState: { id: p.pieces, board: p.board },
         state: p.state,
       };
     });
-    const availableToPreview = localPlayers
-      .filter((p) => {
-        return p.state === 'alive' && p.pseudo !== this.pseudo;
-      })
-      .toSorted((a, b) => {
-        return b.score - a.score;
-      });
 
-    if (availableToPreview.length >= 1) {
-      const nextFirstPlayer = this.game.players.get(
-        availableToPreview[0].pseudo
-      );
+    const availableToPreview = localPlayers.filter((p) => {
+      return p.state === 'alive' && p.pseudo !== this.pseudo;
+    });
 
-      const copy = structuredClone(nextFirstPlayer.board);
-      this.printPiece(
-        copy,
-        nextFirstPlayer.x,
-        nextFirstPlayer.y,
-        nextFirstPlayer.rot,
-        nextFirstPlayer.piece
-      );
-
-      this.socket.emit('updatePreviewBoard', {
-        pseudo: nextFirstPlayer.pseudo,
-        boardState: { id: nextFirstPlayer.boardId, board: copy },
-        score: nextFirstPlayer.score,
-      });
-    }
+    this.socket.emit('updatePreviewBoards', availableToPreview);
   }
+
+  // previewFirst() {
+  //   const localPlayers = Array.from(this.game.players.values()).map((p) => {
+  //     return {
+  //       pseudo: p.pseudo,
+  //       score: p.score,
+  //       state: p.state,
+  //     };
+  //   });
+  //   const availableToPreview = localPlayers
+  //     .filter((p) => {
+  //       return p.state === 'alive' && p.pseudo !== this.pseudo;
+  //     })
+  //     .toSorted((a, b) => {
+  //       return b.score - a.score;
+  //     });
+
+  //   if (availableToPreview.length >= 1) {
+  //     const nextFirstPlayer = this.game.players.get(
+  //       availableToPreview[0].pseudo
+  //     );
+
+  //     const copy = structuredClone(nextFirstPlayer.board);
+  //     this.printPiece(
+  //       copy,
+  //       nextFirstPlayer.x,
+  //       nextFirstPlayer.y,
+  //       nextFirstPlayer.rot,
+  //       nextFirstPlayer.piece
+  //     );
+
+  //     this.socket.emit('updatePreviewBoard', {
+  //       pseudo: nextFirstPlayer.pseudo,
+  //       boardState: { id: nextFirstPlayer.boardId, board: copy },
+  //       score: nextFirstPlayer.score,
+  //     });
+  //   }
+  // }
 
   safeMove(px, py, rot) {
     for (let i = 0; i < 4; i++) {
