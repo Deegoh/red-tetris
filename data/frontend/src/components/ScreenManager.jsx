@@ -56,60 +56,68 @@ export const ScreenManager = () => {
             <Lobby />
           </>
         )) || (
-          <div className='container m-auto flex flex-col gap-4 p-8 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
-            <Typography variant='h1' className='font-[Tetris] py-4'>
-              Red Tetris
-            </Typography>
-            <Typography variant='h2' className='pb-8'>
-              New way to play Tetris
-            </Typography>
+          <>
+            <Header
+              className={'invisible'}
+              callbackPrev={() => {
+                navigate('/');
+              }}
+            />
+            <div className='container min-h-[75vh] justify-center m-auto flex flex-col gap-4 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
+              <Typography variant='h1' className='font-[Tetris] py-4'>
+                Red Tetris
+              </Typography>
+              <Typography variant='h2' className='pb-8'>
+                New way to play Tetris
+              </Typography>
 
-            <div className='flex flex-col mx-auto text-left pb-4'>
-              <label htmlFor='pseudoHome'>
-                <Typography variant={'lead'}>Pseudo</Typography>
-                <input
-                  className='rounded mb-4'
-                  id='pseudoHome'
-                  data-testid='pseudo'
-                  type='text'
-                  defaultValue={pseudo}
-                  onChange={(e) => dispatch(setPseudo(e.target.value))}
-                  required={true}
-                />
-              </label>
-              <Btn
-                onClick={() => {
-                  if (pseudo !== undefined && pseudo.length > 0) {
-                    setDisplayLobby(true);
-                  } //
-                  else {
-                    addNotif('Pseudo required', 'error');
-                  }
-                }}>
-                Play
-              </Btn>
-              <Btn
-                className={'mt-4'}
-                onClick={() => {
-                  navigate('/leaderboard');
-                }}>
-                Leaderboard
-              </Btn>
-              <Btn className={'mt-4'} onClick={handleOpen}>
-                Credits
-              </Btn>
-              <Dialog
-                className={'contents'}
-                open={open}
-                handler={handleOpen}
-                animate={{
-                  mount: { scale: 1, y: 0 },
-                  unmount: { scale: 0.9, y: -100 },
-                }}>
-                <Credits />
-              </Dialog>
+              <div className='flex flex-col mx-auto text-left pb-4'>
+                <label htmlFor='pseudoHome'>
+                  <Typography variant={'lead'}>Pseudo</Typography>
+                  <input
+                    className='rounded mb-4'
+                    id='pseudoHome'
+                    data-testid='pseudo'
+                    type='text'
+                    defaultValue={pseudo}
+                    onChange={(e) => dispatch(setPseudo(e.target.value))}
+                    required={true}
+                  />
+                </label>
+                <Btn
+                  onClick={() => {
+                    if (pseudo !== undefined && pseudo.length > 0) {
+                      setDisplayLobby(true);
+                    } //
+                    else {
+                      addNotif('Pseudo required', 'error');
+                    }
+                  }}>
+                  Play
+                </Btn>
+                <Btn
+                  className={'mt-4'}
+                  onClick={() => {
+                    navigate('/leaderboard');
+                  }}>
+                  Leaderboard
+                </Btn>
+                <Btn className={'mt-4'} onClick={handleOpen}>
+                  Credits
+                </Btn>
+                <Dialog
+                  className={'contents'}
+                  open={open}
+                  handler={handleOpen}
+                  animate={{
+                    mount: { scale: 1, y: 0 },
+                    unmount: { scale: 0.9, y: -100 },
+                  }}>
+                  <Credits />
+                </Dialog>
+              </div>
             </div>
-          </div>
+          </>
         ))) || <Game />}
     </>
   );

@@ -1,5 +1,6 @@
 import { Typography } from '@material-tailwind/react';
 import { useSelector } from 'react-redux';
+import { formatNumber } from './formatNumber.jsx';
 
 export const Score = ({ justify = 'left' }) => {
   // https://redux.js.org/usage/deriving-data-selectors#optimizing-selectors-with-memoization
@@ -12,20 +13,6 @@ export const Score = ({ justify = 'left' }) => {
   if (justify === 'right') {
     classes = ' items-end';
   }
-
-  const formatNumber = (num) => {
-    const absNum = Math.abs(num);
-    if (absNum >= 1e9) {
-      return (num / 1e9).toFixed(1).replace(/\.0$/, '') + ' B';
-    }
-    if (absNum >= 1e6) {
-      return (num / 1e6).toFixed(1).replace(/\.0$/, '') + ' M';
-    }
-    if (absNum >= 1e3) {
-      return (num / 1e3).toFixed(1).replace(/\.0$/, '') + ' K';
-    }
-    return num.toString();
-  };
 
   return (
     <div

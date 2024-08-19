@@ -2,8 +2,9 @@ import { Square } from './Square.jsx';
 import { Typography } from '@material-tailwind/react';
 import { useEffect, useMemo, useState } from 'react';
 import { rows, cols } from './const.jsx';
+import { formatNumber } from './formatNumber.jsx';
 
-export const Board = ({ board, player, className = '', ...rest }) => {
+export const Board = ({ board, player, score, className = '', ...rest }) => {
   const [mode, setMode] = useState('player');
 
   const renderBoard = useMemo(() => {
@@ -51,10 +52,15 @@ export const Board = ({ board, player, className = '', ...rest }) => {
           {...rest}
           className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
           {renderBoard}
-          {player && (
-            <Typography className='col-span-full text-white mx-auto'>
-              {player}
-            </Typography>
+          {player && score && (
+            <>
+              <Typography className='col-span-full text-white mx-auto'>
+                {player}
+              </Typography>
+              <Typography className='col-span-full text-white mx-auto'>
+                {formatNumber(score)}
+              </Typography>
+            </>
           )}
         </div>
       </div>
