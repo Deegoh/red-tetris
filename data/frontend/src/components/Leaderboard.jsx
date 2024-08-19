@@ -55,6 +55,7 @@ export const Leaderboard = () => {
                     className={'contents'}
                     data-testid='scoreLine'>
                     <Typography className={classes}>{v.pseudo}</Typography>
+                    <div className={classes} />
                     <Typography className={classes}>{v.score}</Typography>
                   </div>
                 );

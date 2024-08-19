@@ -117,14 +117,16 @@ describe('store', () => {
       );
 
       store.dispatch(
-        updatePreviews([{
-          pseudo: 'test',
-          score: 1337,
-          boardState: {
-            id: 'X',
-            board: [],
+        updatePreviews([
+          {
+            pseudo: 'test',
+            score: 1337,
+            boardState: {
+              id: 'X',
+              board: [],
+            },
           },
-        }])
+        ])
       );
 
       store.dispatch(updateScore(72));
