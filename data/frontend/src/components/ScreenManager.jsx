@@ -9,6 +9,7 @@ import { setPseudo } from '../features/common/commonSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Credits } from './Credits.jsx';
 import { Header } from './Header.jsx';
+import { useNotification } from 'src/app/notifications.jsx';
 
 export const ScreenManager = () => {
   const [displayLobby, setDisplayLobby] = useState(false);
@@ -16,6 +17,7 @@ export const ScreenManager = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
+  const { addNotif } = useNotification();
 
   const hash =
     window?.location?.hash?.length > 0 ? window.location.hash : undefined;
@@ -38,6 +40,7 @@ export const ScreenManager = () => {
 
     const room = value.slice(0, firstBracket);
     const user = value.slice(firstBracket + 1, lastBracket);
+    dispatch(setPseudo(user));
 
     if (socket !== undefined) {
       socket.emit('connectRoom', { pseudo: user, room: room });
@@ -76,7 +79,12 @@ export const ScreenManager = () => {
               </label>
               <Btn
                 onClick={() => {
-                  setDisplayLobby(true);
+                  if (pseudo !== undefined && pseudo.length > 0) {
+                    setDisplayLobby(true);
+                  } //
+                  else {
+                    addNotif('Pseudo required', 'error');
+                  }
                 }}>
                 Play
               </Btn>

@@ -2,11 +2,17 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const { TetrisServer } = require('./TetrisServer');
+const fs = require('fs');
 
 const app = express();
 
 app.use((req, res) => {
-  res.sendFile(`/build${req.url}`);
+  if (fs.existsSync(`/build${req.url}`)) {
+    res.sendFile(`/build${req.url}`);
+  } //
+  else {
+    res.sendFile(`/build/index.html`);
+  }
 });
 
 const server = http.createServer(app);

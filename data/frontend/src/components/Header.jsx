@@ -45,7 +45,12 @@ export const Header = ({ callbackPrev }) => {
             </label>
             <Btn
               onClick={() => {
-                handleOpen();
+                if (pseudo !== undefined && pseudo.length > 0) {
+                  handleOpen();
+                } //
+                else {
+                  addNotif('Pseudo required', 'error');
+                }
               }}
               data-testid='renamebutton'>
               Rename

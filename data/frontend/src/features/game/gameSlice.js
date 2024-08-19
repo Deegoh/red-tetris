@@ -72,8 +72,6 @@ export const gameSlice = createSlice({
 });
 
 export const {
-  gameStarted,
-  gameRestarted,
   tetrominoPreviewUpdated,
   tetrominoHoldUpdated,
   boardUpdated,

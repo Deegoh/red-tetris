@@ -34,15 +34,11 @@ export const Leaderboard = () => {
             variant='lead'>
             Pseudo
           </Typography>
+          <div className={'text-bold border-b border-dark-red py-2'}></div>
           <Typography
             className={'text-bold border-b border-dark-red py-2'}
             variant='lead'>
             Score
-          </Typography>
-          <Typography
-            className={'text-bold border-b border-dark-red py-2'}
-            variant='lead'>
-            Settings
           </Typography>
 
           <div className='overflow-y-scroll h-auto contents'>
@@ -60,11 +56,10 @@ export const Leaderboard = () => {
                     data-testid='scoreLine'>
                     <Typography className={classes}>{v.pseudo}</Typography>
                     <Typography className={classes}>{v.score}</Typography>
-                    <Typography className={classes}>{v.settings}</Typography>
                   </div>
                 );
               })) || (
-              <div className='py-4 items-center'>
+              <div className='py-4 items-center col-start-2'>
                 <Spinner className='m-auto w-12 h-12' />
               </div>
             )}
