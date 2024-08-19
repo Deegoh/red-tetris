@@ -20,7 +20,7 @@ import {
   updateGameState,
   updateGarbage,
   updateLevel,
-  updatePreview,
+  updatePreviews,
   updateRows,
   updateScore,
 } from 'src/features/game/gameSlice';
@@ -85,6 +85,7 @@ describe('store', () => {
     expect(result.current.holdTetrominoId).toBeUndefined();
     expect(result.current.holdTetromino).toBeUndefined();
     expect(result.current.boardId).toBe(-1);
+    expect(Object.keys(result.current.previews).length).toBe(0);
 
     expect(result.current.score).toBe(0);
     expect(result.current.rows).toBe(0);
@@ -116,14 +117,14 @@ describe('store', () => {
       );
 
       store.dispatch(
-        updatePreview({
+        updatePreviews([{
           pseudo: 'test',
           score: 1337,
           boardState: {
             id: 'X',
             board: [],
           },
-        })
+        }])
       );
 
       store.dispatch(updateScore(72));
@@ -139,7 +140,7 @@ describe('store', () => {
     expect(result.current.holdTetrominoId).toBeDefined();
     expect(result.current.holdTetromino).toBeDefined();
     expect(result.current.boardId).not.toBe(-1);
-    expect(result.current.preview.childrenboardId).not.toBe(-1);
+    expect(Object.keys(result.current.previews).length).toBe(1);
 
     expect(result.current.score).toBe(72);
     expect(result.current.rows).toBe(73);
