@@ -14,12 +14,7 @@ const initialState = {
   incomingGarbage: undefined,
   boardId: -1,
   board: generateDefaultMap(),
-  preview: {
-    pseudo: undefined,
-    score: 0,
-    boardId: -1,
-    board: undefined,
-  },
+  previews: {},
   gameState: undefined,
 };
 
@@ -45,12 +40,19 @@ export const gameSlice = createSlice({
         state.board = action.payload.board;
       }
     },
-    updatePreview: (state, action) => {
-      if (state.preview.boardId !== action.payload.boardState.id) {
-        state.preview.pseudo = action.payload.pseudo;
-        state.preview.score = action.payload.score;
-        state.preview.boardId = action.payload.boardState.id;
-        state.preview.board = action.payload.boardState.board;
+    updatePreviews: (state, action) => {
+      for (let i = 0; i < action.payload.length; i++) {
+        const k = action.payload[i].pseudo;
+
+        if (!Object.keys(state.previews).includes(k)) {
+          state.previews[k] = { boardId: -1 };
+        }
+        if (state.previews[k].boardId !== action.payload[i].boardState.id) {
+          state.previews[k].pseudo = k;
+          state.previews[k].score = action.payload[i].score;
+          state.previews[k].boardId = action.payload[i].boardState.id;
+          state.previews[k].board = action.payload[i].boardState.board;
+        }
       }
     },
     updateScore: (state, action) => {
@@ -75,7 +77,7 @@ export const {
   tetrominoPreviewUpdated,
   tetrominoHoldUpdated,
   boardUpdated,
-  updatePreview,
+  updatePreviews,
   updateScore,
   updateRows,
   updateLevel,
