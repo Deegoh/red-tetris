@@ -6,7 +6,7 @@ export const PreviewBoard = () => {
 
   return (
     <div className='grid grid-flow-row auto-rows-max'>
-      <Board board={board} mode='view' player={`${pseudo} - ${score}`} />
+      <Board board={board} mode='view' player={pseudo} score={score} />
     </div>
   );
 };

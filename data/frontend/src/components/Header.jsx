@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPseudo } from '../features/common/commonSlice.js';
 
-export const Header = ({ callbackPrev }) => {
+export const Header = ({ className, callbackPrev }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
   const pseudo = useSelector((state) => state.common.pseudo);
@@ -12,7 +12,7 @@ export const Header = ({ callbackPrev }) => {
 
   return (
     <>
-      <div className={'flex justify-between mb-4'}>
+      <div className={className + ' flex justify-between mb-4'}>
         <Btn onClick={callbackPrev}>Back</Btn>
         <button
           onClick={handleOpen}

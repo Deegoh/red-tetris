@@ -23,7 +23,7 @@ export const RoomList = ({ className }) => {
     <div className={className} data-testid='roomlistpage'>
       <Typography variant='h3'>Room List</Typography>
 
-      <div className='overflow-y-auto mx-auto w-[80%]'>
+      <div className='overflow-y-auto mx-auto max-h-[60vh] md:max-h-[40vh] w-[80%]'>
         <div className='grid grid-cols-4 auto-cols-max'>
           {TABLE_HEAD.map((head) => (
             <Typography
