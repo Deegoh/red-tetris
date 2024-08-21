@@ -92,12 +92,6 @@ export function SocketProvider({ children }) {
       );
     }
 
-    return (() => {
-      if (socket !== undefined) {
-        socket.disconnect();
-        socket = undefined;
-      }
-    });
   }, [addNotif, dispatch, navigate, socket]);
 
   return (

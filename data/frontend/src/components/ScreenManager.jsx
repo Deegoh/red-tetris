@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Credits } from './Credits.jsx';
 import { Header } from './Header.jsx';
 import { useNotification } from 'src/app/notifications.jsx';
+import { resetPreviews } from '../features/game/gameSlice.js';
 
 export const ScreenManager = () => {
   const [displayLobby, setDisplayLobby] = useState(false);
@@ -43,6 +44,7 @@ export const ScreenManager = () => {
     dispatch(setPseudo(user));
 
     if (socket !== undefined) {
+      dispatch(resetPreviews());
       socket.emit('connectRoom', { pseudo: user, room: room });
     }
   }, [hash, socket]);
