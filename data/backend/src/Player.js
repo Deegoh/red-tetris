@@ -68,6 +68,8 @@ class Player {
     this.sequenceBreak = Math.min(Math.max(1, this.game.startDifficulty), 25);
 
     this.bag = [];
+    this.piece = undefined;
+    this.next = undefined;
     this.summonPiece();
   }
 
