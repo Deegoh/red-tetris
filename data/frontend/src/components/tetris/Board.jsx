@@ -52,7 +52,7 @@ export const Board = ({ board, player, score, className = '', ...rest }) => {
           {...rest}
           className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
           {renderBoard}
-          {player && score && (
+          {player !== undefined && score !== undefined && (
             <>
               <Typography className='col-span-full text-white mx-auto'>
                 {player}
