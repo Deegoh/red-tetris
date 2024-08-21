@@ -18,7 +18,7 @@ COPY data/backend .
 
 COPY --from=build_front /frontend/dist /build
 
-RUN pnpm install
+RUN pnpm install --prod
 
 CMD ["node", "src/main.js"]
 
