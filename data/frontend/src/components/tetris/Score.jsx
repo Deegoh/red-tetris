@@ -20,16 +20,22 @@ export const Score = ({ justify = 'left' }) => {
         'bg-board rounded p-2 text-white flex flex-col gap-4' + classes
       }>
       <div>
-        <Typography variant='h4'>Score</Typography>
-        <Typography variant='h5'>{formatNumber(score)}</Typography>
+        <Typography className='font-bold' variant='lead'>
+          Score
+        </Typography>
+        <Typography variant='lead'>{formatNumber(score)}</Typography>
       </div>
       <div>
-        <Typography variant='h4'>Rows</Typography>
-        <Typography variant='h5'>{rows}</Typography>
+        <Typography className='font-bold' variant='lead'>
+          Rows
+        </Typography>
+        <Typography variant='lead'>{rows}</Typography>
       </div>
       <div>
-        <Typography variant='h4'>Level</Typography>
-        <Typography variant='h5'>{level}</Typography>
+        <Typography className='font-bold' variant='lead'>
+          Level
+        </Typography>
+        <Typography variant='lead'>{level}</Typography>
       </div>
     </div>
   );

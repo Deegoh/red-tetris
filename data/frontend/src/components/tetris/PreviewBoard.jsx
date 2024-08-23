@@ -7,7 +7,7 @@ export const PreviewBoard = () => {
   const screen = useBreakpoint();
 
   return (
-    <div className='grid grid-cols-3 lg:grid-cols-4 gap-2 max-h-[50vh] h-fit overflow-y-scroll pr-4'>
+    <div className='grid grid-cols-3 lg:grid-cols-4 gap-2 max-h-[52vh] h-fit overflow-y-scroll pr-4'>
       {Object.values(previews).map((p) => {
         return (
           <Board

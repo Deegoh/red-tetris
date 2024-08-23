@@ -9,15 +9,20 @@ function waitFor(socket, event) {
     socket.once(event, resolve);
   });
 }
-
 jest.mock('./dbConnector', () => ({
-  client: {
-    connect: jest.fn(),
-    query: () =>
-      new Promise((resolve, reject) => {
-        resolve({ rows: [{}, {}] });
-      }),
-  },
+  getClient: jest.fn(() => {
+    return {
+      connect: () =>
+        new Promise((resolve, reject) => {
+          resolve();
+        }),
+      query: () =>
+        new Promise((resolve, reject) => {
+          resolve({ rows: [{}, {}] });
+        }),
+      end: jest.fn(),
+    };
+  }),
 }));
 
 jest.mock('./Game', () => ({

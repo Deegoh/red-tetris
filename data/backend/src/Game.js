@@ -47,7 +47,8 @@ class Game {
         this.players.forEach((p) => {
           if (
             p.state !== 'spectate' &&
-            sdns.get(p.socketId)?.roomname === this.id
+            sdns.get(p.socketId)?.roomname === this.id &&
+            sdns.get(p.socketId)?.pseudo === p.pseudo
           ) {
             p.frame(this.status);
           }

@@ -1,5 +1,5 @@
 const { rows, cols, emptyColor } = require('./constants');
-const { client } = require('./dbConnector');
+const { getClient } = require('./dbConnector');
 const { tend, genBag } = require('./Piece');
 const { sfc32 } = require('./utils');
 
@@ -68,6 +68,8 @@ class Player {
     this.sequenceBreak = Math.min(Math.max(1, this.game.startDifficulty), 25);
 
     this.bag = [];
+    this.piece = undefined;
+    this.next = undefined;
     this.summonPiece();
   }
 
@@ -322,10 +324,20 @@ class Player {
       values: [this.pseudo, this.score, this.level, this.lines, '-'],
     };
 
-    client.query(query);
-    // .catch((err) => {
-    //   console.log(err)
-    // });
+    const client = getClient();
+    client.connect().then(() => {
+      client
+        .query(query)
+        .then(() => {
+          client.end();
+        })
+        .catch(() => {
+          console.error(
+            `Could not save score for ${this.pseudo} (${this.score})`
+          );
+          client.end();
+        });
+    });
   }
 
   gameover() {

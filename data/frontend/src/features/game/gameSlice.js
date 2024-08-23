@@ -40,6 +40,9 @@ export const gameSlice = createSlice({
         state.board = action.payload.board;
       }
     },
+    resetPreviews: (state) => {
+      state.previews = {};
+    },
     updatePreviews: (state, action) => {
       for (let i = 0; i < action.payload.length; i++) {
         const k = action.payload[i].pseudo;
@@ -77,6 +80,7 @@ export const {
   tetrominoPreviewUpdated,
   tetrominoHoldUpdated,
   boardUpdated,
+  resetPreviews,
   updatePreviews,
   updateScore,
   updateRows,
