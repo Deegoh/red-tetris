@@ -47,20 +47,24 @@ export const Board = ({ board, player, score, className = '', ...rest }) => {
 
   return (
     board !== undefined && (
-      <div className='bg-board p-1 rounded'>
+      <div className='bg-board flex flex-col p-1 rounded'>
         <div
           {...rest}
-          className={`${className} board bg-black rounded grid grid-cols-10 gap-[1px]`}>
+          className={`${className} board bg-black rounded inline-grid grid-cols-[repeat(10,_0fr)] gap-[1px]`}>
           {renderBoard}
           {player !== undefined && score !== undefined && (
-            <>
-              <Typography className='col-span-full text-white mx-auto'>
+            <div className='col-span-full'>
+              <Typography
+                title={player}
+                className='truncate text-center text-white mx-auto'>
                 {player}
               </Typography>
-              <Typography className='col-span-full text-white mx-auto'>
+              <Typography
+                title={score}
+                className='truncate text-center text-white mx-auto'>
                 {formatNumber(score)}
               </Typography>
-            </>
+            </div>
           )}
         </div>
       </div>

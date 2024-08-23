@@ -27,14 +27,16 @@ export const PreviewBlock = ({ tetromino, children }) => {
     <>
       {previewBlock && (
         <div className={'w-max bg-board rounded text-white flex flex-col'}>
-          <div className='bg-board p-1 rounded shrink-1 preview-block grid grid-cols-4 gap-[1px] content-start'>
+          <div className='inline-grid grid-cols-[repeat(4,_0fr)] bg-board p-1 rounded shrink-1 preview-block gap-px content-start'>
             {previewBlock}
+            {children && (
+              <Typography
+                className={'font-bold col-span-full mx-auto'}
+                variant='lead'>
+                {children}
+              </Typography>
+            )}
           </div>
-          {children && (
-            <Typography className={'mx-auto'} variant='h4'>
-              {children}
-            </Typography>
-          )}
         </div>
       )}
     </>
