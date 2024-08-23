@@ -1,4 +1,4 @@
-const { client } = require('./dbConnector');
+const { getClient } = require('./dbConnector');
 const { Game } = require('./Game');
 
 function findFirstUnusedId(rooms) {
@@ -38,7 +38,7 @@ class TetrisServer {
   };
 
   setSocketListeners = (socket, io) => {
-    console.log(socket.id, socket.conn.remoteAddress);
+    console.info(socket.id, socket.conn.remoteAddress);
 
     socket.on('ping', (req) => {
       socket.emit('pong');
@@ -276,12 +276,20 @@ class TetrisServer {
         ORDER BY score DESC`,
       };
 
-      client.query(query).then((res) => {
-        socket.emit('leaderboardRes', res.rows);
+      const client = getClient();
+      client.connect().then(() => {
+        client
+          .query(query)
+          .then((res) => {
+            socket.emit('leaderboardRes', res.rows);
+            client.end();
+          })
+          .catch((err) => {
+            console.error('Could not fetch rows', err);
+            socket.emit('leaderboardRes', []);
+            client.end();
+          });
       });
-      // .catch((err) => {
-      //   console.log(err)
-      // });
     });
 
     socket.emit('roomList', this.listGames());

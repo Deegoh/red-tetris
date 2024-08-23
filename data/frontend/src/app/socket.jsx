@@ -91,7 +91,6 @@ export function SocketProvider({ children }) {
         )
       );
     }
-
   }, [addNotif, dispatch, navigate, socket]);
 
   return (

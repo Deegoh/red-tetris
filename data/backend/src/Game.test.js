@@ -7,10 +7,16 @@ const { createServer } = require('node:http');
 const ioc = require('socket.io-client');
 
 jest.mock('./dbConnector', () => ({
-  client: {
-    connect: jest.fn(),
-    query: jest.fn(),
-  },
+  getClient: jest.fn(() => {
+    return {
+      connect: jest.fn(() => Promise.resolve()),
+      query: () =>
+        new Promise((resolve, reject) => {
+          resolve({ rows: [{}, {}] });
+        }),
+      end: jest.fn(),
+    };
+  }),
 }));
 
 const wsMock = {
