@@ -17,17 +17,33 @@ export const GameMode = ({ className }) => {
   const dispatch = useDispatch();
 
   const garbageTypeData = [
-    { label: 'Without', value: 'no' },
-    { label: 'Full', value: 'full' },
-    { label: 'Hole', value: 'hole' },
+    { label: 'Without', value: 'no', tooltip: 'No penalty' },
+    { label: 'Full', value: 'full', tooltip: 'The line can not be destroy' },
+    {
+      label: 'Hole',
+      value: 'hole',
+      tooltip: 'The line had a hole and can be destroy',
+    },
   ];
   const bagTypeData = [
-    { label: '0', value: '0' },
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
+    { label: '0', value: '0', tooltip: 'All pieces are random' },
+    {
+      label: '1',
+      value: '1',
+      tooltip: 'Tetromino appears between 7-14 pieces',
+    },
+    {
+      label: '2',
+      value: '2',
+      tooltip: 'Tetromino appears between 14-28 pieces',
+    },
   ];
-  const boolData = [
-    { label: 'Yes', value: '1' },
+  const holdData = [
+    { label: 'Yes', value: '1', tooltip: 'Allow you to keep a piece' },
+    { label: 'No', value: '0' },
+  ];
+  const previewData = [
+    { label: 'Yes', value: '1', tooltip: "Display preview's layers" },
     { label: 'No', value: '0' },
   ];
   const marks = [0, 5, 10, 15, 20, 25];
@@ -92,7 +108,7 @@ export const GameMode = ({ className }) => {
 
       <TabGameMode
         name={'hold'}
-        data={boolData}
+        data={holdData}
         setValue={(v) => {
           dispatch(setHold(v));
         }}
@@ -104,7 +120,7 @@ export const GameMode = ({ className }) => {
 
       <TabGameMode
         name={'preview'}
-        data={boolData}
+        data={previewData}
         setValue={(v) => {
           dispatch(setPreview(v));
         }}

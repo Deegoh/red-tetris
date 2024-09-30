@@ -65,7 +65,7 @@ export const ScreenManager = () => {
                 navigate('/');
               }}
             />
-            <div className='container min-h-[75vh] justify-center m-auto flex flex-col gap-4 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
+            <div className='container text-white max-w-screen-sm p-16 justify-center m-auto flex flex-col gap-4 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
               <Typography variant='h1' className='font-[Tetris] py-4'>
                 Red Tetris
               </Typography>
@@ -75,7 +75,9 @@ export const ScreenManager = () => {
 
               <div className='flex flex-col mx-auto text-left pb-4'>
                 <label htmlFor='pseudoHome'>
-                  <Typography variant={'lead'}>Pseudo</Typography>
+                  <Typography className={'text-white'} variant={'lead'}>
+                    Pseudo
+                  </Typography>
                   <input
                     className='rounded mb-4'
                     id='pseudoHome'

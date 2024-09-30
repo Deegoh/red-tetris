@@ -10,7 +10,7 @@ export const Lobby = () => {
   const hostRoom = (
     <RoomCreation
       className={
-        'min-h-[70vh] md:min-h-fit py-6 row-span-3 col-span-5 flex flex-col text-center gap-4 rounded bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
+        'text-white max-w-screen-sm py-6 row-span-3 col-span-5 flex flex-col text-center gap-4 rounded bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
       }
     />
   );
@@ -18,7 +18,7 @@ export const Lobby = () => {
   const listRoom = (
     <RoomList
       className={
-        'min-h-[70vh] md:min-h-fit py-6 row-span-2 col-span-7 md:flex flex-col text-center gap-4 rounded bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
+        'text-white max-w-screen-sm py-6 row-span-2 col-span-7 md:flex flex-col text-center gap-4 rounded bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
       }
     />
   );
@@ -34,7 +34,7 @@ export const Lobby = () => {
       {(['xs', 'sm'].includes(screen) && (
         <div
           className={
-            'container min-h-[70vh] flex flex-col m-auto rounded bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
+            'container min-h-[73vh] max-w-screen-sm flex flex-col m-auto rounded bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
           }
           data-testid='tabchoice'>
           <TabGameMode
@@ -51,7 +51,7 @@ export const Lobby = () => {
       )) || (
         <div
           className={
-            'container min-h-[70vh] m-auto grid grid-cols-12 grid-rows-3 gap-4'
+            'm-auto w-[80vh] lg:w-[100vh] grid grid-cols-12 grid-rows-3 gap-4'
           }>
           {hostRoom}
           {listRoom}

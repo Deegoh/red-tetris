@@ -1,4 +1,10 @@
-import { Tab, Tabs, TabsHeader, Typography } from '@material-tailwind/react';
+import {
+  Tab,
+  Tabs,
+  TabsHeader,
+  Tooltip,
+  Typography,
+} from '@material-tailwind/react';
 
 export const TabGameMode = ({
   name,
@@ -21,7 +27,7 @@ export const TabGameMode = ({
             className:
               'rounded-md shadow-teal-500/40 !bg-teal-500 hover:bg-teal-700 hover:shadow-teal-700/40 text-white',
           }}>
-          {data.map(({ label, value }) => (
+          {data.map(({ label, value, tooltip }) => (
             <Tab
               data-name={name}
               onClick={onClickHandle}
@@ -30,7 +36,8 @@ export const TabGameMode = ({
               key={value}
               value={value}>
               <div data-name={name} data-value={value}>
-                {label}
+                {tooltip && <Tooltip content={tooltip}>{label}</Tooltip>}
+                {!tooltip && label}
               </div>
             </Tab>
           ))}

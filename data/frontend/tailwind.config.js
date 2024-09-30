@@ -29,8 +29,8 @@ module.exports = withMT({
           DEFAULT: 'rgb(78 78 78 / <alpha-value>)',
         },
         board: 'rgba(0,0,0,0.7)',
-        'dark-red': '#960F0FFF',
-        'light-red': '#F70000FF',
+        'dark-red': '#870D0D',
+        'light-red': '#B01919',
       },
       boxShadow: {
         ghost: '0 0 20px 4px rgba(0, 0, 0, 0.3)',
