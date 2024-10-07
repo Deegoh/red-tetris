@@ -23,7 +23,7 @@ export const Leaderboard = () => {
           navigate('/');
         }}
       />
-      <div className='container min-h-[70vh] rounded m-auto p-6 flex flex-col bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
+      <div className='container max-w-screen-sm text-white rounded m-auto p-16 flex flex-col bg-gradient-107 from-dark-red from-10% to-light-red to-90%'>
         <Typography className={'text-center'} variant='h3'>
           Leaderboard
         </Typography>

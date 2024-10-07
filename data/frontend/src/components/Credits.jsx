@@ -6,7 +6,7 @@ export const Credits = () => {
       className={
         'flex flex-col gap-4 p-8 shadow-xl rounded text-center bg-gradient-107 from-dark-red from-10% to-light-red to-90%'
       }>
-      <Typography color={'black'} data-testid='footer'>
+      <Typography className={'text-white'} color={'black'} data-testid='footer'>
         Made with ❤️ by{' '}
         <a
           className='w-fit mx-auto text-blue-100 underline rounded p-2 hover:bg-teal-500 hover:text-white hover:no-underline'
