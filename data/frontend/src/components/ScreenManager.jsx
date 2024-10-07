@@ -79,7 +79,7 @@ export const ScreenManager = () => {
                     Pseudo
                   </Typography>
                   <input
-                    className='rounded mb-4'
+                    className='text-black rounded mb-4'
                     id='pseudoHome'
                     data-testid='pseudo'
                     type='text'
